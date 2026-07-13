@@ -28,14 +28,6 @@ export default function Hero() {
       rememberingMobileRef.current,
       ctaMobileRef.current,
     ];
-    const targets = [
-      craftingRef.current,
-      rememberingRef.current,
-      ctaRef.current,
-      craftingMobileRef.current,
-      rememberingMobileRef.current,
-      ctaMobileRef.current,
-    ];
     gsap.fromTo(
       targets,
       { y: 70, opacity: 0 },
