@@ -98,19 +98,21 @@ export default function VisionShowcase() {
 
   return (
     <section className="relative bg-[#0F0F0F] py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-12">
-        <div className="grid grid-cols-1 gap-16 lg:grid-cols-2 lg:items-center">
-          <div>
-            <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-[56px]">
-              Watch Your <span className="font-serif font-bold italic text-emerald-500">Dream</span>
-              <br />
-              Taking Shape
-            </h2>
-            <p className="mt-6 text-lg text-white/70">Distinctive hospitality destinations that combine</p>
+      <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
+        <div className="max-w-2xl">
+          <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-[56px]">
+            Watch Your <span className="font-serif font-bold italic text-emerald-500">Dream</span>
+            <br />
+            Taking Shape
+          </h2>
+          <p className="mt-6 text-lg text-white/70">Distinctive hospitality destinations that combine</p>
+        </div>
 
-            <div className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-md">
+        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[auto_1fr] lg:items-center">
+          <div>
+            <div className="flex h-76.5 w-60 flex-col gap-3 rounded-2xl border-[0.2px] border-white/10 bg-white/3 px-3.5 py-2.5 backdrop-blur-md">
               <div className="flex items-center gap-3">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/40">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/40">
                   <span className="h-2 w-2 rounded-full bg-white" />
                 </span>
                 <div>
@@ -119,14 +121,14 @@ export default function VisionShowcase() {
                 </div>
               </div>
 
-              <div className="mt-4 flex flex-col gap-3">
+              <div className="flex flex-1 flex-col gap-3 overflow-y-auto">
                 {resortTypes.map((label, i) => {
                   const active = i === activeStage;
                   return (
                     <button
                       key={label}
                       onClick={() => goTo(i)}
-                      className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-left backdrop-blur-md transition-colors ${
+                      className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm backdrop-blur-md transition-colors ${
                         active
                           ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
                           : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
@@ -140,9 +142,9 @@ export default function VisionShowcase() {
               </div>
             </div>
 
-            <div className="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-md">
+            <div className="mt-6 flex h-62 w-60 flex-col gap-3 rounded-2xl border-[0.2px] border-white/10 bg-white/3 px-3.5 py-2.5 backdrop-blur-md">
               <div className="flex items-center gap-3">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/40">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/40">
                   <span className="h-2 w-2 rounded-full bg-white" />
                 </span>
                 <div>
@@ -151,14 +153,14 @@ export default function VisionShowcase() {
                 </div>
               </div>
 
-              <div className="mt-4 flex flex-col gap-3">
+              <div className="flex flex-1 flex-col gap-3 overflow-y-auto">
                 {experienceViews.map((view, i) => {
                   const active = i === activeView;
                   return (
                     <button
                       key={view.label}
                       onClick={() => setActiveView(i)}
-                      className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-left backdrop-blur-md transition-colors ${
+                      className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left text-sm backdrop-blur-md transition-colors ${
                         active
                           ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-400"
                           : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
@@ -198,7 +200,7 @@ export default function VisionShowcase() {
                       alt={stage.key}
                       fill
                       sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="object-cover"
+                      className="object-cover mix-blend-lighten"
                       priority={i === 0}
                     />
                   </div>
