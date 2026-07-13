@@ -15,6 +15,11 @@ export default function Preloader() {
     const maxSize = Math.max(window.innerWidth, window.innerHeight) * 2.5;
     const size = { value: 150 };
 
+    if (logoMaskRef.current) {
+      logoMaskRef.current.setAttribute("x", String(centerX - size.value / 2));
+      logoMaskRef.current.setAttribute("y", String(centerY - size.value / 2));
+    }
+
     const tl = gsap.timeline({ delay: 1 });
 
     tl.to(size, {

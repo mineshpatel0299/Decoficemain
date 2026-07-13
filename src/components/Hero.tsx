@@ -28,15 +28,26 @@ export default function Hero() {
       rememberingMobileRef.current,
       ctaMobileRef.current,
     ];
-    gsap.set(targets, { y: 70, opacity: 0 });
-    gsap.to(targets, {
-      y: 0,
-      opacity: 1,
-      duration: 1.4,
-      ease: "power3.out",
-      delay: 2.6,
-      stagger: 0.15,
-    });
+    const targets = [
+      craftingRef.current,
+      rememberingRef.current,
+      ctaRef.current,
+      craftingMobileRef.current,
+      rememberingMobileRef.current,
+      ctaMobileRef.current,
+    ];
+    gsap.fromTo(
+      targets,
+      { y: 70, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1.4,
+        ease: "power3.out",
+        delay: 2.6,
+        stagger: 0.15,
+      }
+    );
   }, []);
 
   return (
@@ -74,7 +85,7 @@ export default function Hero() {
           <p
             ref={craftingRef}
             aria-hidden="true"
-            className="mt-10 -translate-x-3 font-opensans text-[4.375vw] font-extrabold leading-[1.111] tracking-normal text-white"
+            className="mt-10 -translate-x-3 font-opensans text-[4.375vw] font-extrabold leading-[1.111] tracking-normal text-white opacity-0"
           >
             Crafting Places Worth
           </p>
@@ -94,7 +105,7 @@ export default function Hero() {
         <p
           ref={rememberingRef}
           aria-hidden="true"
-          className="absolute inset-x-0 top-[calc(-14.25vw+50vh+11.11vw)] z-15 mx-auto max-w-5xl px-6 text-center font-serif text-[6.667vw] font-bold italic leading-[0.729] tracking-normal text-emerald-600"
+          className="absolute inset-x-0 top-[calc(-14.25vw+50vh+11.11vw)] z-15 mx-auto max-w-5xl px-6 text-center font-serif text-[6.667vw] font-bold italic leading-[0.729] tracking-normal text-emerald-600 opacity-0"
         >
           Remembering
         </p>
@@ -112,7 +123,7 @@ export default function Hero() {
         {/* CTAs: kept above the resort cutout so they always stay legible and clickable */}
         <div
           ref={ctaRef}
-          className="absolute inset-x-0 bottom-[16%] z-30 flex flex-wrap items-center justify-center gap-4 px-6"
+          className="absolute inset-x-0 bottom-[16%] z-30 flex flex-wrap items-center justify-center gap-4 px-6 opacity-0"
         >
           <a
             href="#discuss-your-vision"
@@ -131,7 +142,7 @@ export default function Hero() {
 
       {/* Mobile composition (< lg): dedicated portrait artwork from /heromobile, same occlusion trick as desktop.
       Full device height per spec; top-[%] offsets below are proportioned against a 375×812 reference frame. */}
-      <div className="relative isolate block h-dvh min-h-140 w-full lg:hidden">
+      <div className="relative isolate block h-[100svh] min-h-140 w-full lg:hidden">
         {/* Base scene: sky, mountains, valley, resort (baked in) */}
         <Image
           src="/heromobile/Hero_.png"
@@ -155,7 +166,7 @@ export default function Hero() {
           <p
             ref={craftingMobileRef}
             aria-hidden="true"
-            className="mt-6 font-opensans text-[6.5vw] font-extrabold whitespace-nowrap leading-[1.2] tracking-normal text-white"
+            className="mt-6 font-opensans text-[6.5vw] font-extrabold whitespace-nowrap leading-[1.2] tracking-normal text-white opacity-0"
           >
             Crafting Places Worth
           </p>
@@ -175,7 +186,7 @@ export default function Hero() {
         <p
           ref={rememberingMobileRef}
           aria-hidden="true"
-          className="absolute inset-x-0 top-[41%] z-15 mx-auto px-6 text-center font-serif text-[9.5vw] font-bold italic leading-[1.05] tracking-normal text-emerald-600"
+          className="absolute inset-x-0 top-[41%] z-15 mx-auto px-6 text-center font-serif text-[9.5vw] font-bold italic leading-[1.05] tracking-normal text-emerald-600 opacity-0"
         >
           Remembering
         </p>
@@ -191,7 +202,7 @@ export default function Hero() {
         />
 
         {/* CTAs: kept above the resort cutout so they always stay legible and clickable */}
-        <div ref={ctaMobileRef} className="absolute inset-x-0 bottom-[17%] z-30 flex flex-col items-center gap-4 px-6">
+        <div ref={ctaMobileRef} className="absolute inset-x-0 bottom-[17%] z-30 flex flex-col items-center gap-4 px-6 opacity-0">
           <a
             href="#discuss-your-vision"
             className="font-opensans flex h-9 w-37 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg bg-emerald-600 px-3 py-2 text-xs leading-4 font-semibold text-white transition-colors hover:bg-emerald-500"
