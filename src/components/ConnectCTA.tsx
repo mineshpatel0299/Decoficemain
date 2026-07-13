@@ -58,7 +58,7 @@ export default function ConnectCTA() {
         <div className="mt-16 flex justify-center">
           <div className="flex h-[327px] w-[272px] flex-col items-center justify-between rounded-[18px] border border-[#EAEAEA]/10 bg-[#EAEAEA]/10 px-[32px] py-[30px] text-center shadow-2xl shadow-black/40 backdrop-blur-md">
             <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-full shadow-lg">
-              <Image src="/dv.png" alt={CONSULTANT.name} fill sizes="80px" className="object-cover" />
+              <Image src="/dv.png" alt={CONSULTANT.name} fill sizes="80px" className="object-cover scale-[1.20] -translate-x-1" />
             </div>
 
             <div className="flex flex-col items-center gap-1">
@@ -125,7 +125,7 @@ export default function ConnectCTA() {
         <div className="flex justify-center">
           <div className="flex w-[340px] flex-col items-center rounded-[24px] border border-[#EAEAEA]/10 bg-[#EAEAEA]/10 px-8 py-10 text-center shadow-[0px_7px_8.6px_3px_#00000040] backdrop-blur-md">
             <div className="relative mb-6 h-[88px] w-[88px] shrink-0 overflow-hidden rounded-full">
-              <Image src="/dv.png" alt={CONSULTANT.name} fill sizes="88px" className="object-cover" />
+              <Image src="/dv.png" alt={CONSULTANT.name} fill sizes="88px" className="object-cover scale-[1.20] -translate-x-1" />
             </div>
 
             <div className="mb-8 flex flex-col items-center gap-1.5">
