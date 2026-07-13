@@ -90,6 +90,7 @@ export default function ExperienceScroll() {
   const sectionRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   const imageRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const innerImageRefs = useRef<(HTMLDivElement | null)[]>([]);
   const textRefs = useRef<(HTMLDivElement | null)[]>([]);
   const markerRef = useRef<HTMLDivElement>(null);
 
@@ -117,6 +118,19 @@ export default function ExperienceScroll() {
             autoAlpha: opacity,
             y: (1 - opacity) * 16,
           });
+
+          // Parallax effect for the image
+          const offset = raw - i;
+          const clampedOffset = gsap.utils.clamp(-1, 1, offset);
+          if (innerImageRefs.current[i]) {
+            // As we scroll down (raw increases), offset increases.
+            // When coming into view (offset < 0), it starts at yPercent: -10
+            // When fully in view (offset === 0), it is at yPercent: 0
+            // When leaving view (offset > 0), it goes to yPercent: 10
+            gsap.set(innerImageRefs.current[i], {
+              yPercent: clampedOffset * 10,
+            });
+          }
         });
 
         if (markerRef.current) {
@@ -158,18 +172,25 @@ export default function ExperienceScroll() {
             ref={(el) => {
               imageRefs.current[i] = el;
             }}
-            className="absolute inset-0"
+            className="absolute inset-0 overflow-hidden"
             style={{ zIndex: i + 1 }}
           >
-            <Image
-              src={slide.image}
-              alt=""
-              aria-hidden="true"
-              fill
-              priority={i === 0}
-              sizes="100vw"
-              className="object-cover"
-            />
+            <div
+              ref={(el) => {
+                innerImageRefs.current[i] = el;
+              }}
+              className="absolute -top-[15%] -left-[5%] h-[130%] w-[110%]"
+            >
+              <Image
+                src={slide.image}
+                alt=""
+                aria-hidden="true"
+                fill
+                priority={i === 0}
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
             <div className="absolute inset-0 bg-black/35" />
           </div>
         ))}

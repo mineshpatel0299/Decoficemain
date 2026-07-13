@@ -54,12 +54,12 @@ const socials = [
 
 function FooterColumn({ title, links }: { title: string; links: string[] }) {
   return (
-    <div>
-      <h3 className="text-sm font-semibold text-white">{title}</h3>
-      <ul className="mt-4 flex flex-col gap-3">
+    <div className="shrink-0">
+      <h3 className="text-[10px] lg:text-sm font-semibold text-white">{title}</h3>
+      <ul className="mt-2 flex flex-col gap-1.5 lg:mt-4 lg:gap-3">
         {links.map((label) => (
           <li key={label}>
-            <a href="#" className="text-sm text-white/60 transition-colors hover:text-white">
+            <a href="#" className="whitespace-nowrap text-[8px] lg:text-sm text-white/60 transition-colors hover:text-white">
               {label}
             </a>
           </li>
@@ -75,23 +75,23 @@ export default function Footer() {
       <div
         className="pointer-events-none absolute inset-0"
         style={{
-          background: "radial-gradient(1200px 500px at 0% 0%, rgba(16,94,63,0.35), transparent 60%)",
+          background: "linear-gradient(to bottom, rgba(16,94,63,0.35) 0%, transparent 100%)",
         }}
       />
 
-      <div className="relative mx-auto max-w-7xl px-6 pt-16 pb-8 sm:px-12">
-        <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">
-          <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <Logo className="h-9 w-auto text-white" />
-            <p className="mt-4 text-lg font-semibold text-white">Experience the dream</p>
-            <p className="mt-2 text-sm text-white/50">CIN: U72900KL2021PTC069994</p>
-            <div className="mt-5 flex items-center gap-3">
+      <div className="relative mx-auto max-w-7xl px-4 pt-10 pb-6 lg:px-12 lg:pt-16 lg:pb-8">
+        <div className="flex w-full items-start gap-4 overflow-x-auto pb-4 lg:gap-12 lg:pb-6 justify-between">
+          <div className="shrink-0 min-w-[130px] lg:min-w-[240px]">
+            <Logo className="h-5 lg:h-9 w-auto text-white" />
+            <p className="mt-2 text-[10px] lg:text-lg font-semibold text-white whitespace-nowrap">Experience the dream</p>
+            <p className="mt-1 text-[8px] lg:text-sm text-white/50 whitespace-nowrap">CIN: U72900KL2021PTC069994</p>
+            <div className="mt-3 flex items-center gap-1.5 lg:mt-5 lg:gap-3">
               {socials.map((s) => (
                 <a
                   key={s.label}
                   href={s.href}
                   aria-label={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-black transition-opacity hover:opacity-80"
+                  className="flex h-5 w-5 lg:h-9 lg:w-9 items-center justify-center rounded-full bg-white text-black transition-opacity hover:opacity-80 shrink-0 [&>svg]:w-2.5 [&>svg]:h-2.5 lg:[&>svg]:w-4 lg:[&>svg]:h-4"
                 >
                   {s.icon}
                 </a>
@@ -105,23 +105,23 @@ export default function Footer() {
           <FooterColumn title="Resources" links={resourceLinks} />
         </div>
 
-        <div className="mt-14 border-t border-white/10 pt-6">
-          <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-            <p className="text-sm text-white/50">
+        <div className="mt-8 border-t border-[#259A5A]/40 pt-4 lg:mt-14 lg:pt-6">
+          <div className="flex flex-row items-center justify-between gap-2 overflow-x-auto pb-2 lg:gap-4 lg:pb-4">
+            <p className="shrink-0 text-[7px] lg:text-sm text-white/50 whitespace-nowrap">
               Copyright © {new Date().getFullYear()} Decofice Technologies Private Limited | All rights reserved
             </p>
 
-            <div className="flex items-center gap-4">
-              <span className="rounded border border-white/15 bg-white/5 px-2.5 py-1 text-xs font-bold tracking-wide text-white/70">
+            <div className="flex shrink-0 items-center justify-center gap-2 lg:gap-4">
+              <span className="rounded border border-white/15 bg-white/5 px-1.5 py-0.5 text-[6px] lg:px-2.5 lg:py-1 lg:text-xs font-bold tracking-wide text-white/70">
                 UPI
               </span>
-              <span className="relative flex h-5 w-9 items-center">
-                <span className="absolute left-0 h-5 w-5 rounded-full bg-red-500" />
-                <span className="absolute left-3 h-5 w-5 rounded-full bg-amber-400 opacity-90" />
+              <span className="relative flex h-3 w-5 lg:h-5 lg:w-9 items-center">
+                <span className="absolute left-0 h-3 w-3 lg:h-5 lg:w-5 rounded-full bg-red-500" />
+                <span className="absolute left-1.5 lg:left-3 h-3 w-3 lg:h-5 lg:w-5 rounded-full bg-amber-400 opacity-90" />
               </span>
-              <span className="text-sm font-black text-white/80 italic">VISA</span>
-              <span className="text-sm font-bold text-white/80 italic">RuPay</span>
-              <span className="rounded bg-blue-600 px-2 py-1 text-[10px] font-bold text-white">AMEX</span>
+              <span className="text-[8px] lg:text-sm font-black text-white/80 italic">VISA</span>
+              <span className="text-[8px] lg:text-sm font-bold text-white/80 italic">RuPay</span>
+              <span className="rounded bg-blue-600 px-1 py-0.5 text-[5px] lg:px-2 lg:py-1 lg:text-[10px] font-bold text-white">AMEX</span>
             </div>
           </div>
         </div>

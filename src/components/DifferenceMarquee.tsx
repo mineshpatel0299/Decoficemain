@@ -81,7 +81,7 @@ export default function DifferenceMarquee() {
 
       <div className="relative mx-auto max-w-3xl px-6 text-center">
         <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[40px]">
-          The <span className="font-serif font-bold text-emerald-500 italic">Difference</span>{" "}
+          The <span className="font-serif font-bold text-emerald-600 italic">Difference</span>{" "}
           You&apos;ll Feel
         </h2>
         <p className="mt-4 text-white/60">

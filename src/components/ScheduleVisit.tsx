@@ -113,8 +113,8 @@ function FieldInput({
 }) {
   return (
     <div
-      className={`rounded-2xl border px-5 py-4 backdrop-blur-md transition-colors ${
-        error ? "border-rose-400/40 bg-rose-500/8" : "border-white/10 bg-white/3 focus-within:border-white/25 focus-within:bg-white/6"
+      className={`rounded-2xl border px-5 py-4 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
+        error ? "border-rose-400/50 bg-rose-500/10" : "border-white/20 bg-white/5 focus-within:border-white/40 focus-within:bg-white/10"
       }`}
     >
       <label className="mb-3 flex items-center gap-2 text-xs tracking-[0.2em] text-white/40 uppercase">
@@ -193,36 +193,36 @@ export default function ScheduleVisit() {
     <section className="relative bg-[#0F0F0F] py-24 lg:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
-          <div>
+          <div className="text-center lg:text-left">
             <h2 className="font-opensans text-[40px] leading-tight font-bold text-white sm:text-[56px]">
               Schedule a
               <br />
-              <span className="font-serif font-bold text-emerald-500 italic">Meet</span>
+              <span className="font-serif font-bold text-emerald-600 italic">Meet</span>
             </h2>
-            <p className="mt-5 max-w-md text-white/70">
+            <p className="mx-auto mt-5 max-w-md text-white/70 lg:mx-0">
               Choose an in-person visit or a virtual call, then share a preferred slot and your contact details.
             </p>
 
-            <div className="mt-10 flex flex-col gap-4">
+            <div className="mt-10 hidden flex-col gap-4 lg:flex">
               {STEPS.map((item) => {
                 const isComplete = currentStep > item.step || isSubmitted;
                 const isCurrent = currentStep === item.step && !isSubmitted;
                 return (
                   <div
                     key={item.step}
-                    className={`rounded-2xl border p-5 backdrop-blur-md transition-colors ${
+                    className={`rounded-2xl border p-5 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
                       isCurrent
-                        ? "border-emerald-500/30 bg-emerald-500/8"
+                        ? "border-emerald-500/50 bg-emerald-500/15"
                         : isComplete
-                          ? "border-emerald-500/20 bg-emerald-500/4"
-                          : "border-white/10 bg-white/3"
+                          ? "border-emerald-500/20 bg-emerald-500/5"
+                          : "border-white/20 bg-white/5"
                     }`}
                   >
                     <div className="flex items-start gap-4">
                       <div
                         className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full border ${
                           isComplete
-                            ? "border-emerald-500/30 bg-emerald-500/20 text-emerald-400"
+                            ? "border-emerald-500/30 bg-emerald-500/20 text-emerald-600"
                             : isCurrent
                               ? "border-white bg-white text-black"
                               : "border-white/25 text-white/60"
@@ -241,13 +241,13 @@ export default function ScheduleVisit() {
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-[32px] border border-white/15 bg-white/3 p-6 shadow-2xl shadow-black/40 backdrop-blur-2xl sm:p-8 lg:h-[551px] lg:self-end">
-            <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent" />
+          <div className="relative mx-auto flex h-[300px] w-full max-w-[358px] flex-col gap-[14px] overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.02] px-[14px] py-[18px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-3xl sm:p-8 lg:mx-0 lg:h-[551px] lg:max-w-none lg:rounded-[32px] lg:self-end lg:gap-0 lg:p-6 lg:sm:p-8">
+            <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent opacity-50" />
             <div className="relative flex h-full flex-col">
             <form onSubmit={handleSubmit} className="flex h-full flex-col">
-              <div className="mb-6 flex shrink-0 flex-wrap items-center justify-between gap-4">
+              <div className="mb-4 flex shrink-0 flex-wrap items-center justify-between gap-4 lg:mb-6">
                 <div>
-                  <h3 className="text-xl font-bold text-white">
+                  <h3 className="text-[18px] font-bold text-white lg:text-xl">
                     {isSubmitted
                       ? "Request captured"
                       : currentStep === 1
@@ -256,7 +256,7 @@ export default function ScheduleVisit() {
                           ? "Choose a slot"
                           : "Share contact details"}
                   </h3>
-                  <p className="mt-1 text-sm text-white/50">
+                  <p className="mt-1 text-[12px] text-white/70 lg:text-sm lg:text-white/50">
                     {isSubmitted
                       ? "We'll be in touch shortly."
                       : currentStep === 1
@@ -267,7 +267,7 @@ export default function ScheduleVisit() {
                   </p>
                 </div>
                 {!isSubmitted && (
-                  <span className="rounded-full border border-white/15 px-4 py-2 text-sm text-white/60">
+                  <span className="rounded-full border border-white/15 px-3 py-1.5 text-[10px] text-white/80 lg:px-4 lg:py-2 lg:text-sm lg:text-white/60">
                     Step {currentStep} of 3
                   </span>
                 )}
@@ -275,8 +275,8 @@ export default function ScheduleVisit() {
 
               <div className="flex-1 overflow-y-auto pr-1">
               {isSubmitted ? (
-                <div className="rounded-3xl border border-emerald-500/20 bg-emerald-500/10 p-6 sm:p-8">
-                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-emerald-500/20 bg-emerald-500/20 text-emerald-400">
+                <div className="rounded-3xl border border-emerald-500/30 bg-emerald-500/10 p-6 backdrop-blur-xl shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] sm:p-8">
+                  <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/20 text-emerald-600">
                     <CheckIcon className="h-7 w-7" />
                   </div>
                   <h4 className="mb-3 text-2xl font-semibold text-white">Request received</h4>
@@ -284,12 +284,12 @@ export default function ScheduleVisit() {
                     Thank you for sharing your preferred slot. Our team will review the request and confirm shortly.
                   </p>
                   <div className="mb-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                    <div className="rounded-2xl border border-white/10 bg-white/3 p-4">
+                    <div className="rounded-2xl border border-white/20 bg-white/5 p-4 backdrop-blur-md">
                       <p className="mb-2 text-xs tracking-[0.2em] text-white/40 uppercase">Scheduled For</p>
                       <p className="font-medium text-white">{dates[selectedDateIndex].label}</p>
                       <p className="mt-1 text-sm text-white/60">{selectedTime}</p>
                     </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/3 p-4">
+                    <div className="rounded-2xl border border-white/20 bg-white/5 p-4 backdrop-blur-md">
                       <p className="mb-2 text-xs tracking-[0.2em] text-white/40 uppercase">Client</p>
                       <p className="font-medium text-white">{form.fullName}</p>
                       <p className="mt-1 text-sm text-white/60">{form.phone}</p>
@@ -306,7 +306,7 @@ export default function ScheduleVisit() {
               ) : (
                 <>
                   {currentStep === 1 && (
-                    <div className="flex flex-col gap-4">
+                    <div className="flex flex-col gap-[14px]">
                       {FORMAT_OPTIONS.map((option) => {
                         const active = visitType === option.type;
                         return (
@@ -314,13 +314,13 @@ export default function ScheduleVisit() {
                             key={option.type}
                             type="button"
                             onClick={() => setVisitType(option.type)}
-                            className={`w-full rounded-2xl border p-5 text-left backdrop-blur-md transition-colors sm:p-6 ${
+                            className={`w-full h-[72px] rounded-lg border px-[12px] py-[10px] text-left backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] lg:h-auto lg:rounded-2xl lg:p-5 lg:sm:p-6 ${
                               active
-                                ? "border-emerald-500/30 bg-emerald-500/8"
-                                : "border-white/10 bg-white/3 hover:bg-white/6"
+                                ? "border-emerald-500/50 bg-emerald-500/15"
+                                : "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
                             }`}
                           >
-                            <div className="flex items-start gap-4">
+                            <div className="flex h-full items-center gap-1 overflow-hidden lg:items-start lg:gap-4">
                               <div
                                 className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${
                                   active ? "bg-white text-black" : "border border-white/20 text-white"
@@ -328,10 +328,10 @@ export default function ScheduleVisit() {
                               >
                                 {option.type === "In-person" ? <PersonIcon /> : <VideoIcon />}
                               </div>
-                              <div>
-                                <p className="text-lg font-semibold text-white">{option.type}</p>
-                                <p className="text-sm text-white/50">{option.title}</p>
-                                <p className="mt-2 text-sm text-white/60">{option.description}</p>
+                              <div className="flex flex-col justify-center">
+                                <p className="text-[14px] font-semibold leading-tight text-white lg:text-lg">{option.type}</p>
+                                <p className="text-[11px] leading-tight text-white/70 lg:text-sm lg:text-white/50">{option.title}</p>
+                                <p className="mt-0.5 text-[9px] leading-tight text-white/50 lg:mt-2 lg:text-sm lg:text-white/60">{option.description}</p>
                               </div>
                             </div>
                           </button>
@@ -349,10 +349,10 @@ export default function ScheduleVisit() {
                             key={d.label}
                             type="button"
                             onClick={() => setSelectedDateIndex(i)}
-                            className={`flex min-w-16 shrink-0 flex-col items-center rounded-2xl border px-4 py-3 backdrop-blur-md transition-colors ${
+                            className={`flex min-w-16 shrink-0 flex-col items-center rounded-2xl border px-4 py-3 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
                               selectedDateIndex === i
-                                ? "border-emerald-500/30 bg-emerald-500/8 text-white"
-                                : "border-white/10 bg-white/3 text-white/70 hover:bg-white/6"
+                                ? "border-emerald-500/50 bg-emerald-500/15 text-white"
+                                : "border-white/20 bg-white/5 text-white/70 hover:bg-white/10 hover:border-white/30"
                             }`}
                           >
                             <span className="text-xs tracking-wide uppercase">{d.weekday}</span>
@@ -371,10 +371,10 @@ export default function ScheduleVisit() {
                               setSelectedTime(time);
                               setErrors((prev) => ({ ...prev, selectedTime: undefined }));
                             }}
-                            className={`rounded-xl border px-3 py-3 text-sm font-medium transition-colors ${
+                            className={`rounded-xl border px-3 py-3 text-sm font-medium transition-all backdrop-blur-md shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
                               selectedTime === time
-                                ? "border-white bg-white text-black"
-                                : "border-white/15 text-white hover:bg-white/10"
+                                ? "border-white bg-white text-black shadow-white/20"
+                                : "border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30"
                             }`}
                           >
                             {time}
@@ -412,7 +412,7 @@ export default function ScheduleVisit() {
                         error={errors.email}
                         type="email"
                       />
-                      <div className="rounded-2xl border border-white/10 bg-white/3 px-5 py-4 backdrop-blur-md transition-colors focus-within:border-white/25 focus-within:bg-white/6">
+                      <div className="rounded-2xl border border-white/20 bg-white/5 px-5 py-4 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] focus-within:border-white/40 focus-within:bg-white/10">
                         <label className="mb-3 flex items-center gap-2 text-xs tracking-[0.2em] text-white/40 uppercase">
                           <MailIcon /> Message (optional)
                         </label>
@@ -430,14 +430,14 @@ export default function ScheduleVisit() {
               </div>
 
               {!isSubmitted && (
-                <div className="mt-6 flex shrink-0 flex-col gap-3 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
-                  <p className="text-sm text-white/45">{nextUpText}</p>
-                  <div className="flex flex-col-reverse gap-3 sm:flex-row">
+                <div className="mt-auto flex shrink-0 flex-row items-center justify-between border-t border-white/10 pt-3 lg:mt-6 lg:pt-6">
+                  <p className="text-[10px] text-white/50 lg:text-sm lg:text-white/45">{nextUpText}</p>
+                  <div className="flex gap-2 lg:gap-3">
                     {currentStep > 1 && (
                       <button
                         type="button"
                         onClick={goBack}
-                        className="rounded-full border border-white/15 px-6 py-3 font-medium text-white transition-colors hover:bg-white/10"
+                        className="flex h-[24px] min-w-[64px] items-center justify-center rounded-lg border border-white/15 px-[10px] py-[2px] text-[10px] font-medium leading-none text-white transition-colors hover:bg-white/10 lg:h-auto lg:rounded-full lg:px-6 lg:py-3 lg:text-base"
                       >
                         Back
                       </button>
@@ -447,7 +447,7 @@ export default function ScheduleVisit() {
                         key="continue"
                         type="button"
                         onClick={goNext}
-                        className="rounded-full bg-white px-8 py-3 font-semibold text-black transition-colors hover:bg-white/90"
+                        className="flex h-[24px] w-[64px] items-center justify-center rounded-lg bg-white px-[10px] py-[2px] text-[10px] font-semibold leading-none text-black transition-colors hover:bg-white/90 lg:h-auto lg:w-auto lg:rounded-full lg:px-8 lg:py-3 lg:text-base"
                       >
                         Continue
                       </button>
@@ -455,7 +455,7 @@ export default function ScheduleVisit() {
                       <button
                         key="submit"
                         type="submit"
-                        className="rounded-full bg-white px-8 py-3 font-semibold text-black transition-colors hover:bg-white/90"
+                        className="flex h-[24px] items-center justify-center rounded-lg bg-white px-[10px] py-[2px] text-[10px] font-semibold leading-none text-black transition-colors hover:bg-white/90 lg:h-auto lg:rounded-full lg:px-8 lg:py-3 lg:text-base"
                       >
                         Submit Request
                       </button>
