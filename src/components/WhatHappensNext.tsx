@@ -8,6 +8,22 @@ const steps = [
   { title: "The First Glimpse Of What's Possible", image: "/3d/Vision.png" },
 ];
 
+const GlowingDot = () => (
+  <svg width="29" height="29" viewBox="0 0 29 29" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0 -ml-2">
+    <g filter="url(#filter0_f_1309_360)">
+      <circle cx="14.5" cy="14.5" r="9.5" stroke="#EAEAEA"/>
+    </g>
+    <circle cx="14.4987" cy="14.4997" r="6.66667" fill="#EAEAEA"/>
+    <defs>
+      <filter id="filter0_f_1309_360" x="0" y="0" width="29" height="29" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+        <feGaussianBlur stdDeviation="2.25" result="effect1_foregroundBlur_1309_360"/>
+      </filter>
+    </defs>
+  </svg>
+);
+
 export default function WhatHappensNext() {
   return (
     <section className="relative bg-[#0F0F0F] py-16 lg:py-32">
@@ -87,8 +103,8 @@ export default function WhatHappensNext() {
                 className="relative h-[253px] w-full overflow-hidden rounded-lg border border-black/20"
               >
                 <Image src={step.image} alt={step.title} fill sizes="(min-width: 1024px) 33vw, 100vw" className="object-cover" />
-                <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 border-t border-black/20 bg-black/20 p-4 backdrop-blur-md">
-                  <span className="h-2 w-2 shrink-0 rounded-full border border-white/80" />
+                <div className="absolute inset-x-0 bottom-0 flex items-center gap-4 border-t border-black/20 bg-black/20 p-4 backdrop-blur-md">
+                  <GlowingDot />
                   <p className="text-sm font-bold text-white">{step.title}</p>
                 </div>
               </div>
@@ -96,8 +112,8 @@ export default function WhatHappensNext() {
 
             <div className="relative col-span-full h-[281px] w-full overflow-hidden rounded-lg border border-black/20">
               <Image src="/temp/4.png" alt="Turning vision into something real" fill sizes="100vw" className="object-cover" />
-              <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 border-t border-black/20 bg-black/20 p-5 backdrop-blur-md">
-                <span className="h-2 w-2 shrink-0 rounded-full border border-white/80" />
+              <div className="absolute inset-x-0 bottom-0 flex items-center gap-5 border-t border-black/20 bg-black/20 p-5 backdrop-blur-md">
+                <GlowingDot />
                 <p className="text-base font-bold text-white">Turning Vision Into Something Real</p>
               </div>
             </div>

@@ -1,4 +1,9 @@
+"use client";
+
 import Image from "next/image";
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const concerns = [
   {
@@ -34,17 +39,10 @@ const concerns = [
 function ConcernCard({ concern }: { concern: (typeof concerns)[number] }) {
   return (
     <div
-      className="font-opensans relative w-123.75 shrink-0 overflow-hidden rounded-3xl border border-white/15 bg-white/5 px-6 py-3.5 text-center backdrop-blur-md"
+      className="font-opensans relative w-123.75 shrink-0 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02] px-6 py-3.5 text-center shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-3xl"
       style={{ height: "380.03192138671875px" }}
     >
-      <Image
-        src="/grids.png"
-        alt=""
-        aria-hidden="true"
-        fill
-        sizes="495px"
-        className="scale-150 object-cover opacity-70 blur-xl"
-      />
+      <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent opacity-50" />
 
       <div className="relative flex h-full flex-col justify-between">
         <div className="mt-14 flex flex-col gap-4">
@@ -67,20 +65,68 @@ function ConcernCard({ concern }: { concern: (typeof concerns)[number] }) {
 
 export default function DifferenceMarquee() {
   const track = [...concerns, ...concerns];
+  const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      // Background grid drifts downward, the same direction as the scroll.
+      gsap.fromTo(
+        gridRef.current,
+        { yPercent: -15 },
+        {
+          yPercent: 15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+
+      // Card row sweeps right to left as the section scrolls through view.
+      if (trackRef.current) {
+        const sweep = trackRef.current.scrollWidth / 2;
+        gsap.fromTo(
+          trackRef.current,
+          { x: 0 },
+          {
+            x: -sweep,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true,
+            },
+          }
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section className="relative overflow-hidden bg-[#0F0F0F] py-24">
-      <Image
-        src="/grids.png"
-        alt=""
-        aria-hidden="true"
-        fill
-        sizes="100vw"
-        className="pointer-events-none object-cover mask-[linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]"
-      />
+    <section ref={sectionRef} className="relative overflow-hidden bg-[#0F0F0F] py-24">
+      <div ref={gridRef} className="pointer-events-none absolute inset-x-0 -top-[15%] h-[130%]">
+        <Image
+          src="/grids.png"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover mask-[linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]"
+        />
+      </div>
 
       <div className="relative mx-auto max-w-3xl px-6 text-center lg:px-12">
-        <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[40px]">
+        <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[44px] lg:text-[52px]">
           The <span className="font-serif font-bold text-emerald-600 italic">Difference</span>{" "}
           You&apos;ll Feel
         </h2>
@@ -90,7 +136,7 @@ export default function DifferenceMarquee() {
       </div>
 
       <div className="relative mt-14 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)]">
-        <div className="animate-marquee flex w-max gap-6">
+        <div ref={trackRef} className="flex w-max gap-6">
           {track.map((concern, i) => (
             <ConcernCard key={`${concern.label}-${i}`} concern={concern} />
           ))}

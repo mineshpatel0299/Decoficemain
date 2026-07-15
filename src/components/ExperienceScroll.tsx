@@ -123,12 +123,12 @@ export default function ExperienceScroll() {
           const offset = raw - i;
           const clampedOffset = gsap.utils.clamp(-1, 1, offset);
           if (innerImageRefs.current[i]) {
-            // As we scroll down (raw increases), offset increases.
-            // When coming into view (offset < 0), it starts at yPercent: -10
-            // When fully in view (offset === 0), it is at yPercent: 0
-            // When leaving view (offset > 0), it goes to yPercent: 10
+            // As we scroll down (raw increases), offset increases, and the image
+            // should travel upward. Coming into view (offset < 0) it starts at
+            // yPercent: 10; fully in view (offset === 0) it's at yPercent: 0;
+            // leaving view (offset > 0) it continues to yPercent: -10.
             gsap.set(innerImageRefs.current[i], {
-              yPercent: clampedOffset * 10,
+              yPercent: clampedOffset * -10,
             });
           }
         });

@@ -20,15 +20,24 @@ export default function Stats() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
+      // Slide the text content up over the first stretch of the pin, then hold
+      // (nothing animates) for the remainder so the section ends on the hills
+      // alone — sticky at the bottom the whole time — before releasing the pin
+      // and letting the section scroll away with just the hills visible.
+      const tl = gsap.timeline();
+      tl.to(contentRef.current, { yPercent: -100, ease: "none", duration: 1 }).to({}, { duration: 0.6 });
+
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=100%", // Pin for 100% of viewport height
+        end: "+=160%", // Pin for the slide plus the hold at the end
         pin: true,
-        animation: gsap.to(contentRef.current, {
-          yPercent: -100, // Slide the text content up
-          ease: "none",
-        }),
+        // <main> is a flex container, which makes GSAP disable pin spacing by
+        // default (it assumes flex layouts don't want the extra reserved
+        // space) — force it back on so the next section can't ride up over
+        // the still-pinned hills.
+        pinSpacing: true,
+        animation: tl,
         scrub: true,
       });
     }, sectionRef);
