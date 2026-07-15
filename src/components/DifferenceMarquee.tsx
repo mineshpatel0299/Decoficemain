@@ -48,15 +48,15 @@ function ConcernCard({ concern }: { concern: (typeof concerns)[number] }) {
 
       <div className="relative flex h-full flex-col justify-between">
         <div className="mt-14 flex flex-col gap-4">
-          <p className="text-base leading-none font-bold text-[#25975B]">{concern.label}</p>
+          <p className="text-base leading-none font-bold text-emerald-600">{concern.label}</p>
           <p className="text-base leading-none text-white/60 italic">&ldquo;{concern.quote}&rdquo;</p>
         </div>
 
         <div className="mb-14 flex flex-col gap-4">
           <p className="text-2xl leading-none font-bold">
-            <span className="text-[#25975B]">{concern.headingWhite}</span>
+            <span className="text-emerald-600">{concern.headingWhite}</span>
             <br />
-            <span className="text-[#25975B]">{concern.headingGreen}</span>
+            <span className="text-emerald-600">{concern.headingGreen}</span>
           </p>
           <p className="text-base leading-5 text-white/60">{concern.body}</p>
         </div>
@@ -79,7 +79,7 @@ export default function DifferenceMarquee() {
         className="pointer-events-none object-cover mask-[linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]"
       />
 
-      <div className="relative mx-auto max-w-3xl px-6 text-center">
+      <div className="relative mx-auto max-w-3xl px-6 text-center lg:px-12">
         <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[40px]">
           The <span className="font-serif font-bold text-emerald-600 italic">Difference</span>{" "}
           You&apos;ll Feel
@@ -97,7 +97,7 @@ export default function DifferenceMarquee() {
         </div>
       </div>
 
-      <div className="relative mt-14 flex justify-center px-6">
+      <div className="relative mt-14 flex justify-center px-6 lg:px-12">
         <a
           href="#feel-the-difference"
           className="font-opensans inline-flex h-11 items-center justify-center rounded-lg bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"

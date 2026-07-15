@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
 import Logo from "./Logo";
 
 const navLinks = [
@@ -13,9 +14,23 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    // Slides down once the preloader (1s delay + 1.4s logo zoom + 0.4s fade,
+    // overlapping) has fully cleared at ~2.5s — same cue Hero's copy uses.
+    gsap.fromTo(
+      headerRef.current,
+      { y: -40, opacity: 0 },
+      { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay: 2.5 }
+    );
+  }, []);
 
   return (
-    <header className="relative z-30 mx-auto max-w-[1800px] px-8 pt-8 sm:px-12">
+    <header
+      ref={headerRef}
+      className="relative z-30 mx-auto max-w-[1800px] px-8 pt-8 opacity-0 sm:px-12"
+    >
       <div className="flex items-center justify-between">
         <a href="/" className="shrink-0 text-white">
           <Logo className="h-8 w-auto" />

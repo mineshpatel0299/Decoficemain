@@ -42,7 +42,7 @@ export default function Stats() {
       <div className="absolute inset-0 z-1 bg-linear-to-b from-[#0F0F0F] from-25% via-transparent via-45% to-[#0F0F0F] to-95%" />
 
       <div ref={contentRef} className="absolute inset-0 z-10">
-        <div className="absolute inset-x-0 top-[18%] mx-auto max-w-5xl px-6 text-center">
+        <div className="absolute inset-x-0 top-[18%] mx-auto max-w-5xl px-6 text-center lg:px-12">
           <h2 className="font-opensans text-[24px] leading-tight font-bold text-white sm:text-[44px] lg:text-[56px]">
             Beyond The <span className="font-serif font-bold text-emerald-600 italic">Blueprint</span>
           </h2>
@@ -63,7 +63,7 @@ export default function Stats() {
           </div>
         </div>
 
-        <div className="absolute inset-x-0 top-[70%] mx-auto max-w-3xl px-6 text-center lg:top-[72%]">
+        <div className="absolute inset-x-0 top-[70%] mx-auto max-w-3xl px-6 text-center lg:top-[72%] lg:px-12">
           <h3 className="font-opensans text-[24px] leading-tight font-bold text-white sm:text-[42px] lg:text-[50px]">
             The <span className="font-serif font-bold text-emerald-600 italic">Company</span> We Keep
           </h3>

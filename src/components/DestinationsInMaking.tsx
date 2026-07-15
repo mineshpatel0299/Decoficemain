@@ -19,7 +19,7 @@ function Badge({ children }: { children: React.ReactNode }) {
 export default function DestinationsInMaking() {
   return (
     <section className="relative bg-[#0F0F0F] py-24 lg:py-32">
-      <div className="mx-auto max-w-6xl px-6 text-center">
+      <div className="mx-auto max-w-7xl px-6 text-center lg:px-12">
         <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[44px] lg:text-[52px]">
           Destinations In The <span className="font-serif font-bold text-emerald-600 italic">Making</span>
         </h2>
@@ -29,10 +29,12 @@ export default function DestinationsInMaking() {
         </p>
 
         <div className="mt-14 grid grid-cols-1 justify-items-center gap-6 text-left sm:grid-cols-2 lg:grid-cols-3">
-          {projects.map((project) => (
+          {projects.map((project, i) => (
             <div
               key={project.typeBadge}
-              className="flex w-full max-w-[400px] flex-col overflow-hidden rounded-2xl bg-black"
+              className={`flex w-full max-w-[400px] flex-col overflow-hidden rounded-2xl bg-black ${
+                i === projects.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""
+              }`}
               style={{ aspectRatio: "400/458" }}
             >
               <div className="relative flex-1">
@@ -56,7 +58,7 @@ export default function DestinationsInMaking() {
                 </div>
               </div>
 
-              <div className="bg-black px-1 py-4">
+              <div className="bg-black px-4 py-4">
                 <p className="font-opensans text-lg font-semibold text-white">Master Planning • Architecture</p>
               </div>
             </div>

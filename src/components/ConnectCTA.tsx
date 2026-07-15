@@ -42,13 +42,13 @@ export default function ConnectCTA() {
           <div className="mt-8 flex w-full flex-col items-center gap-4">
             <a
               href="#learn-more"
-              className="font-opensans flex h-[36px] w-[182px] items-center justify-center whitespace-nowrap rounded-lg bg-[#259A5A] px-[12px] py-[8px] text-[12px] font-semibold text-white transition-colors hover:bg-[#259A5A]/90"
+              className="font-opensans flex h-[36px] w-[182px] items-center justify-center whitespace-nowrap rounded-lg bg-emerald-600 px-[12px] py-[8px] text-[12px] font-semibold text-white transition-colors hover:bg-emerald-600/90"
             >
               Learn More About Decofice
             </a>
             <a
               href="#download-brochure"
-              className="font-opensans flex h-[36px] w-[182px] items-center justify-center whitespace-nowrap rounded-lg bg-[#EFEFEF] px-[12px] py-[8px] text-[12px] font-semibold text-[#259A5A] transition-colors hover:bg-white"
+              className="font-opensans flex h-[36px] w-[182px] items-center justify-center whitespace-nowrap rounded-lg bg-[#EFEFEF] px-[12px] py-[8px] text-[12px] font-semibold text-emerald-600 transition-colors hover:bg-white"
             >
               Download Brochure
             </a>
@@ -80,7 +80,7 @@ export default function ConnectCTA() {
             <div className="grid w-full grid-cols-2 gap-3">
               <a
                 href={CONSULTANT.phoneHref}
-                className="font-opensans flex h-9 items-center justify-center gap-2 rounded-xl bg-[#EFEFEF] text-[11px] font-semibold text-[#259A5A] transition-colors hover:bg-white"
+                className="font-opensans flex h-9 items-center justify-center gap-2 rounded-xl bg-[#EFEFEF] text-[11px] font-semibold text-emerald-600 transition-colors hover:bg-white"
               >
                 <PhoneIcon className="h-3.5 w-3.5" />
                 Call
@@ -147,7 +147,7 @@ export default function ConnectCTA() {
             <div className="flex w-full items-center justify-center gap-[10px]">
               <a
                 href={CONSULTANT.phoneHref}
-                className="font-opensans flex h-[40px] w-[131px] items-center justify-center gap-2 rounded-[8px] bg-[#EFEFEF] px-[36px] py-[10px] text-base font-semibold text-[#259A5A] transition-colors hover:bg-white"
+                className="font-opensans flex h-[40px] w-[131px] items-center justify-center gap-2 rounded-[8px] bg-[#EFEFEF] px-[36px] py-[10px] text-base font-semibold text-emerald-600 transition-colors hover:bg-white"
               >
                 <PhoneIcon className="h-5 w-5" />
                 Call

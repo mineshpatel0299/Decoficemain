@@ -195,55 +195,59 @@ export default function ExperienceScroll() {
           </div>
         ))}
 
-        <div className="absolute inset-0 z-50 flex flex-col justify-end pb-28 pl-8 sm:pb-32 sm:pl-16 lg:pl-24">
-          <div className="relative max-w-xl lg:max-w-5xl">
-            {slides.map((slide, i) => (
-              <div
-                key={slide.badge + i}
-                ref={(el) => {
-                  textRefs.current[i] = el;
-                }}
-                className={i === 0 ? "relative" : "absolute inset-0"}
-              >
-                <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-emerald-700/60 px-4 py-1.5 text-[11px] font-semibold tracking-[0.2em] text-white uppercase backdrop-blur-sm">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white" />
-                  {slide.badge}
-                </span>
-
-                <h2 className="font-opensans mt-5 text-[32px] leading-[1.15] font-bold text-white sm:text-[44px] lg:text-[64px] lg:leading-none">
-                  {slide.heading.map((line, lineIdx) => (
-                    <span key={lineIdx}>
-                      {lineIdx > 0 && <br />}
-                      {line.map((segment, segIdx) =>
-                        segment.italic ? (
-                          <span key={segIdx} className="font-serif font-bold italic">
-                            {segment.text}
-                          </span>
-                        ) : (
-                          <span key={segIdx}>{segment.text}</span>
-                        ),
-                      )}
-                    </span>
-                  ))}
-                </h2>
-
-                <p className="font-opensans mt-4 max-w-xl text-base leading-6 font-normal text-white/80 sm:text-lg sm:leading-7 lg:text-[20px] lg:leading-7.5">
-                  {slide.paragraph}
-                </p>
-
-                <a
-                  href="#view-experience"
-                  className="mt-6 inline-flex h-11 items-center justify-center rounded-md bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
+        <div className="absolute inset-0 z-50 flex flex-col justify-end pb-28 sm:pb-32">
+          <div className="mx-auto w-full max-w-7xl px-6 lg:px-12">
+            <div className="relative max-w-xl lg:max-w-5xl">
+              {slides.map((slide, i) => (
+                <div
+                  key={slide.badge + i}
+                  ref={(el) => {
+                    textRefs.current[i] = el;
+                  }}
+                  className={i === 0 ? "relative" : "absolute inset-0"}
                 >
-                  {slide.cta}
-                </a>
-              </div>
-            ))}
+                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-emerald-700/60 px-4 py-1.5 text-[11px] font-semibold tracking-[0.2em] text-white uppercase backdrop-blur-sm">
+                    <span className="h-1.5 w-1.5 rounded-full bg-white" />
+                    {slide.badge}
+                  </span>
+
+                  <h2 className="font-opensans mt-5 text-[32px] leading-[1.15] font-bold text-white sm:text-[44px] lg:text-[64px] lg:leading-none">
+                    {slide.heading.map((line, lineIdx) => (
+                      <span key={lineIdx}>
+                        {lineIdx > 0 && <br />}
+                        {line.map((segment, segIdx) =>
+                          segment.italic ? (
+                            <span key={segIdx} className="font-serif font-bold italic">
+                              {segment.text}
+                            </span>
+                          ) : (
+                            <span key={segIdx}>{segment.text}</span>
+                          ),
+                        )}
+                      </span>
+                    ))}
+                  </h2>
+
+                  <p className="font-opensans mt-4 max-w-xl text-base leading-6 font-normal text-white/80 sm:text-lg sm:leading-7 lg:text-[20px] lg:leading-7.5">
+                    {slide.paragraph}
+                  </p>
+
+                  <a
+                    href="#view-experience"
+                    className="mt-6 inline-flex h-11 items-center justify-center rounded-md bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
+                  >
+                    {slide.cta}
+                  </a>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
-        <div className="absolute right-8 bottom-10 left-8 z-50 h-px bg-white/25 sm:right-16 sm:left-16 lg:right-24 lg:left-24">
-          <div ref={markerRef} className="absolute top-1/2 h-0.5 -translate-y-1/2 bg-white" style={{ width: `${100 / slides.length}%` }} />
+        <div className="absolute inset-x-0 bottom-10 z-50 mx-auto max-w-7xl px-6 lg:px-12">
+          <div className="relative h-px bg-white/25">
+            <div ref={markerRef} className="absolute top-1/2 h-0.5 -translate-y-1/2 bg-white" style={{ width: `${100 / slides.length}%` }} />
+          </div>
         </div>
       </div>
     </section>

@@ -113,11 +113,11 @@ function FieldInput({
 }) {
   return (
     <div
-      className={`rounded-2xl border px-5 py-4 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
+      className={`rounded-2xl border px-5 py-3 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
         error ? "border-rose-400/50 bg-rose-500/10" : "border-white/20 bg-white/5 focus-within:border-white/40 focus-within:bg-white/10"
       }`}
     >
-      <label className="mb-3 flex items-center gap-2 text-xs tracking-[0.2em] text-white/40 uppercase">
+      <label className="mb-2 flex items-center gap-2 text-xs tracking-[0.2em] text-white/40 uppercase">
         {icon} {label}
       </label>
       <input
@@ -386,8 +386,8 @@ export default function ScheduleVisit() {
                   )}
 
                   {currentStep === 3 && (
-                    <div className="flex flex-col gap-4">
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                    <div className="flex flex-col gap-3">
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                         <FieldInput
                           label="Full name"
                           icon={<PersonIcon className="h-3.5 w-3.5" />}
@@ -412,12 +412,12 @@ export default function ScheduleVisit() {
                         error={errors.email}
                         type="email"
                       />
-                      <div className="rounded-2xl border border-white/20 bg-white/5 px-5 py-4 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] focus-within:border-white/40 focus-within:bg-white/10">
-                        <label className="mb-3 flex items-center gap-2 text-xs tracking-[0.2em] text-white/40 uppercase">
+                      <div className="rounded-2xl border border-white/20 bg-white/5 px-5 py-3 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] focus-within:border-white/40 focus-within:bg-white/10">
+                        <label className="mb-2 flex items-center gap-2 text-xs tracking-[0.2em] text-white/40 uppercase">
                           <MailIcon /> Message (optional)
                         </label>
                         <textarea
-                          rows={3}
+                          rows={2}
                           value={form.message}
                           onChange={(e) => updateField("message", e.target.value)}
                           className="w-full resize-none bg-transparent text-white placeholder:text-white/30 focus:outline-none"

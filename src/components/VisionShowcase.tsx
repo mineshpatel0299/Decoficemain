@@ -122,7 +122,7 @@ export default function VisionShowcase() {
 
   return (
     <section ref={sectionRef} className="relative bg-[#0F0F0F] py-24 lg:py-32">
-      <div className="mx-auto max-w-[1440px] px-6 lg:px-12">
+      <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="max-w-2xl">
           <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-[56px]">
             Watch Your <span className="font-serif font-bold italic text-emerald-600">Dream</span>

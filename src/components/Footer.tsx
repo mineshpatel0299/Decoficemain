@@ -105,7 +105,7 @@ export default function Footer() {
           <FooterColumn title="Resources" links={resourceLinks} />
         </div>
 
-        <div className="mt-8 border-t border-[#259A5A]/40 pt-4 lg:mt-14 lg:pt-6">
+        <div className="mt-8 border-t border-emerald-600/40 pt-4 lg:mt-14 lg:pt-6">
           <div className="flex flex-row items-center justify-between gap-2 overflow-x-auto pb-2 lg:gap-4 lg:pb-4">
             <p className="shrink-0 text-[7px] lg:text-sm text-white/50 whitespace-nowrap">
               Copyright © {new Date().getFullYear()} Decofice Technologies Private Limited | All rights reserved

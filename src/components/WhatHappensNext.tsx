@@ -14,7 +14,7 @@ export default function WhatHappensNext() {
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="text-center">
           <h2 className="font-opensans text-[28px] leading-tight font-bold text-white sm:text-[44px] lg:text-[52px]">
-            Here&apos;s What Happens <span className="font-serif font-bold text-[#259A5A] italic lg:text-emerald-600">Next</span>
+            Here&apos;s What Happens <span className="font-serif font-bold text-emerald-600 italic">Next</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-[14px] leading-relaxed text-white/70 lg:mt-5 lg:text-base">
             From site visits and planning to concepts and execution, here&apos;s what your journey with Decofice
@@ -56,7 +56,7 @@ export default function WhatHappensNext() {
           <div className="mx-auto w-full max-w-[338px]">
             <a
               href="#schedule-a-meet"
-              className="mt-3 flex h-12 w-full items-center justify-center rounded-[8px] bg-[#259A5A] text-[15px] font-medium text-white transition-colors hover:bg-[#259A5A]/90"
+              className="mt-3 flex h-12 w-full items-center justify-center rounded-[8px] bg-emerald-600 text-[15px] font-medium text-white transition-colors hover:bg-emerald-600/90"
             >
               Schedule A Meet
             </a>
