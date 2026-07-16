@@ -63,6 +63,22 @@ function ViewIcon({ type, active }: { type: "daylight" | "sunset" | "nightfall";
   );
 }
 
+const SmallGlowingDot = () => (
+  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
+    <g filter="url(#filter0_f_2305_90)">
+      <circle cx="5.5" cy="5.5" r="2.5" transform="rotate(-90 5.5 5.5)" stroke="#EAEAEA"/>
+    </g>
+    <circle cx="5.5" cy="5.5" r="2" transform="rotate(-90 5.5 5.5)" fill="#EAEAEA"/>
+    <defs>
+      <filter id="filter0_f_2305_90" x="0" y="0" width="11" height="11" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+        <feGaussianBlur stdDeviation="1.25" result="effect1_foregroundBlur_2305_90"/>
+      </filter>
+    </defs>
+  </svg>
+);
+
 export default function VisionShowcase() {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeStage, setActiveStage] = useState(0);
@@ -122,6 +138,29 @@ export default function VisionShowcase() {
 
   return (
     <section ref={sectionRef} className="relative bg-[#0F0F0F] py-24 lg:py-32">
+      {/* Absolute Progress Line on Extreme Right */}
+      <div 
+        className="absolute z-10 hidden flex-col items-center lg:flex"
+        style={{ 
+          top: "180px", 
+          right: "max(24px, calc(50% - 622px))" // Maps to left: 1342px on a 1440px screen
+        }}
+      >
+        <div className="relative bg-white/15 w-[3px] h-[764px]">
+          <div
+            className="absolute top-0 left-0 w-full bg-emerald-500 transition-all duration-500"
+            style={{ height: "191px", transform: `translateY(${activeStage * 191}px)` }}
+          >
+            <span
+              className="absolute top-1/2 left-[-22px] flex min-w-[84px] h-[24px] -translate-x-1/2 -translate-y-1/2 -rotate-90 items-center justify-center gap-[10px] rounded-full border border-emerald-500/40 bg-[#0F0F0F] px-[14px] py-[6px] text-[11px] font-semibold tracking-widest text-emerald-600 whitespace-nowrap shadow-[0_0_15px_rgba(16,185,129,0.2)]"
+            >
+              <SmallGlowingDot />
+              {stages[activeStage].key}
+            </span>
+          </div>
+        </div>
+      </div>
+
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="max-w-2xl">
           <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-[56px]">
@@ -239,20 +278,7 @@ export default function VisionShowcase() {
                 ))}
               </div>
 
-              <div className="hidden shrink-0 flex-col items-center gap-3 lg:flex">
-                <span
-                  className="rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-3 text-[11px] font-semibold tracking-widest text-emerald-600"
-                  style={{ writingMode: "vertical-rl" }}
-                >
-                  {stages[activeStage].key}
-                </span>
-                <div className="relative h-32 w-px bg-white/15">
-                  <div
-                    className="absolute top-0 left-0 w-full bg-emerald-500 transition-all duration-500"
-                    style={{ height: `${((activeStage + 1) / stages.length) * 100}%` }}
-                  />
-                </div>
-              </div>
+
             </div>
 
             <p className="mt-4 flex items-center justify-center gap-2 text-sm text-white/50">
