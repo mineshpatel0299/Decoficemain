@@ -48,7 +48,6 @@ export default function Stats() {
   return (
     <section ref={sectionRef} className="relative h-[1150px] max-h-screen min-h-[860px] w-full overflow-hidden bg-black">
       <Image src="/stats/aurora.png" alt="Aurora over the mountains" fill priority sizes="100vw" className="object-cover" />
-      <div className="absolute inset-0 z-1 bg-linear-to-b from-[#0F0F0F] from-25% via-transparent via-45% to-[#0F0F0F] to-95%" />
 
       <div ref={contentRef} className="absolute inset-0 z-10">
         <div className="absolute inset-x-0 top-[18%] mx-auto max-w-5xl px-6 text-center lg:px-12">
@@ -88,7 +87,7 @@ export default function Stats() {
         aria-hidden="true"
         fill
         sizes="100vw"
-        className="pointer-events-none absolute inset-0 z-20 object-cover"
+        className="pointer-events-none absolute inset-0 z-20 translate-y-[8%] object-cover"
       />
     </section>
   );
