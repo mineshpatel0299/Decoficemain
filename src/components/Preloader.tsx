@@ -59,7 +59,16 @@ export default function Preloader() {
   }, []);
 
   return (
-    <div ref={preloaderRef} className="pointer-events-none fixed inset-0 z-100 flex items-center justify-center">
+    <div suppressHydrationWarning ref={preloaderRef} className="pointer-events-none fixed inset-0 z-100 flex items-center justify-center">
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            if (sessionStorage.getItem("hasSeenPreloader")) {
+              document.currentScript.parentElement.style.display = "none";
+            }
+          `,
+        }}
+      />
       <svg width="100%" height="100%" className="absolute inset-0">
         <defs>
           <mask id="knockout-mask">

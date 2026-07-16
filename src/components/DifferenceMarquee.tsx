@@ -80,8 +80,8 @@ function ConcernCard({ concern }: { concern: (typeof concerns)[number] }) {
 }
 
 export default function DifferenceMarquee() {
-  // Duplicate cards so sweep never shows a gap
-  const track = [...concerns, ...concerns, ...concerns];
+  // Use just the 4 concerns, no infinite duplication
+  const track = concerns;
   const outerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
@@ -93,24 +93,28 @@ export default function DifferenceMarquee() {
     const ctx = gsap.context(() => {
       if (!trackRef.current || !outerRef.current) return;
 
-      // Total distance to sweep = one full set of cards (concerns.length cards)
-      const cardWidth = 495 + 24; // card width + gap
-      const sweep = cardWidth * concerns.length;
+      // Calculate the exact distance to sweep so the 4th card aligns nicely
+      // on the right side of the screen. We use 8vw padding to ensure it clears
+      // the 8% edge fade mask but stays firmly on the right side.
+      const getSweep = () => {
+        const totalCardsWidth = concerns.length * (495 + 24); // 4 cards * (495px + 24px gap)
+        const rightPadding = window.innerWidth * 0.08;
+        return Math.max(0, totalCardsWidth - window.innerWidth + rightPadding);
+      };
 
       // Cards sweep right → left while the outer wrapper is pinned (sticky).
-      // start: when the sticky top hits top of viewport
-      // end: when the outer wrapper bottom exits viewport
       gsap.fromTo(
         trackRef.current,
         { x: 0 },
         {
-          x: -sweep,
+          x: () => -getSweep(),
           ease: "none",
           scrollTrigger: {
             trigger: outerRef.current,
             start: "top top",
             end: "bottom top",
             scrub: 1,
+            invalidateOnRefresh: true,
           },
         }
       );
@@ -138,8 +142,9 @@ export default function DifferenceMarquee() {
   }, []);
 
   return (
-    // outerRef is the tall scroll canvas that gives the sticky section room to breathe
-    <div ref={outerRef} className="relative bg-[#0F0F0F]" style={{ height: "300vh" }}>
+    // outerRef is the tall scroll canvas that gives the sticky section room to breathe.
+    // 200vh gives enough room to scroll through the 4 cards smoothly.
+    <div ref={outerRef} className="relative bg-[#0F0F0F]" style={{ height: "200vh" }}>
       {/* Sticky viewport-height panel */}
       <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
 
