@@ -72,7 +72,7 @@ export default function Stats() {
         </div>
 
         <div className="absolute inset-x-0 top-[70%] mx-auto max-w-3xl px-6 text-center lg:top-[72%] lg:px-12">
-          <h3 className="font-opensans text-[24px] leading-tight font-bold text-white sm:text-[42px] lg:text-heading">
+          <h3 className="font-opensans text-[24px] whitespace-nowrap leading-tight font-bold text-white sm:text-[42px] lg:text-heading">
             The <span className="font-serif font-bold text-emerald-600 italic">Company</span> We Keep
           </h3>
           <p className="mx-auto mt-5 max-w-xl text-[12px] text-white/70 sm:text-base">
