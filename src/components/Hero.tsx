@@ -6,9 +6,12 @@ import gsap from "gsap";
 import Navbar from "./Navbar";
 
 export default function Hero() {
+  const badgeRef = useRef<HTMLSpanElement>(null);
   const craftingRef = useRef<HTMLParagraphElement>(null);
   const rememberingRef = useRef<HTMLParagraphElement>(null);
   const ctaRef = useRef<HTMLDivElement>(null);
+
+  const badgeMobileRef = useRef<HTMLSpanElement>(null);
   const craftingMobileRef = useRef<HTMLParagraphElement>(null);
   const rememberingMobileRef = useRef<HTMLParagraphElement>(null);
   const ctaMobileRef = useRef<HTMLDivElement>(null);
@@ -20,29 +23,34 @@ export default function Hero() {
     // ~2.5s, so this lands right after the homepage reveal. Mobile and desktop
     // nodes both exist in the DOM (only one set is visible per breakpoint), so
     // they're animated together and the hidden set is just a no-op visually.
-    const targets = [
+    const desktopTargets = [
+      badgeRef.current,
       craftingRef.current,
       rememberingRef.current,
       ctaRef.current,
+    ];
+    
+    const mobileTargets = [
+      badgeMobileRef.current,
       craftingMobileRef.current,
       rememberingMobileRef.current,
       ctaMobileRef.current,
     ];
+    
     const hasSeen = sessionStorage.getItem("hasSeenPreloader");
     const delay = hasSeen ? 0 : 2.6;
 
-    gsap.fromTo(
-      targets,
-      { y: 70, opacity: 0 },
-      {
-        y: 0,
-        opacity: 1,
-        duration: 1.4,
-        ease: "power3.out",
-        delay,
-        stagger: 0.15,
-      }
-    );
+    const animTo = {
+      y: 0,
+      opacity: 1,
+      duration: 1.4,
+      ease: "power3.out",
+      delay,
+      stagger: 0.15,
+    };
+
+    gsap.fromTo(desktopTargets, { y: 70, opacity: 0 }, animTo);
+    gsap.fromTo(mobileTargets, { y: 70, opacity: 0 }, animTo);
   }, []);
 
   return (
@@ -72,7 +80,7 @@ export default function Hero() {
 
         {/* Badge + "Crafting Places Worth": sits behind the mountain cutout so it can occlude it a little. Font-size is pure vw because object-cover's pixel scale on this width-dominant container is exactly cw/imageNativeWidth, independent of height. But *position* is NOT pure vw: object-cover also crops the image top/bottom by (scaledHeight − containerHeight)/2, and that crop amount depends on containerHeight too — so a fixed point in the artwork (e.g. the mountain ridge) lands at top = (v−0.5)·(imageNativeHeight/imageNativeWidth)·vw + 0.5·vh for its normalized vertical fraction v. Solved against the 1440×900 reference point where the badge sits correctly, that's -14.25vw + 50vh. A pure-vw formula only happens to work when the window's aspect ratio matches the 1440:900 reference (as it does under simple browser-zoom testing, which scales width and height together) — on a wider/shorter real window (common on external monitors, or short browser chrome) it drifts the text down into the art, since the art crops more aggressively than pure vw accounts for. */}
         <div className="absolute inset-x-0 top-[calc(-14.25vw+50vh+6px)] z-5 mx-auto flex max-w-5xl flex-col items-center px-6 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-[0.2em] text-white/90 backdrop-blur-sm">
+          <span ref={badgeRef} className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-[0.2em] text-white/90 backdrop-blur-sm opacity-0">
             <span className="h-1.5 w-1.5 rounded-full bg-white" />
             DESTINATIONS IN THE MAKING
           </span>
@@ -148,7 +156,7 @@ export default function Hero() {
 
         {/* Badge + "Crafting Places Worth": sits behind the hills cutout so it can occlude it a little */}
         <div className="absolute inset-x-0 top-[31%] z-5 mx-auto flex flex-col items-center px-6 text-center">
-          <span className="flex h-4.5 w-34.5 items-center justify-center gap-1.5 whitespace-nowrap rounded-3xl border border-white/25 bg-white/10 pt-0.75 pr-1.75 pb-0.75 pl-1.75 text-[6px] font-semibold tracking-widest text-white/90 backdrop-blur-sm">
+          <span ref={badgeMobileRef} className="flex h-4.5 w-34.5 items-center justify-center gap-1.5 whitespace-nowrap rounded-3xl border border-white/25 bg-white/10 pt-0.75 pr-1.75 pb-0.75 pl-1.75 text-[6px] font-semibold tracking-widest text-white/90 backdrop-blur-sm opacity-0">
             <span className="h-1 w-1 shrink-0 rounded-full bg-white" />
             DESTINATIONS IN THE MAKING
           </span>

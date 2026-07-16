@@ -112,7 +112,7 @@ export default function DifferenceMarquee() {
           scrollTrigger: {
             trigger: outerRef.current,
             start: "top top",
-            end: "bottom top",
+            end: "bottom bottom",
             scrub: 1,
             invalidateOnRefresh: true,
           },

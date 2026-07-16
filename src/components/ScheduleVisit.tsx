@@ -140,6 +140,8 @@ export default function ScheduleVisit() {
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const updateField = (field: keyof FormState, value: string) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -170,10 +172,38 @@ export default function ScheduleVisit() {
 
   const goBack = () => setCurrentStep((prev) => Math.max(prev - 1, 1) as Step);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validateStep(3)) return;
-    setIsSubmitted(true);
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+    try {
+      const res = await fetch("/api/schedule-visit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          visitType,
+          date: dates[selectedDateIndex].label,
+          time: selectedTime,
+          fullName: form.fullName,
+          phone: form.phone,
+          email: form.email,
+          message: form.message,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || "Something went wrong. Please try again.");
+      }
+
+      setIsSubmitted(true);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const resetFlow = () => {
@@ -184,6 +214,7 @@ export default function ScheduleVisit() {
     setForm(INITIAL_FORM);
     setErrors({});
     setIsSubmitted(false);
+    setSubmitError(null);
   };
 
   const nextUpText =
@@ -430,7 +461,8 @@ export default function ScheduleVisit() {
               </div>
 
               {!isSubmitted && (
-                <div className="mt-auto flex shrink-0 flex-row items-center justify-between border-t border-white/10 pt-3 lg:mt-6 lg:pt-6">
+                <div className="mt-auto shrink-0 border-t border-white/10 pt-3 lg:mt-6 lg:pt-6">
+                <div className="flex flex-row items-center justify-between">
                   <p className="text-[10px] text-white/50 lg:text-sm lg:text-white/45">{nextUpText}</p>
                   <div className="flex gap-2 lg:gap-3">
                     {currentStep > 1 && (
@@ -455,12 +487,15 @@ export default function ScheduleVisit() {
                       <button
                         key="submit"
                         type="submit"
-                        className="flex h-[24px] items-center justify-center rounded-lg bg-white px-[10px] py-[2px] text-[10px] font-semibold leading-none text-black transition-colors hover:bg-white/90 lg:h-auto lg:rounded-full lg:px-8 lg:py-3 lg:text-base"
+                        disabled={isSubmitting}
+                        className="flex h-[24px] items-center justify-center rounded-lg bg-white px-[10px] py-[2px] text-[10px] font-semibold leading-none text-black transition-colors hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-60 lg:h-auto lg:rounded-full lg:px-8 lg:py-3 lg:text-base"
                       >
-                        Submit Request
+                        {isSubmitting ? "Sending..." : "Submit Request"}
                       </button>
                     )}
                   </div>
+                </div>
+                {submitError && <p className="mt-3 text-right text-xs text-rose-400">{submitError}</p>}
                 </div>
               )}
             </form>
