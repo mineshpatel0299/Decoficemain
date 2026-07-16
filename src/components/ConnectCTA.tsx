@@ -100,7 +100,7 @@ export default function ConnectCTA() {
       {/* DESKTOP LAYOUT */}
       <div className="relative mx-auto hidden min-h-[700px] max-w-7xl flex-row items-center justify-between px-12 py-20 lg:flex">
         <div className="max-w-xl">
-          <h2 className="font-opensans text-[64px] leading-tight font-bold text-white">
+          <h2 className="font-opensans text-heading leading-tight font-bold text-white">
             Connect <span className="font-serif italic text-white/90">Directly</span>
           </h2>
           <p className="mt-6 max-w-md text-[20px] text-white/80">

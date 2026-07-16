@@ -211,7 +211,7 @@ export default function ExperienceScroll() {
                     {slide.badge}
                   </span>
 
-                  <h2 className="font-opensans mt-5 text-[32px] leading-[1.15] font-bold text-white sm:text-[44px] lg:text-[64px] lg:leading-none">
+                  <h2 className="font-opensans mt-5 text-[32px] leading-[1.15] font-bold text-white sm:text-[44px] lg:text-heading lg:leading-none">
                     {slide.heading.map((line, lineIdx) => (
                       <span key={lineIdx}>
                         {lineIdx > 0 && <br />}

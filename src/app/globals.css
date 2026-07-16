@@ -12,7 +12,10 @@
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-playfair);
   --font-opensans: var(--font-open-sans);
-  
+
+  /* Shared section heading size (desktop) — keep every section's lg: heading in sync */
+  --text-heading: 64px;
+
   /* Brand Green: single canonical shade, no variation across the scale */
   --color-emerald-400: #25975B;
   --color-emerald-500: #25975B;

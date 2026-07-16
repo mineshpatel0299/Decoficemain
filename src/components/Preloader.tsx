@@ -8,6 +8,11 @@ export default function Preloader() {
   const logoMaskRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
+    if (sessionStorage.getItem("hasSeenPreloader")) {
+      if (preloaderRef.current) preloaderRef.current.style.display = "none";
+      return;
+    }
+
     if (!preloaderRef.current || !logoMaskRef.current) return;
 
     const centerX = window.innerWidth / 2;
@@ -42,6 +47,7 @@ export default function Preloader() {
         ease: "power1.out",
         onComplete: () => {
           if (preloaderRef.current) preloaderRef.current.style.display = "none";
+          sessionStorage.setItem("hasSeenPreloader", "true");
         },
       },
       "-=0.3"

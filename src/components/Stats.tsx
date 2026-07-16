@@ -51,7 +51,7 @@ export default function Stats() {
 
       <div ref={contentRef} className="absolute inset-0 z-10">
         <div className="absolute inset-x-0 top-[18%] mx-auto max-w-5xl px-6 text-center lg:px-12">
-          <h2 className="font-opensans text-[24px] leading-tight font-bold text-white sm:text-[44px] lg:text-[56px]">
+          <h2 className="font-opensans text-[24px] leading-tight font-bold text-white sm:text-[44px] lg:text-heading">
             Beyond The <span className="font-serif font-bold text-emerald-600 italic">Blueprint</span>
           </h2>
           <p className="mx-auto mt-5 max-w-2xl text-[12px] text-white/70 sm:text-base">
@@ -72,7 +72,7 @@ export default function Stats() {
         </div>
 
         <div className="absolute inset-x-0 top-[70%] mx-auto max-w-3xl px-6 text-center lg:top-[72%] lg:px-12">
-          <h3 className="font-opensans text-[24px] leading-tight font-bold text-white sm:text-[42px] lg:text-[50px]">
+          <h3 className="font-opensans text-[24px] leading-tight font-bold text-white sm:text-[42px] lg:text-heading">
             The <span className="font-serif font-bold text-emerald-600 italic">Company</span> We Keep
           </h3>
           <p className="mx-auto mt-5 max-w-xl text-[12px] text-white/70 sm:text-base">

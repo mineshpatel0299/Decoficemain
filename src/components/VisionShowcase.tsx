@@ -163,7 +163,7 @@ export default function VisionShowcase() {
 
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="max-w-2xl">
-          <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-[56px]">
+          <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-heading">
             Watch Your <span className="font-serif font-bold italic text-emerald-600">Dream</span>
             <br />
             Taking Shape

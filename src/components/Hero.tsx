@@ -28,6 +28,9 @@ export default function Hero() {
       rememberingMobileRef.current,
       ctaMobileRef.current,
     ];
+    const hasSeen = sessionStorage.getItem("hasSeenPreloader");
+    const delay = hasSeen ? 0 : 2.6;
+
     gsap.fromTo(
       targets,
       { y: 70, opacity: 0 },
@@ -36,7 +39,7 @@ export default function Hero() {
         opacity: 1,
         duration: 1.4,
         ease: "power3.out",
-        delay: 2.6,
+        delay,
         stagger: 0.15,
       }
     );

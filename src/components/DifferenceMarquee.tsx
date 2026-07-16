@@ -85,6 +85,7 @@ export default function DifferenceMarquee() {
   const outerRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const bgRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -113,6 +114,24 @@ export default function DifferenceMarquee() {
           },
         }
       );
+
+      // Grid background parallax: moves down slightly while scrolling
+      if (bgRef.current) {
+        gsap.fromTo(
+          bgRef.current,
+          { y: 0 },
+          {
+            y: "40vh",
+            ease: "none",
+            scrollTrigger: {
+              trigger: outerRef.current,
+              start: "top top",
+              end: "bottom top",
+              scrub: 1,
+            },
+          }
+        );
+      }
     });
 
     return () => ctx.revert();
@@ -125,7 +144,7 @@ export default function DifferenceMarquee() {
       <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
 
         {/* Background grid */}
-        <div className="pointer-events-none absolute inset-0">
+        <div ref={bgRef} className="pointer-events-none absolute inset-0">
           <Image
             src="/grids.png"
             alt=""
@@ -138,7 +157,7 @@ export default function DifferenceMarquee() {
 
         {/* Content above cards */}
         <div className="relative z-10 mx-auto max-w-3xl px-6 text-center lg:px-12 mb-14">
-          <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[44px] lg:text-[52px]">
+          <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[44px] lg:text-heading">
             The <span className="font-serif font-bold text-emerald-600 italic">Difference</span>{" "}
             You&apos;ll Feel
           </h2>
