@@ -144,7 +144,7 @@ export default function DifferenceMarquee() {
   return (
     // outerRef is the tall scroll canvas that gives the sticky section room to breathe.
     // 200vh gives enough room to scroll through the 4 cards smoothly.
-    <div ref={outerRef} className="relative bg-[#0F0F0F]" style={{ height: "200vh" }}>
+    <div ref={outerRef} className="hidden md:block relative bg-[#0F0F0F]" style={{ height: "200vh" }}>
       {/* Sticky viewport-height panel */}
       <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
 
