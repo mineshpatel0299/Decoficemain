@@ -33,7 +33,7 @@ export default function Navbar() {
     >
       <div className="flex items-center justify-between">
         <a href="/" className="shrink-0 text-white">
-          <Logo className="h-8 w-auto" />
+          <Logo className="w-[39px] h-[38px]" />
         </a>
 
         <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-9 lg:flex">
@@ -41,7 +41,7 @@ export default function Navbar() {
             <a
               key={link.label}
               href={link.href}
-              className="text-[15px] font-medium text-white/90 transition-colors hover:text-white"
+              className="font-opensans text-[16px] font-normal leading-none tracking-normal text-white/90 transition-colors hover:text-white"
             >
               {link.label}
             </a>
@@ -50,7 +50,7 @@ export default function Navbar() {
 
         <a
           href="#contact-us"
-          className="hidden shrink-0 rounded-full bg-white px-6 py-3 text-[15px] font-semibold text-black transition-colors hover:bg-white/90 lg:inline-flex"
+          className="hidden shrink-0 items-center justify-center gap-[10px] rounded-full bg-white px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal text-black transition-colors hover:bg-white/90 lg:inline-flex"
         >
           Contact Us
         </a>
@@ -97,7 +97,7 @@ export default function Navbar() {
               key={link.label}
               href={link.href}
               onClick={() => setMenuOpen(false)}
-              className="text-base font-medium text-white/90 transition-colors hover:text-white"
+              className="font-opensans text-[16px] font-normal leading-none tracking-normal text-white/90 transition-colors hover:text-white"
             >
               {link.label}
             </a>
@@ -105,7 +105,7 @@ export default function Navbar() {
           <a
             href="#contact-us"
             onClick={() => setMenuOpen(false)}
-            className="mt-2 w-full max-w-60 rounded-full bg-white px-6 py-3 text-center text-[15px] font-semibold text-black transition-colors hover:bg-white/90"
+            className="mt-2 flex w-full max-w-60 items-center justify-center gap-[10px] rounded-full bg-white px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal text-black transition-colors hover:bg-white/90"
           >
             Contact Us
           </a>

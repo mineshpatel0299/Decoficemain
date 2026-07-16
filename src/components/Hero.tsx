@@ -68,7 +68,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-linear-to-b from-black/30 via-transparent to-black/40" />
 
         {/* Badge + "Crafting Places Worth": sits behind the mountain cutout so it can occlude it a little. Font-size is pure vw because object-cover's pixel scale on this width-dominant container is exactly cw/imageNativeWidth, independent of height. But *position* is NOT pure vw: object-cover also crops the image top/bottom by (scaledHeight − containerHeight)/2, and that crop amount depends on containerHeight too — so a fixed point in the artwork (e.g. the mountain ridge) lands at top = (v−0.5)·(imageNativeHeight/imageNativeWidth)·vw + 0.5·vh for its normalized vertical fraction v. Solved against the 1440×900 reference point where the badge sits correctly, that's -14.25vw + 50vh. A pure-vw formula only happens to work when the window's aspect ratio matches the 1440:900 reference (as it does under simple browser-zoom testing, which scales width and height together) — on a wider/shorter real window (common on external monitors, or short browser chrome) it drifts the text down into the art, since the art crops more aggressively than pure vw accounts for. */}
-        <div className="absolute inset-x-0 top-[calc(-14.25vw+50vh)] z-5 mx-auto flex max-w-5xl flex-col items-center px-6 text-center">
+        <div className="absolute inset-x-0 top-[calc(-14.25vw+50vh+6px)] z-5 mx-auto flex max-w-5xl flex-col items-center px-6 text-center">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-[0.2em] text-white/90 backdrop-blur-sm">
             <span className="h-1.5 w-1.5 rounded-full bg-white" />
             DESTINATIONS IN THE MAKING
@@ -93,11 +93,11 @@ export default function Hero() {
           className="pointer-events-none absolute inset-0 z-10 object-cover"
         />
 
-        {/* "Remembering": in front of the mountains, behind the resort cutout so the roofline can occlude it a little. Same width+height-aware formula as the badge wrapper above (see its comment), plus a pure-vw gap on top so the two lines stay locked together and can never collide regardless of aspect ratio (the vh terms are identical for both lines and cancel out of their difference, leaving a pure-vw gap). */}
+        {/* "Remembering": in front of the mountains, behind the resort cutout so the roofline can occlude it a little. Same width+height-aware formula as the badge wrapper above, plus an offset of 4.86vw + 72px to perfectly match the dynamic height of the text above it (which includes a fixed mt-10 and fixed badge height) so the visual gap remains identically tight across all browser zoom levels. */}
         <p
           ref={rememberingRef}
           aria-hidden="true"
-          className="absolute inset-x-0 top-[calc(-14.25vw+50vh+11.11vw)] z-15 mx-auto max-w-5xl px-6 text-center font-serif text-[6.667vw] font-bold italic leading-[0.729] tracking-normal text-emerald-600 opacity-0"
+          className="absolute inset-x-0 top-[calc(-14.25vw+50vh+4.86vw+78px)] z-15 mx-auto max-w-5xl px-6 text-center font-serif text-[6.667vw] font-bold italic leading-[0.729] tracking-normal text-emerald-600 opacity-0"
         >
           Remembering
         </p>
