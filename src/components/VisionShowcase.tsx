@@ -1,16 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import { useRef, useState, useLayoutEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-const stages = [
-  { key: "Vision", image: "/3d/Vision.png" },
-  { key: "Craft", image: "/3d/Craft.png" },
-  { key: "Build", image: "/3d/Build.png" },
-  { key: "Experience", image: "/3d/Experience.png" },
-];
+const stages = ["Vision", "Craft", "Build", "Experience"];
 
 const resortTypes = ["Luxury Resort", "Hills Resort", "Eco Resort", "Wellness Retreat"];
 
@@ -72,61 +67,146 @@ const SmallGlowingDot = () => (
 
 export default function VisionShowcase() {
   const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const [activeStage, setActiveStage] = useState(0);
   const [activeView, setActiveView] = useState(0);
-  const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
+    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-    const ctx = gsap.context(() => {
-      // Image Parallax: move images slightly up and down based on scroll
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        animation: gsap.fromTo(
-          parallaxRefs.current,
-          { yPercent: -10 },
-          { yPercent: 10, ease: "none" }
-        ),
-        scrub: true,
-      });
-    }, sectionRef);
+    const section = sectionRef.current;
+    const grid = gridRef.current;
+    const video = videoRef.current;
+    if (!section || !grid || !video) return;
 
-    return () => ctx.revert();
+    let ctx: ReturnType<typeof gsap.context> | null = null;
+    let cancelled = false;
+
+    // `loadedmetadata` fires asynchronously (whenever the video finishes
+    // fetching), so this runs after the effect's own synchronous setup has
+    // already returned. Creating the gsap.context() here — at the moment the
+    // ScrollTrigger is actually built, instead of wrapping the whole effect
+    // in one up front — means ctx.revert() in cleanup reliably tears down
+    // whatever got created, even if that happened later, asynchronously.
+    // Without this, a duplicate effect run (React Strict Mode in dev, or any
+    // remount before metadata loads) can leave two competing pins on the same
+    // section, which breaks the pin's reserved scroll space and lets the next
+    // section bleed up over the video mid-scroll.
+    const startScrub = () => {
+      if (cancelled) return;
+      const total = video.duration;
+      if (!total) return;
+
+      video.pause();
+
+      ctx = gsap.context(() => {
+        // Scrub the video's currentTime directly off scroll progress. A numeric
+        // `scrub` value (instead of `true`) makes ScrollTrigger ease its own
+        // progress toward the scroll position every tick, so the video glides
+        // instead of snapping frame-to-frame on fast/jittery scroll input.
+        const updateProgress = (self: ScrollTrigger) => {
+          video.currentTime = self.progress * total;
+          const idx = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
+          setActiveStage((prev) => (prev === idx ? prev : idx));
+        };
+
+        // Desktop: pin just the cards/video row (not the heading above it), so
+        // the heading scrolls past normally and the pinned view starts right
+        // at the row — the video is always fully visible without needing to
+        // shrink it, whatever the viewport height. Mobile content is too tall
+        // to pin without clipping, so it just scrubs the video as the section
+        // naturally passes through the viewport.
+        ScrollTrigger.matchMedia({
+          "(min-width: 1024px)": () => {
+            const st = ScrollTrigger.create({
+              trigger: grid,
+              start: "top top",
+              end: () => "+=" + window.innerHeight * 1.6,
+              pin: true,
+              // GSAP silently disables pin spacing by default when the pinned
+              // element's parent is a flex container (`<main>`, the section's
+              // ultimate ancestor in app/page.tsx, is). Force it on explicitly
+              // regardless of the current DOM chain, or the pin can end up
+              // never reserving scroll runway and later sections bleed up
+              // over the pinned video.
+              pinSpacing: true,
+              anticipatePin: 1,
+              scrub: 0.5,
+              onUpdate: updateProgress,
+              // The scrub above eases toward the scroll position, which can
+              // lag behind on a fast/flung scroll. Snap hard to the first or
+              // last frame right as the pin engages/releases so the section
+              // never hands off to the next one mid-video.
+              onEnter: () => {
+                video.currentTime = 0;
+              },
+              onLeave: () => {
+                video.currentTime = total;
+              },
+              onEnterBack: () => {
+                video.currentTime = total;
+              },
+              onLeaveBack: () => {
+                video.currentTime = 0;
+              },
+            });
+            scrollTriggerRef.current = st;
+            return () => {
+              if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
+            };
+          },
+          "(max-width: 1023.98px)": () => {
+            const st = ScrollTrigger.create({
+              trigger: section,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 0.5,
+              onUpdate: updateProgress,
+            });
+            scrollTriggerRef.current = st;
+            return () => {
+              if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
+            };
+          },
+        });
+      }, section);
+    };
+
+    if (video.readyState >= 1 && video.duration) {
+      startScrub();
+    } else {
+      video.addEventListener("loadedmetadata", startScrub, { once: true });
+    }
+
+    return () => {
+      cancelled = true;
+      video.removeEventListener("loadedmetadata", startScrub);
+      ctx?.revert();
+    };
   }, []);
 
   const goTo = (index: number) => {
     if (index === activeStage) return;
-    setActiveStage(index);
+
+    const st = scrollTriggerRef.current;
+    const video = videoRef.current;
+    if (!st || !video || !video.duration) {
+      setActiveStage(index);
+      return;
+    }
+
+    const progress = (index + 0.5) / stages.length;
+    gsap.to(window, {
+      scrollTo: st.start + (st.end - st.start) * progress,
+      duration: 1,
+      ease: "power2.inOut",
+    });
   };
 
   return (
     <section ref={sectionRef} className="relative bg-[#0F0F0F] py-24 lg:py-32">
-      {/* Absolute Progress Line on Extreme Right */}
-      <div 
-        className="absolute z-10 hidden flex-col items-center lg:flex"
-        style={{ 
-          top: "180px", 
-          right: "max(24px, calc(50% - 622px))" // Maps to left: 1342px on a 1440px screen
-        }}
-      >
-        <div className="relative bg-white/15 w-[3px] h-[764px]">
-          <div
-            className="absolute top-0 left-0 w-full bg-emerald-500 transition-all duration-500"
-            style={{ height: "191px", transform: `translateY(${activeStage * 191}px)` }}
-          >
-            <span
-              className="absolute top-1/2 left-[-22px] flex min-w-[84px] h-[24px] -translate-x-1/2 -translate-y-1/2 -rotate-90 items-center justify-center gap-[10px] rounded-full border border-emerald-500/40 bg-[#0F0F0F] px-[14px] py-[6px] text-[11px] font-semibold tracking-widest text-emerald-600 whitespace-nowrap shadow-[0_0_15px_rgba(16,185,129,0.2)]"
-            >
-              <SmallGlowingDot />
-              {stages[activeStage].key}
-            </span>
-          </div>
-        </div>
-      </div>
-
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="max-w-2xl">
           <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-heading">
@@ -137,7 +217,7 @@ export default function VisionShowcase() {
           <p className="mt-6 text-lg text-white/70">Distinctive hospitality destinations that combine</p>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[auto_1fr] lg:items-center">
+        <div ref={gridRef} className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[auto_1fr_auto] lg:items-center">
           <div className="flex flex-col items-center lg:block">
             <div className="flex h-[227px] w-full max-w-[338px] flex-col gap-[6px] rounded-2xl border-[0.2px] border-white/10 bg-white/3 px-[14px] py-[10px] backdrop-blur-md lg:h-76.5 lg:w-60 lg:gap-3 lg:px-3.5 lg:py-2.5">
               <div className="flex items-center justify-center gap-3 pb-1 lg:pb-0 lg:justify-start">
@@ -206,38 +286,42 @@ export default function VisionShowcase() {
 
           <div className="relative">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-black">
-              {stages.map((stage, i) => (
-                <div
-                  key={stage.key}
-                  className="absolute inset-3 lg:inset-5 transition-opacity duration-500 ease-in-out"
-                  style={{
-                    opacity: i === activeStage ? 1 : 0,
-                    zIndex: i === activeStage ? 2 : 1,
-                  }}
-                >
-                  <div
-                    ref={(el) => {
-                      parallaxRefs.current[i] = el;
-                    }}
-                    className="absolute -inset-y-[15%] inset-x-0"
-                  >
-                    <Image
-                      src={stage.image}
-                      alt={stage.key}
-                      fill
-                      sizes="(min-width: 1024px) 50vw, 100vw"
-                      className="object-cover mix-blend-lighten"
-                      priority={i === 0}
-                    />
-                  </div>
-                </div>
-              ))}
+              <div className="absolute inset-3 overflow-hidden rounded-2xl lg:inset-5">
+                <video
+                  ref={videoRef}
+                  src="/ggg-scrub.mp4"
+                  className="absolute inset-0 h-full w-full object-cover"
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-hidden="true"
+                />
+              </div>
             </div>
 
             <p className="mt-4 flex items-center justify-center gap-2 text-sm text-white/50">
               <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
               Scroll to see the progress
             </p>
+          </div>
+
+          {/* Progress rail — stretches to match the row height set by the
+              cards/video, instead of a hand-tuned pixel offset. */}
+          <div className="hidden lg:flex lg:h-full lg:flex-col lg:items-center lg:self-stretch">
+            <div className="relative h-full w-[3px] bg-white/15">
+              <div
+                className="absolute top-0 left-0 w-full bg-emerald-500 transition-transform duration-500"
+                style={{
+                  height: `${100 / stages.length}%`,
+                  transform: `translateY(${activeStage * 100}%)`,
+                }}
+              >
+                <span className="absolute top-1/2 left-[-22px] flex h-[24px] min-w-[84px] -translate-x-1/2 -translate-y-1/2 -rotate-90 items-center justify-center gap-[10px] rounded-full border border-emerald-500/40 bg-[#0F0F0F] px-[14px] py-[6px] text-[11px] font-semibold tracking-widest whitespace-nowrap text-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
+                  <SmallGlowingDot />
+                  {stages[activeStage]}
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
