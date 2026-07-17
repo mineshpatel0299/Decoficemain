@@ -68,6 +68,7 @@ const SmallGlowingDot = () => (
 export default function VisionShowcase() {
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
+  const videoWrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
   const progressRef = useRef(0);
@@ -79,101 +80,71 @@ export default function VisionShowcase() {
 
     const section = sectionRef.current;
     const grid = gridRef.current;
+    const videoWrap = videoWrapRef.current;
     const video = videoRef.current;
-    if (!section || !grid || !video) return;
+    if (!section || !grid || !videoWrap || !video) return;
 
-    let ctx: ReturnType<typeof gsap.context> | null = null;
+    let mm: gsap.MatchMedia | null = null;
     let cancelled = false;
 
-    // `loadedmetadata` fires asynchronously (whenever the video finishes
-    // fetching), so this runs after the effect's own synchronous setup has
-    // already returned. Creating the gsap.context() here — at the moment the
-    // ScrollTrigger is actually built, instead of wrapping the whole effect
-    // in one up front — means ctx.revert() in cleanup reliably tears down
-    // whatever got created, even if that happened later, asynchronously.
-    // Without this, a duplicate effect run (React Strict Mode in dev, or any
-    // remount before metadata loads) can leave two competing pins on the same
-    // section, which breaks the pin's reserved scroll space and lets the next
-    // section bleed up over the video mid-scroll.
     const startScrub = () => {
       if (cancelled) return;
       if (!video.duration) return;
 
       video.pause();
 
-      ctx = gsap.context(() => {
-        // Scrub the video's currentTime directly off scroll progress. A numeric
-        // `scrub` value (instead of `true`) makes ScrollTrigger ease its own
-        // progress toward the scroll position every tick, so the video glides
-        // instead of snapping frame-to-frame on fast/jittery scroll input.
-        // Duration is read live (not captured once) so switching the video
-        // source (Daylight/Nightfall) keeps scrubbing correctly afterward.
-        const updateProgress = (self: ScrollTrigger) => {
-          progressRef.current = self.progress;
-          video.currentTime = self.progress * (video.duration || 0);
-          const idx = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
-          setActiveStage((prev) => (prev === idx ? prev : idx));
-        };
+      // Use gsap.matchMedia() instead of ScrollTrigger.matchMedia (deprecated)
+      // This properly scopes the context and cleans up pins, preventing duplicate elements
+      mm = gsap.matchMedia();
 
-        // Desktop: pin just the cards/video row (not the heading above it), so
-        // the heading scrolls past normally and the pinned view starts right
-        // at the row — the video is always fully visible without needing to
-        // shrink it, whatever the viewport height. Mobile content is too tall
-        // to pin without clipping, so it just scrubs the video as the section
-        // naturally passes through the viewport.
-        ScrollTrigger.matchMedia({
-          "(min-width: 1024px)": () => {
-            const st = ScrollTrigger.create({
-              trigger: grid,
-              start: "top 120px",
-              end: () => "+=" + window.innerHeight * 1.6,
-              pin: true,
-              // GSAP silently disables pin spacing by default when the pinned
-              // element's parent is a flex container (`<main>`, the section's
-              // ultimate ancestor in app/page.tsx, is). Force it on explicitly
-              // regardless of the current DOM chain, or the pin can end up
-              // never reserving scroll runway and later sections bleed up
-              // over the pinned video.
-              pinSpacing: true,
-              anticipatePin: 1,
-              scrub: 0.5,
-              onUpdate: updateProgress,
-              // The scrub above eases toward the scroll position, which can
-              // lag behind on a fast/flung scroll. Snap hard to the first or
-              // last frame right as the pin engages/releases so the section
-              // never hands off to the next one mid-video.
-              onEnter: () => {
-                video.currentTime = 0;
-              },
-              onLeave: () => {
-                video.currentTime = video.duration || 0;
-              },
-              onEnterBack: () => {
-                video.currentTime = video.duration || 0;
-              },
-              onLeaveBack: () => {
-                video.currentTime = 0;
-              },
-            });
-            scrollTriggerRef.current = st;
-            return () => {
-              if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
-            };
-          },
-          "(max-width: 1023.98px)": () => {
-            const st = ScrollTrigger.create({
-              trigger: section,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: 0.5,
-              onUpdate: updateProgress,
-            });
-            scrollTriggerRef.current = st;
-            return () => {
-              if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
-            };
-          },
+      const updateProgress = (self: ScrollTrigger) => {
+        progressRef.current = self.progress;
+        video.currentTime = self.progress * (video.duration || 0);
+        const idx = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
+        setActiveStage((prev) => (prev === idx ? prev : idx));
+      };
+
+      const snapBoundaries = {
+        onEnter: () => { video.currentTime = 0; },
+        onLeave: () => { video.currentTime = video.duration || 0; },
+        onEnterBack: () => { video.currentTime = video.duration || 0; },
+        onLeaveBack: () => { video.currentTime = 0; },
+      };
+
+      mm.add("(min-width: 1024px)", () => {
+        const st = ScrollTrigger.create({
+          trigger: grid,
+          start: "top 120px",
+          end: () => "+=" + window.innerHeight * 1.6,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          scrub: 0.5,
+          onUpdate: updateProgress,
+          ...snapBoundaries,
         });
+        scrollTriggerRef.current = st;
+        return () => {
+          if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
+        };
+      }, section);
+
+      mm.add("(max-width: 1023.98px)", () => {
+        const st = ScrollTrigger.create({
+          trigger: grid,
+          start: "top 60px",
+          end: () => "+=" + window.innerHeight * 1.6,
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          scrub: 0.5,
+          onUpdate: updateProgress,
+          ...snapBoundaries,
+        });
+        scrollTriggerRef.current = st;
+        return () => {
+          if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
+        };
       }, section);
     };
 
@@ -186,7 +157,7 @@ export default function VisionShowcase() {
     return () => {
       cancelled = true;
       video.removeEventListener("loadedmetadata", startScrub);
-      ctx?.revert();
+      mm?.revert();
     };
   }, []);
 
@@ -310,7 +281,7 @@ export default function VisionShowcase() {
             </div>
           </div>
 
-          <div className="relative">
+          <div ref={videoWrapRef} className="relative mt-8 lg:mt-0">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-[#0F0F0F]">
               <video
                 ref={videoRef}
