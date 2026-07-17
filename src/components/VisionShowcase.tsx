@@ -52,14 +52,14 @@ function ViewIcon({ type, active }: { type: "daylight" | "nightfall"; active: bo
 const SmallGlowingDot = () => (
   <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
     <g filter="url(#filter0_f_2305_90)">
-      <circle cx="5.5" cy="5.5" r="2.5" transform="rotate(-90 5.5 5.5)" stroke="#EAEAEA"/>
+      <circle cx="5.5" cy="5.5" r="2.5" transform="rotate(-90 5.5 5.5)" stroke="#EAEAEA" />
     </g>
-    <circle cx="5.5" cy="5.5" r="2" transform="rotate(-90 5.5 5.5)" fill="#EAEAEA"/>
+    <circle cx="5.5" cy="5.5" r="2" transform="rotate(-90 5.5 5.5)" fill="#EAEAEA" />
     <defs>
       <filter id="filter0_f_2305_90" x="0" y="0" width="11" height="11" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-        <feGaussianBlur stdDeviation="1.25" result="effect1_foregroundBlur_2305_90"/>
+        <feFlood floodOpacity="0" result="BackgroundImageFix" />
+        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
+        <feGaussianBlur stdDeviation="1.25" result="effect1_foregroundBlur_2305_90" />
       </filter>
     </defs>
   </svg>
@@ -125,7 +125,7 @@ export default function VisionShowcase() {
           "(min-width: 1024px)": () => {
             const st = ScrollTrigger.create({
               trigger: grid,
-              start: "top top",
+              start: "top 120px",
               end: () => "+=" + window.innerHeight * 1.6,
               pin: true,
               // GSAP silently disables pin spacing by default when the pinned
@@ -265,11 +265,10 @@ export default function VisionShowcase() {
                     <button
                       key={label}
                       onClick={() => goTo(i)}
-                      className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 ${
-                        active
+                      className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 ${active
                           ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600"
                           : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
-                      }`}
+                        }`}
                     >
                       <CheckIcon active={active} />
                       {label}
@@ -297,11 +296,10 @@ export default function VisionShowcase() {
                     <button
                       key={view.label}
                       onClick={() => switchView(i)}
-                      className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 ${
-                        active
+                      className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 ${active
                           ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600"
                           : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
-                      }`}
+                        }`}
                     >
                       <ViewIcon type={view.icon} active={active} />
                       {view.label}
@@ -313,27 +311,22 @@ export default function VisionShowcase() {
           </div>
 
           <div className="relative">
-            <div className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-black">
-              <div className="absolute inset-3 overflow-hidden rounded-2xl lg:inset-5">
-                <video
-                  ref={videoRef}
-                  // Only the initial src — Daylight/Nightfall switches after
-                  // this happen imperatively in switchView(), not via React
-                  // state, so a src swap doesn't fight with a re-render.
-                  src={experienceViews[0].src}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  muted
-                  playsInline
-                  preload="auto"
-                  aria-hidden="true"
-                />
-              </div>
+            <div className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-[#0F0F0F]">
+              <video
+                ref={videoRef}
+                // Only the initial src — Daylight/Nightfall switches after
+                // this happen imperatively in switchView(), not via React
+                // state, so a src swap doesn't fight with a re-render.
+                src={experienceViews[0].src}
+                className="absolute inset-0 h-full w-full object-cover"
+                muted
+                playsInline
+                preload="auto"
+                aria-hidden="true"
+              />
             </div>
 
-            <p className="mt-4 flex items-center justify-center gap-2 text-sm text-white/50">
-              <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
-              Scroll to see the progress
-            </p>
+
           </div>
 
           {/* Progress rail — stretches to match the row height set by the
