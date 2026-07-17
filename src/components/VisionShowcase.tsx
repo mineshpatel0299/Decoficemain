@@ -9,9 +9,9 @@ const stages = ["Vision", "Craft", "Build", "Experience"];
 
 const resortTypes = ["Luxury Resort", "Hills Resort", "Eco Resort", "Wellness Retreat"];
 
-const experienceViews: { label: string; icon: "daylight" | "nightfall" }[] = [
-  { label: "Daylight", icon: "daylight" },
-  { label: "Nightfall", icon: "nightfall" },
+const experienceViews: { label: string; icon: "daylight" | "nightfall"; src: string }[] = [
+  { label: "Daylight", icon: "daylight", src: "/day-scrub.mp4" },
+  { label: "Nightfall", icon: "nightfall", src: "/ggg-scrub.mp4" },
 ];
 
 function CheckIcon({ active }: { active: boolean }) {
@@ -70,6 +70,7 @@ export default function VisionShowcase() {
   const gridRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const progressRef = useRef(0);
   const [activeStage, setActiveStage] = useState(0);
   const [activeView, setActiveView] = useState(0);
 
@@ -96,8 +97,7 @@ export default function VisionShowcase() {
     // section bleed up over the video mid-scroll.
     const startScrub = () => {
       if (cancelled) return;
-      const total = video.duration;
-      if (!total) return;
+      if (!video.duration) return;
 
       video.pause();
 
@@ -106,8 +106,11 @@ export default function VisionShowcase() {
         // `scrub` value (instead of `true`) makes ScrollTrigger ease its own
         // progress toward the scroll position every tick, so the video glides
         // instead of snapping frame-to-frame on fast/jittery scroll input.
+        // Duration is read live (not captured once) so switching the video
+        // source (Daylight/Nightfall) keeps scrubbing correctly afterward.
         const updateProgress = (self: ScrollTrigger) => {
-          video.currentTime = self.progress * total;
+          progressRef.current = self.progress;
+          video.currentTime = self.progress * (video.duration || 0);
           const idx = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
           setActiveStage((prev) => (prev === idx ? prev : idx));
         };
@@ -143,10 +146,10 @@ export default function VisionShowcase() {
                 video.currentTime = 0;
               },
               onLeave: () => {
-                video.currentTime = total;
+                video.currentTime = video.duration || 0;
               },
               onEnterBack: () => {
-                video.currentTime = total;
+                video.currentTime = video.duration || 0;
               },
               onLeaveBack: () => {
                 video.currentTime = 0;
@@ -187,15 +190,13 @@ export default function VisionShowcase() {
     };
   }, []);
 
-  const goTo = (index: number) => {
-    if (index === activeStage) return;
-
+  // Smooth-scrolls to wherever stage `index` lives in the pinned scroll
+  // runway, so the actual scroll position stays in sync with activeStage —
+  // otherwise the next scroll tick would just recompute activeStage from the
+  // real (unchanged) scroll position and undo the jump.
+  const scrollToStage = (index: number) => {
     const st = scrollTriggerRef.current;
-    const video = videoRef.current;
-    if (!st || !video || !video.duration) {
-      setActiveStage(index);
-      return;
-    }
+    if (!st) return false;
 
     const progress = (index + 0.5) / stages.length;
     gsap.to(window, {
@@ -203,6 +204,33 @@ export default function VisionShowcase() {
       duration: 1,
       ease: "power2.inOut",
     });
+    return true;
+  };
+
+  const goTo = (index: number) => {
+    if (index === activeStage) return;
+    if (!scrollToStage(index)) setActiveStage(index);
+  };
+
+  const switchView = (index: number) => {
+    if (index === activeView) return;
+    setActiveView(index);
+    setActiveStage(0);
+
+    const video = videoRef.current;
+    if (video) {
+      // Swap the video file (Daylight vs Nightfall) and reset to the start,
+      // matching the "Vision" stage the rail is about to jump back to.
+      const onLoaded = () => {
+        video.currentTime = 0;
+        video.pause();
+      };
+      video.addEventListener("loadedmetadata", onLoaded, { once: true });
+      video.src = experienceViews[index].src;
+      video.load();
+    }
+
+    if (!scrollToStage(0)) setActiveStage(0);
   };
 
   return (
@@ -268,7 +296,7 @@ export default function VisionShowcase() {
                   return (
                     <button
                       key={view.label}
-                      onClick={() => setActiveView(i)}
+                      onClick={() => switchView(i)}
                       className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 ${
                         active
                           ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600"
@@ -289,7 +317,10 @@ export default function VisionShowcase() {
               <div className="absolute inset-3 overflow-hidden rounded-2xl lg:inset-5">
                 <video
                   ref={videoRef}
-                  src="/ggg-scrub.mp4"
+                  // Only the initial src — Daylight/Nightfall switches after
+                  // this happen imperatively in switchView(), not via React
+                  // state, so a src swap doesn't fight with a re-render.
+                  src={experienceViews[0].src}
                   className="absolute inset-0 h-full w-full object-cover"
                   muted
                   playsInline
