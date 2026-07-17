@@ -14,9 +14,8 @@ const stages = [
 
 const resortTypes = ["Luxury Resort", "Hills Resort", "Eco Resort", "Wellness Retreat"];
 
-const experienceViews: { label: string; icon: "daylight" | "sunset" | "nightfall" }[] = [
+const experienceViews: { label: string; icon: "daylight" | "nightfall" }[] = [
   { label: "Daylight", icon: "daylight" },
-  { label: "Sunset", icon: "sunset" },
   { label: "Nightfall", icon: "nightfall" },
 ];
 
@@ -35,7 +34,7 @@ function CheckIcon({ active }: { active: boolean }) {
   );
 }
 
-function ViewIcon({ type, active }: { type: "daylight" | "sunset" | "nightfall"; active: boolean }) {
+function ViewIcon({ type, active }: { type: "daylight" | "nightfall"; active: boolean }) {
   const color = active ? "#34d399" : "#ffffff";
   if (type === "daylight") {
     return (
@@ -45,14 +44,6 @@ function ViewIcon({ type, active }: { type: "daylight" | "sunset" | "nightfall";
           d="M12 2v2M12 20v2M4 12H2M22 12h-2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
           strokeLinecap="round"
         />
-      </svg>
-    );
-  }
-  if (type === "sunset") {
-    return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" className="shrink-0">
-        <path d="M3 18h18M6 18a6 6 0 0112 0" strokeLinecap="round" />
-        <path d="M12 4v6M8.5 7.5l2 2M15.5 7.5l-2 2" strokeLinecap="round" />
       </svg>
     );
   }
@@ -83,10 +74,7 @@ export default function VisionShowcase() {
   const sectionRef = useRef<HTMLElement>(null);
   const [activeStage, setActiveStage] = useState(0);
   const [activeView, setActiveView] = useState(0);
-  const nextDirection = useRef<"left" | "right">("left");
-  const frameRefs = useRef<(HTMLDivElement | null)[]>([]);
   const parallaxRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const isAnimating = useRef(false);
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -110,29 +98,7 @@ export default function VisionShowcase() {
   }, []);
 
   const goTo = (index: number) => {
-    if (index === activeStage || isAnimating.current) return;
-    isAnimating.current = true;
-
-    const direction = nextDirection.current;
-    nextDirection.current = direction === "left" ? "right" : "left";
-
-    const outgoing = frameRefs.current[activeStage];
-    const incoming = frameRefs.current[index];
-    const outAngle = direction === "left" ? -90 : 90;
-    const inAngle = direction === "left" ? 90 : -90;
-
-    gsap.set(incoming, { autoAlpha: 1, rotateY: inAngle, zIndex: 2 });
-    gsap.set(outgoing, { zIndex: 1 });
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        gsap.set(outgoing, { autoAlpha: 0 });
-        isAnimating.current = false;
-      },
-    });
-    tl.to(outgoing, { rotateY: outAngle, autoAlpha: 0, duration: 0.55, ease: "power2.inOut" }, 0);
-    tl.to(incoming, { rotateY: 0, autoAlpha: 1, duration: 0.55, ease: "power2.inOut" }, 0);
-
+    if (index === activeStage) return;
     setActiveStage(index);
   };
 
@@ -239,46 +205,33 @@ export default function VisionShowcase() {
           </div>
 
           <div className="relative">
-            <div className="flex items-center gap-5">
-              <div
-                className="relative aspect-[3/2] w-full flex-1 overflow-hidden rounded-3xl bg-black"
-                style={{ perspective: "1600px" }}
-              >
-                {stages.map((stage, i) => (
+            <div className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-black">
+              {stages.map((stage, i) => (
+                <div
+                  key={stage.key}
+                  className="absolute inset-3 lg:inset-5 transition-opacity duration-500 ease-in-out"
+                  style={{
+                    opacity: i === activeStage ? 1 : 0,
+                    zIndex: i === activeStage ? 2 : 1,
+                  }}
+                >
                   <div
-                    key={stage.key}
                     ref={(el) => {
-                      frameRefs.current[i] = el;
+                      parallaxRefs.current[i] = el;
                     }}
-                    className="absolute inset-0"
-                    style={{
-                      opacity: i === activeStage ? 1 : 0,
-                      visibility: i === activeStage ? "visible" : "hidden",
-                      transformStyle: "preserve-3d",
-                      zIndex: i === activeStage ? 2 : 1,
-                    }}
+                    className="absolute -inset-y-[15%] inset-x-0"
                   >
-                    {/* Inner wrapper for parallax effect to avoid transform conflicts with the flip animation */}
-                    <div
-                      ref={(el) => {
-                        parallaxRefs.current[i] = el;
-                      }}
-                      className="absolute -inset-y-[15%] inset-x-0"
-                    >
-                      <Image
-                        src={stage.image}
-                        alt={stage.key}
-                        fill
-                        sizes="(min-width: 1024px) 50vw, 100vw"
-                        className="object-cover mix-blend-lighten"
-                        priority={i === 0}
-                      />
-                    </div>
+                    <Image
+                      src={stage.image}
+                      alt={stage.key}
+                      fill
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      className="object-cover mix-blend-lighten"
+                      priority={i === 0}
+                    />
                   </div>
-                ))}
-              </div>
-
-
+                </div>
+              ))}
             </div>
 
             <p className="mt-4 flex items-center justify-center gap-2 text-sm text-white/50">

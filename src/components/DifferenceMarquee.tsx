@@ -162,7 +162,7 @@ export default function DifferenceMarquee() {
 
         {/* Content above cards */}
         <div className="relative z-10 mx-auto max-w-3xl px-6 text-center lg:px-12 mb-14">
-          <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[44px] lg:text-heading">
+          <h2 className="font-opensans text-[26px] whitespace-nowrap leading-tight font-bold text-white sm:text-[44px] lg:text-heading">
             The <span className="font-serif font-bold text-emerald-600 italic">Difference</span>{" "}
             You&apos;ll Feel
           </h2>
