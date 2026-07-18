@@ -227,6 +227,7 @@ export default function ExperienceScroll() {
                       </span>
                     ))}
                   </h2>
+                  
 
                   <p className="font-opensans mt-4 max-w-xl text-base leading-6 font-normal text-white/80 sm:text-lg sm:leading-7 lg:text-[20px] lg:leading-7.5">
                     {slide.paragraph}

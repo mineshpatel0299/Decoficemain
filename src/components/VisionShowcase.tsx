@@ -84,80 +84,71 @@ export default function VisionShowcase() {
     const video = videoRef.current;
     if (!section || !grid || !videoWrap || !video) return;
 
-    let mm: gsap.MatchMedia | null = null;
-    let cancelled = false;
+    video.pause();
 
-    const startScrub = () => {
-      if (cancelled) return;
-      if (!video.duration) return;
+    // Create the pin immediately on mount rather than waiting on the video's
+    // "loadedmetadata" event. Pinning reserves scroll space for every section
+    // below this one (DifferenceMarquee, Stats, ...), and GSAP schedules a
+    // full ScrollTrigger refresh whenever a new pin is created. In production
+    // the video can take a while to fetch over the network, so creating the
+    // pin late — after the user has already scrolled past it — used to shift
+    // those later sections mid-scroll, showing up as a glitch/jump in them.
+    // The scrub itself only needs video.duration, not the pin creation, so we
+    // guard just the currentTime seeks until the video is actually ready.
+    const mm = gsap.matchMedia();
 
-      video.pause();
-
-      // Use gsap.matchMedia() instead of ScrollTrigger.matchMedia (deprecated)
-      // This properly scopes the context and cleans up pins, preventing duplicate elements
-      mm = gsap.matchMedia();
-
-      const updateProgress = (self: ScrollTrigger) => {
-        progressRef.current = self.progress;
-        video.currentTime = self.progress * (video.duration || 0);
-        const idx = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
-        setActiveStage((prev) => (prev === idx ? prev : idx));
-      };
-
-      const snapBoundaries = {
-        onEnter: () => { video.currentTime = 0; },
-        onLeave: () => { video.currentTime = video.duration || 0; },
-        onEnterBack: () => { video.currentTime = video.duration || 0; },
-        onLeaveBack: () => { video.currentTime = 0; },
-      };
-
-      mm.add("(min-width: 1024px)", () => {
-        const st = ScrollTrigger.create({
-          trigger: grid,
-          start: "top 120px",
-          end: () => "+=" + window.innerHeight * 1.6,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          scrub: 0.5,
-          onUpdate: updateProgress,
-          ...snapBoundaries,
-        });
-        scrollTriggerRef.current = st;
-        return () => {
-          if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
-        };
-      }, section);
-
-      mm.add("(max-width: 1023.98px)", () => {
-        const st = ScrollTrigger.create({
-          trigger: grid,
-          start: "top 60px",
-          end: () => "+=" + window.innerHeight * 1.6,
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          scrub: 0.5,
-          onUpdate: updateProgress,
-          ...snapBoundaries,
-        });
-        scrollTriggerRef.current = st;
-        return () => {
-          if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
-        };
-      }, section);
+    const updateProgress = (self: ScrollTrigger) => {
+      progressRef.current = self.progress;
+      if (video.duration) video.currentTime = self.progress * video.duration;
+      const idx = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
+      setActiveStage((prev) => (prev === idx ? prev : idx));
     };
 
-    if (video.readyState >= 1 && video.duration) {
-      startScrub();
-    } else {
-      video.addEventListener("loadedmetadata", startScrub, { once: true });
-    }
+    const snapBoundaries = {
+      onEnter: () => { if (video.duration) video.currentTime = 0; },
+      onLeave: () => { if (video.duration) video.currentTime = video.duration; },
+      onEnterBack: () => { if (video.duration) video.currentTime = video.duration; },
+      onLeaveBack: () => { if (video.duration) video.currentTime = 0; },
+    };
+
+    mm.add("(min-width: 1024px)", () => {
+      const st = ScrollTrigger.create({
+        trigger: grid,
+        start: "top 120px",
+        end: () => "+=" + window.innerHeight * 1.6,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        scrub: 0.5,
+        onUpdate: updateProgress,
+        ...snapBoundaries,
+      });
+      scrollTriggerRef.current = st;
+      return () => {
+        if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
+      };
+    }, section);
+
+    mm.add("(max-width: 1023.98px)", () => {
+      const st = ScrollTrigger.create({
+        trigger: grid,
+        start: "top 60px",
+        end: () => "+=" + window.innerHeight * 1.6,
+        pin: true,
+        pinSpacing: true,
+        anticipatePin: 1,
+        scrub: 0.5,
+        onUpdate: updateProgress,
+        ...snapBoundaries,
+      });
+      scrollTriggerRef.current = st;
+      return () => {
+        if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
+      };
+    }, section);
 
     return () => {
-      cancelled = true;
-      video.removeEventListener("loadedmetadata", startScrub);
-      mm?.revert();
+      mm.revert();
     };
   }, []);
 
