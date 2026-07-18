@@ -147,7 +147,24 @@ export default function VisionShowcase() {
       };
     }, section);
 
+    // On a slow connection the video can still be loading when the user
+    // scrolls through the pinned range — every currentTime seek above gets
+    // skipped since video.duration isn't known yet, so the frame stays
+    // stuck. Once metadata does arrive, snap straight to wherever the
+    // scroll position already is instead of waiting for the next scroll
+    // event to reconcile it.
+    const syncToScrollProgress = () => {
+      if (!video.duration) return;
+      video.currentTime = (scrollTriggerRef.current?.progress ?? 0) * video.duration;
+    };
+    if (video.readyState >= 1) {
+      syncToScrollProgress();
+    } else {
+      video.addEventListener("loadedmetadata", syncToScrollProgress, { once: true });
+    }
+
     return () => {
+      video.removeEventListener("loadedmetadata", syncToScrollProgress);
       mm.revert();
     };
   }, []);
