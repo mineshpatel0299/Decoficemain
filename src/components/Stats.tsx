@@ -47,7 +47,14 @@ export default function Stats() {
 
   return (
     <section ref={sectionRef} className="relative h-[1150px] max-h-screen min-h-[860px] w-full overflow-hidden bg-black">
-      <Image src="/stats/aurora.png" alt="Aurora over the mountains" fill priority sizes="100vw" className="object-cover" />
+      <Image
+        src="/stats/aurora.png"
+        alt="Aurora over the mountains"
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover brightness-125"
+      />
 
       <div ref={contentRef} className="absolute inset-0 z-10">
         <div className="absolute inset-x-0 top-[18%] mx-auto max-w-5xl px-6 text-center lg:px-12">
