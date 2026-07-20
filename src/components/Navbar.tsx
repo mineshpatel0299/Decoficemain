@@ -29,6 +29,7 @@ export default function Navbar() {
     );
   }, []);
 
+
   return (
     <header
       ref={headerRef}
@@ -52,7 +53,7 @@ export default function Navbar() {
         </nav>
 
         <a
-          href="#contact-us"
+          href="/contact-us"
           className="hidden shrink-0 items-center justify-center gap-[10px] rounded-full bg-white px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal text-black transition-colors hover:bg-white/90 lg:inline-flex"
         >
           Contact Us
@@ -69,19 +70,16 @@ export default function Navbar() {
         >
           <span className="relative block h-4 w-5.5">
             <span
-              className={`absolute left-0 h-0.5 w-full rounded-full bg-current transition-all duration-300 ${
-                menuOpen ? "top-1.75 rotate-45" : "top-0 rotate-0"
-              }`}
+              className={`absolute left-0 h-0.5 w-full rounded-full bg-current transition-all duration-300 ${menuOpen ? "top-1.75 rotate-45" : "top-0 rotate-0"
+                }`}
             />
             <span
-              className={`absolute left-0 top-1.75 h-0.5 w-full rounded-full bg-current transition-opacity duration-300 ${
-                menuOpen ? "opacity-0" : "opacity-100"
-              }`}
+              className={`absolute left-0 top-1.75 h-0.5 w-full rounded-full bg-current transition-opacity duration-300 ${menuOpen ? "opacity-0" : "opacity-100"
+                }`}
             />
             <span
-              className={`absolute left-0 h-0.5 w-full rounded-full bg-current transition-all duration-300 ${
-                menuOpen ? "top-1.75 -rotate-45" : "top-3.5 rotate-0"
-              }`}
+              className={`absolute left-0 h-0.5 w-full rounded-full bg-current transition-all duration-300 ${menuOpen ? "top-1.75 -rotate-45" : "top-3.5 rotate-0"
+                }`}
             />
           </span>
         </button>
@@ -90,9 +88,8 @@ export default function Navbar() {
       {/* Mobile/tablet menu panel */}
       <div
         id="mobile-nav-menu"
-        className={`absolute inset-x-4 top-full z-20 origin-top overflow-hidden rounded-2xl border border-white/10 bg-black/95 backdrop-blur-sm transition-all duration-300 ease-out lg:hidden ${
-          menuOpen ? "mt-3 max-h-100 opacity-100" : "mt-0 max-h-0 opacity-0"
-        }`}
+        className={`absolute inset-x-4 top-full z-20 origin-top overflow-hidden rounded-2xl border border-white/10 bg-black/95 backdrop-blur-sm transition-all duration-300 ease-out lg:hidden ${menuOpen ? "mt-3 max-h-100 opacity-100" : "mt-0 max-h-0 opacity-0"
+          }`}
       >
         <nav className="flex flex-col items-center gap-6 px-6 py-8">
           {navLinks.map((link) => (
@@ -106,7 +103,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="#contact-us"
+            href="/contact-us"
             onClick={() => setMenuOpen(false)}
             className="mt-2 flex w-full max-w-60 items-center justify-center gap-[10px] rounded-full bg-white px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal text-black transition-colors hover:bg-white/90"
           >

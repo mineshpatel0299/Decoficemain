@@ -69,14 +69,14 @@ export default function WhatHappensNext() {
           </div>
 
           {/* Mobile Button */}
-          <div className="mx-auto w-full max-w-[338px]">
+          {/* <div className="mx-auto w-full max-w-[338px]">
             <a
               href="#schedule-a-meet"
               className="mt-3 flex h-12 w-full items-center justify-center rounded-[8px] bg-emerald-600 text-[15px] font-medium text-white transition-colors hover:bg-emerald-600/90"
             >
               Schedule A Meet
             </a>
-          </div>
+          </div> */}
         </div>
 
         {/* DESKTOP LAYOUT (hidden on mobile) */}
@@ -92,12 +92,12 @@ export default function WhatHappensNext() {
             </div>
             <div className="p-5">
               <h3 className="text-lg font-bold text-white">It All Starts With A Conversation</h3>
-              <a
+              {/* <a
                 href="#schedule-a-meet"
                 className="font-opensans mt-4 inline-flex h-11 w-full items-center justify-center rounded-lg bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
               >
                 Schedule A Meet
-              </a>
+              </a> */}
             </div>
           </div>
 

@@ -113,20 +113,20 @@ function FieldInput({
 }) {
   return (
     <div
-      className={`rounded-2xl border px-5 py-3 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
+      className={`rounded-xl border px-4 py-2.5 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] lg:rounded-2xl lg:px-5 lg:py-3 ${
         error ? "border-rose-400/50 bg-rose-500/10" : "border-white/20 bg-white/5 focus-within:border-white/40 focus-within:bg-white/10"
       }`}
     >
-      <label className="mb-2 flex items-center gap-2 text-xs tracking-[0.2em] text-white/40 uppercase">
+      <label className="mb-1 flex items-center gap-2 text-[10px] tracking-[0.15em] text-white/40 uppercase lg:mb-2 lg:text-xs lg:tracking-[0.2em]">
         {icon} {label}
       </label>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full bg-transparent text-white placeholder:text-white/30 focus:outline-none"
+        className="w-full bg-transparent text-sm text-white placeholder:text-white/30 focus:outline-none lg:text-base"
       />
-      {error && <p className="mt-2 text-xs text-rose-400">{error}</p>}
+      {error && <p className="mt-1 text-[10px] text-rose-400 lg:mt-2 lg:text-xs">{error}</p>}
     </div>
   );
 }
@@ -272,7 +272,7 @@ export default function ScheduleVisit() {
             </div>
           </div>
 
-          <div className="relative mx-auto flex h-[300px] w-full max-w-[358px] flex-col gap-[14px] overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.02] px-[14px] py-[18px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-3xl sm:p-8 lg:mx-0 lg:h-[551px] lg:max-w-none lg:rounded-[32px] lg:self-end lg:gap-0 lg:p-6 lg:sm:p-8">
+          <div className="relative mx-auto flex min-h-75 w-full max-w-[358px] flex-col gap-[14px] overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.02] px-[14px] py-[18px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-3xl sm:p-8 lg:mx-0 lg:h-[551px] lg:max-w-none lg:rounded-[32px] lg:self-end lg:gap-0 lg:p-6 lg:sm:p-8">
             <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-white/10 via-transparent to-transparent opacity-50" />
             <div className="relative flex h-full flex-col">
             <form onSubmit={handleSubmit} className="flex h-full flex-col">
@@ -373,27 +373,27 @@ export default function ScheduleVisit() {
 
                   {currentStep === 2 && (
                     <div>
-                      <p className="mb-3 text-sm text-white/60">Choose a date</p>
-                      <div className="mb-8 flex gap-3 overflow-x-auto pb-1">
+                      <p className="mb-2 text-xs text-white/60 lg:mb-3 lg:text-sm">Choose a date</p>
+                      <div className="mb-4 flex gap-2 overflow-x-auto pb-1 lg:mb-8 lg:gap-3">
                         {dates.map((d, i) => (
                           <button
                             key={d.label}
                             type="button"
                             onClick={() => setSelectedDateIndex(i)}
-                            className={`flex min-w-16 shrink-0 flex-col items-center rounded-2xl border px-4 py-3 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
+                            className={`flex min-w-14 shrink-0 flex-col items-center rounded-xl border px-3 py-2 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] lg:min-w-16 lg:rounded-2xl lg:px-4 lg:py-3 ${
                               selectedDateIndex === i
                                 ? "border-emerald-500/50 bg-emerald-500/15 text-white"
                                 : "border-white/20 bg-white/5 text-white/70 hover:bg-white/10 hover:border-white/30"
                             }`}
                           >
-                            <span className="text-xs tracking-wide uppercase">{d.weekday}</span>
-                            <span className="mt-1 text-lg font-semibold">{d.day}</span>
+                            <span className="text-[10px] tracking-wide uppercase lg:text-xs">{d.weekday}</span>
+                            <span className="mt-0.5 text-sm font-semibold lg:mt-1 lg:text-lg">{d.day}</span>
                           </button>
                         ))}
                       </div>
 
-                      <p className="mb-3 text-sm text-white/60">Available time slots</p>
-                      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                      <p className="mb-2 text-xs text-white/60 lg:mb-3 lg:text-sm">Available time slots</p>
+                      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:gap-3">
                         {TIME_SLOTS.map((time) => (
                           <button
                             key={time}
@@ -402,7 +402,7 @@ export default function ScheduleVisit() {
                               setSelectedTime(time);
                               setErrors((prev) => ({ ...prev, selectedTime: undefined }));
                             }}
-                            className={`rounded-xl border px-3 py-3 text-sm font-medium transition-all backdrop-blur-md shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] ${
+                            className={`rounded-lg border px-2 py-2 text-xs font-medium transition-all backdrop-blur-md shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] lg:rounded-xl lg:px-3 lg:py-3 lg:text-sm ${
                               selectedTime === time
                                 ? "border-white bg-white text-black shadow-white/20"
                                 : "border-white/20 bg-white/5 text-white hover:bg-white/10 hover:border-white/30"
@@ -412,13 +412,13 @@ export default function ScheduleVisit() {
                           </button>
                         ))}
                       </div>
-                      {errors.selectedTime && <p className="mt-3 text-sm text-rose-400">{errors.selectedTime}</p>}
+                      {errors.selectedTime && <p className="mt-2 text-xs text-rose-400 lg:mt-3 lg:text-sm">{errors.selectedTime}</p>}
                     </div>
                   )}
 
                   {currentStep === 3 && (
-                    <div className="flex flex-col gap-3">
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <div className="flex flex-col gap-2 lg:gap-3">
+                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:gap-3">
                         <FieldInput
                           label="Full name"
                           icon={<PersonIcon className="h-3.5 w-3.5" />}
@@ -443,15 +443,15 @@ export default function ScheduleVisit() {
                         error={errors.email}
                         type="email"
                       />
-                      <div className="rounded-2xl border border-white/20 bg-white/5 px-5 py-3 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] focus-within:border-white/40 focus-within:bg-white/10">
-                        <label className="mb-2 flex items-center gap-2 text-xs tracking-[0.2em] text-white/40 uppercase">
+                      <div className="rounded-xl border border-white/20 bg-white/5 px-4 py-2.5 backdrop-blur-xl transition-all shadow-[0_4px_24px_-8px_rgba(0,0,0,0.3)] focus-within:border-white/40 focus-within:bg-white/10 lg:rounded-2xl lg:px-5 lg:py-3">
+                        <label className="mb-1 flex items-center gap-2 text-[10px] tracking-[0.15em] text-white/40 uppercase lg:mb-2 lg:text-xs lg:tracking-[0.2em]">
                           <MailIcon /> Message (optional)
                         </label>
                         <textarea
                           rows={2}
                           value={form.message}
                           onChange={(e) => updateField("message", e.target.value)}
-                          className="w-full resize-none bg-transparent text-white placeholder:text-white/30 focus:outline-none"
+                          className="w-full resize-none bg-transparent text-sm text-white placeholder:text-white/30 focus:outline-none lg:text-base"
                         />
                       </div>
                     </div>

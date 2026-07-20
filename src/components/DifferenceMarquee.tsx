@@ -22,18 +22,34 @@ const concerns = [
   },
   {
     label: "Common Concern 3:",
-    quote: "I'm worried costs will spiral out of control",
-    headingWhite: "One Price.",
-    headingGreen: "No Surprises.",
-    body: "Transparent, fixed-scope pricing agreed upfront, with zero hidden costs along the way.",
+    quote: "I don't want the final resort to feel different from what I imagined.",
+    headingWhite: "Your Vision Never",
+    headingGreen: "Gets Lost.",
+    body: "Every decision stays aligned with the vision you approved from day one.",
   },
   {
     label: "Common Concern 4:",
-    quote: "I don't know if my vision will actually get built the way I imagined",
-    headingWhite: "Your Vision,",
-    headingGreen: "Exactly Realized.",
-    body: "From concept to handover, every detail is executed exactly as designed.",
+    quote: "I don't want expensive mistakes to appear once construction begins.",
+    headingWhite: "Every Detail Has",
+    headingGreen: "A Purpose.",
+    body: "Every material, finish, and decision is chosen with long-term quality in mind.",
   },
+  {
+    label: "Common Concern 5:",
+    quote: "I want guests to remember the experience, not just the building.",
+    headingWhite: "Built Around The",
+    headingGreen: "Guest Experience.",
+    body: "Every space is designed to create comfort, emotion, and unforgettable stays.",
+  },
+  {
+    label: "Common Concern 6:",
+    quote: "I need a partner I can genuinely trust with this investment.",
+    headingWhite: "Confidence At",
+    headingGreen: "Every Stage.",
+    body: "Expert guidance and complete transparency support every step of your journey.",
+  },
+
+
 ];
 
 function QuoteIcon() {
@@ -89,19 +105,31 @@ export default function DifferenceMarquee() {
 
   useLayoutEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
+    if (!trackRef.current || !outerRef.current) return;
+
+    // Calculate the exact distance to sweep so the last card aligns nicely
+    // on the right side of the screen. We use 8vw padding to ensure it clears
+    // the 8% edge fade mask but stays firmly on the right side.
+    const getSweep = () => {
+      const rightPadding = window.innerWidth * 0.08;
+      return Math.max(0, trackRef.current!.scrollWidth - window.innerWidth + rightPadding);
+    };
+
+    // Scroll pace (scroll px per sweep px), tuned so the reveal always feels
+    // equally unhurried regardless of how many concern cards there are — the
+    // outer wrapper's pinned scroll distance scales with the sweep instead of
+    // being a fixed "200vh" that only had enough room for 4 cards.
+    const PACE = 1.2;
+
+    const syncHeight = () => {
+      if (outerRef.current) {
+        outerRef.current.style.height = `${window.innerHeight + getSweep() * PACE}px`;
+      }
+    };
+
+    syncHeight();
 
     const ctx = gsap.context(() => {
-      if (!trackRef.current || !outerRef.current) return;
-
-      // Calculate the exact distance to sweep so the 4th card aligns nicely
-      // on the right side of the screen. We use 8vw padding to ensure it clears
-      // the 8% edge fade mask but stays firmly on the right side.
-      const getSweep = () => {
-        const totalCardsWidth = concerns.length * (495 + 24); // 4 cards * (495px + 24px gap)
-        const rightPadding = window.innerWidth * 0.08;
-        return Math.max(0, totalCardsWidth - window.innerWidth + rightPadding);
-      };
-
       // Cards sweep right → left while the outer wrapper is pinned (sticky).
       gsap.fromTo(
         trackRef.current,
@@ -138,13 +166,23 @@ export default function DifferenceMarquee() {
       }
     });
 
-    return () => ctx.revert();
+    const handleResize = () => {
+      syncHeight();
+      ScrollTrigger.refresh();
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      ctx.revert();
+    };
   }, []);
 
   return (
     // outerRef is the tall scroll canvas that gives the sticky section room to breathe.
-    // 200vh gives enough room to scroll through the 4 cards smoothly.
-    <div ref={outerRef} className="hidden md:block relative bg-[#0F0F0F]" style={{ height: "200vh" }}>
+    // Height is computed in JS (syncHeight) to scale with however many concern
+    // cards there are; this static value is just the pre-hydration fallback.
+    <div ref={outerRef} className="hidden md:block relative bg-[#0F0F0F]" style={{ height: "300vh" }}>
       {/* Sticky viewport-height panel */}
       <div ref={stickyRef} className="sticky top-0 h-screen overflow-hidden flex flex-col justify-center">
 
@@ -161,10 +199,11 @@ export default function DifferenceMarquee() {
         </div>
 
         {/* Content above cards */}
-        <div className="relative z-10 mx-auto max-w-3xl px-6 text-center lg:px-12 mb-14">
-          <h2 className="font-opensans text-[26px] whitespace-nowrap leading-tight font-bold text-white sm:text-[44px] lg:text-heading">
-            The <span className="font-serif font-bold text-emerald-600 italic">Difference</span>{" "}
-            You&apos;ll Feel
+        <div className="relative z-10 mx-auto max-w-3xl px-6 flex flex-col items-center text-center lg:px-12 mb-14 w-full">
+          <h2 className="font-opensans text-[26px] leading-tight font-bold text-white sm:text-[44px] lg:text-heading flex items-center justify-center whitespace-nowrap gap-x-2 w-full">
+            <span>The</span>
+            <span className="font-serif font-bold text-emerald-600 italic">Difference</span>
+            <span>You&apos;ll Feel</span>
           </h2>
           <p className="mt-4 text-white/60">
             The right partner doesn&apos;t just build better. They make every stage of the journey better.
@@ -173,7 +212,7 @@ export default function DifferenceMarquee() {
 
         {/* Scrolling card track */}
         <div className="relative z-10 [mask-image:linear-gradient(to_right,transparent,black_8%,black_92%,transparent)] overflow-hidden">
-          <div ref={trackRef} className="flex gap-6 w-max">
+          <div ref={trackRef} className="flex gap-6 w-max pl-[6vw] md:pl-[10vw]">
             {track.map((concern, i) => (
               <ConcernCard key={`${concern.label}-${i}`} concern={concern} />
             ))}
@@ -186,7 +225,7 @@ export default function DifferenceMarquee() {
             href="#feel-the-difference"
             className="font-opensans inline-flex h-11 items-center justify-center rounded-lg bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
           >
-            Feel The Difference Yourself
+            Connect with our team
           </a>
         </div>
       </div>

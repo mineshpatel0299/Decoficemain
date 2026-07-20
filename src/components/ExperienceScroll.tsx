@@ -14,7 +14,6 @@ type Slide = {
   badge: string;
   heading: [HeadingSegment[], HeadingSegment[]];
   paragraph: string;
-  cta: string;
 };
 
 const slides: Slide[] = [
@@ -27,7 +26,6 @@ const slides: Slide[] = [
     ],
     paragraph:
       "Distinctive hospitality destinations that combine personalized experiences with unique architectural character.",
-    cta: "View Experience",
   },
   {
     image: "/temp/2.png",
@@ -38,7 +36,6 @@ const slides: Slide[] = [
     ],
     paragraph:
       "Iconic architecture, premium experiences, and world-class amenities designed to create unforgettable stays.",
-    cta: "View Experience",
   },
   {
     image: "/temp/3.png",
@@ -49,7 +46,6 @@ const slides: Slide[] = [
     ],
     paragraph:
       "Sustainably designed retreats that blend seamlessly with the landscape while delivering modern comfort.",
-    cta: "View Experience",
   },
   {
     image: "/temp/1.png",
@@ -60,7 +56,6 @@ const slides: Slide[] = [
     ],
     paragraph:
       "Scenic retreats designed to embrace breathtaking views, challenging terrains, and memorable guest experiences.",
-    cta: "View Experience",
   },
   {
     image: "/temp/6.png",
@@ -71,7 +66,6 @@ const slides: Slide[] = [
     ],
     paragraph:
       "Thoughtfully planned wellness environments focused on relaxation, rejuvenation, and holistic living.",
-    cta: "View Experience",
   },
   {
     image: "/temp/5.png",
@@ -82,7 +76,6 @@ const slides: Slide[] = [
     ],
     paragraph:
       "Exclusive villa communities offering privacy, comfort, and resort-style amenities in one seamless experience.",
-    cta: "View Experience",
   },
 ];
 
@@ -232,13 +225,6 @@ export default function ExperienceScroll() {
                   <p className="font-opensans mt-4 max-w-xl text-base leading-6 font-normal text-white/80 sm:text-lg sm:leading-7 lg:text-[20px] lg:leading-7.5">
                     {slide.paragraph}
                   </p>
-
-                  <a
-                    href="#view-experience"
-                    className="mt-6 inline-flex h-11 items-center justify-center rounded-md bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
-                  >
-                    {slide.cta}
-                  </a>
                 </div>
               ))}
             </div>

@@ -7,7 +7,7 @@ import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
 const stages = ["Vision", "Craft", "Build", "Experience"];
 
-const resortTypes = ["Luxury Resort", "Hills Resort", "Eco Resort", "Wellness Retreat"];
+const resortTypes = ["Architectural Concept", "Design Development", "Construction & Interiors", "Luxury Destination"];
 
 const experienceViews: { label: string; icon: "daylight" | "nightfall"; src: string }[] = [
   { label: "Daylight", icon: "daylight", src: "/day-scrub.mp4" },
@@ -114,7 +114,7 @@ export default function VisionShowcase() {
     mm.add("(min-width: 1024px)", () => {
       const st = ScrollTrigger.create({
         trigger: grid,
-        start: "top 120px",
+        start: "top 0px",
         end: () => "+=" + window.innerHeight * 1.6,
         pin: true,
         pinSpacing: true,
@@ -132,7 +132,7 @@ export default function VisionShowcase() {
     mm.add("(max-width: 1023.98px)", () => {
       const st = ScrollTrigger.create({
         trigger: grid,
-        start: "top 60px",
+        start: "top 0px",
         end: () => "+=" + window.innerHeight * 1.6,
         pin: true,
         pinSpacing: true,
@@ -214,8 +214,11 @@ export default function VisionShowcase() {
 
   return (
     <section ref={sectionRef} className="relative bg-[#0F0F0F] py-24 lg:py-32">
-      <div className="mx-auto max-w-7xl px-6 lg:px-12">
-        <div className="max-w-2xl">
+      <div
+        ref={gridRef}
+        className="mx-auto flex h-177 max-w-7xl flex-col px-6 lg:px-12"
+      >
+        <div className="max-w-2xl shrink-0">
           <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-heading">
             Watch Your <span className="font-serif font-bold italic text-emerald-600">Dream</span>
             <br />
@@ -224,16 +227,13 @@ export default function VisionShowcase() {
           <p className="mt-6 text-lg text-white/70">Distinctive hospitality destinations that combine</p>
         </div>
 
-        <div ref={gridRef} className="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[auto_1fr_auto] lg:items-center">
-          <div className="flex flex-col items-center lg:block">
+        <div className="mt-10 flex min-h-0 flex-1 flex-col gap-10 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-stretch">
+          <div className="flex shrink-0 flex-col items-center lg:block lg:self-start">
             <div className="flex h-[227px] w-full max-w-[338px] flex-col gap-[6px] rounded-2xl border-[0.2px] border-white/10 bg-white/3 px-[14px] py-[10px] backdrop-blur-md lg:h-76.5 lg:w-60 lg:gap-3 lg:px-3.5 lg:py-2.5">
               <div className="flex items-center justify-center gap-3 pb-1 lg:pb-0 lg:justify-start">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/40">
-                  <span className="h-2 w-2 rounded-full bg-white" />
-                </span>
                 <div>
-                  <div className="text-[14px] font-semibold text-white lg:text-base">Resort Type</div>
-                  <div className="text-[10px] text-white/50 lg:text-sm">Select your dream resort</div>
+                  <div className="text-[14px] font-semibold text-white lg:text-base">Process Stages</div>
+                  <div className="text-[10px] text-white/50 lg:text-sm">Follow the Journey</div>
                 </div>
               </div>
 
@@ -256,41 +256,10 @@ export default function VisionShowcase() {
                 })}
               </div>
             </div>
-
-            <div className="mt-6 flex h-[189px] w-full max-w-[337px] flex-col gap-[6px] rounded-2xl border-[0.2px] border-white/10 bg-white/3 px-[14px] py-[10px] backdrop-blur-md lg:h-62 lg:w-60 lg:gap-3 lg:px-3.5 lg:py-2.5">
-              <div className="flex items-center justify-center gap-3 pb-1 lg:pb-0 lg:justify-start">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-white/40">
-                  <span className="h-2 w-2 rounded-full bg-white" />
-                </span>
-                <div>
-                  <div className="text-[14px] font-semibold text-white lg:text-base">The Experience</div>
-                  <div className="text-[10px] text-white/50 lg:text-sm">Select your fav view</div>
-                </div>
-              </div>
-
-              <div className="flex flex-1 flex-col gap-2 overflow-y-auto lg:gap-3">
-                {experienceViews.map((view, i) => {
-                  const active = i === activeView;
-                  return (
-                    <button
-                      key={view.label}
-                      onClick={() => switchView(i)}
-                      className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 ${active
-                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600"
-                          : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
-                        }`}
-                    >
-                      <ViewIcon type={view.icon} active={active} />
-                      {view.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
           </div>
 
-          <div ref={videoWrapRef} className="relative mt-8 lg:mt-0">
-            <div className="relative aspect-[3/2] w-full overflow-hidden rounded-3xl bg-[#0F0F0F]">
+          <div ref={videoWrapRef} className="relative mt-8 flex min-h-0 flex-1 flex-col lg:mt-0 lg:h-full">
+            <div className="relative min-h-0 w-full flex-1 overflow-hidden rounded-3xl bg-[#0F0F0F]">
               <video
                 ref={videoRef}
                 // Only the initial src — Daylight/Nightfall switches after
@@ -305,7 +274,26 @@ export default function VisionShowcase() {
               />
             </div>
 
-
+            <div className="mt-6 flex shrink-0 justify-center">
+              <div className="flex w-full max-w-[337px] items-center justify-center gap-1.5 rounded-lg border-[0.2px] border-white/10 bg-white/5 p-1.5 backdrop-blur-md">
+                {experienceViews.map((view, i) => {
+                  const active = i === activeView;
+                  return (
+                    <button
+                      key={view.label}
+                      onClick={() => switchView(i)}
+                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors ${active
+                          ? "border-white/15 bg-white/15 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]"
+                          : "border-transparent text-white/60 hover:bg-white/5 hover:text-white/90"
+                        }`}
+                    >
+                      <ViewIcon type={view.icon} active={active} />
+                      {view.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
           {/* Progress rail — stretches to match the row height set by the

@@ -27,7 +27,7 @@ export default function DestinationsInMaking() {
           The strongest proof isn&apos;t always found in what&apos;s been completed- it&apos;s found in what&apos;s
           actively taking shape.
         </p>
-        
+
 
         <div className="mt-14 grid grid-cols-1 justify-items-center gap-6 text-left sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, i) => (
@@ -69,15 +69,10 @@ export default function DestinationsInMaking() {
         </div>
 
         <div className="mt-16">
-          <h3 className="font-opensans text-2xl font-bold text-white sm:text-3xl">
+          <h3 className="font-opensans  font-bold text-white sm:text-2xl">
             Perhaps The Next One Is <span className="font-serif font-bold text-emerald-600 italic">Yours!</span>
           </h3>
-          <a
-            href="#bring-your-vision"
-            className="font-opensans mt-8 inline-flex h-12 items-center justify-center rounded-lg bg-emerald-600 px-7 text-base font-semibold text-white transition-colors hover:bg-emerald-500"
-          >
-            Bring Your Vision To The Table
-          </a>
+        
         </div>
       </div>
     </section>

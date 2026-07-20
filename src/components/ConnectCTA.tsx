@@ -41,17 +41,17 @@ export default function ConnectCTA() {
           </p>
           <div className="mt-8 flex w-full flex-col items-center gap-4">
             <a
-              href="#learn-more"
+              href="https://www.decofice.com/about"
               className="font-opensans flex h-[36px] w-[182px] items-center justify-center whitespace-nowrap rounded-lg bg-emerald-600 px-[12px] py-[8px] text-[12px] font-semibold text-white transition-colors hover:bg-emerald-600/90"
             >
               Learn More About Decofice
             </a>
-            <a
+            {/* <a
               href="#download-brochure"
               className="font-opensans flex h-[36px] w-[182px] items-center justify-center whitespace-nowrap rounded-lg bg-[#EFEFEF] px-[12px] py-[8px] text-[12px] font-semibold text-emerald-600 transition-colors hover:bg-white"
             >
               Download Brochure
-            </a>
+            </a> */}
           </div>
         </div>
 
@@ -108,17 +108,17 @@ export default function ConnectCTA() {
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <a
-              href="#learn-more"
+              href="https://www.decofice.com/about"
               className="font-opensans inline-flex h-12 items-center justify-center rounded-lg bg-emerald-600 px-7 text-base font-semibold text-white transition-colors hover:bg-emerald-500"
             >
               Learn More About Decofice
             </a>
-            <a
+            {/* <a
               href="#download-brochure"
               className="font-opensans inline-flex h-12 items-center justify-center rounded-lg bg-white px-7 text-base font-semibold text-emerald-600 transition-colors hover:bg-white/90"
             >
               Download Brochure
-            </a>
+            </a> */}
           </div>
         </div>
 
