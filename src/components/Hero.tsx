@@ -211,12 +211,12 @@ export default function Hero() {
           >
             Discuss Your Vision
           </button>
-          <a
+          {/* <a
             href="#enter-the-experience"
             className="font-opensans flex h-9 w-37 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border border-white/70 px-3 py-2 text-xs leading-4 font-semibold text-white transition-colors hover:bg-white/10"
           >
             Enter The Experience
-          </a>
+          </a> */}
         </div>
       </div>
 
