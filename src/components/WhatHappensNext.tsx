@@ -44,7 +44,9 @@ export default function WhatHappensNext() {
           <div className="relative mx-auto h-[188px] w-full max-w-[338px] overflow-hidden rounded-[8px] border border-black/20">
             <Image src="/whathappennext/1.png" alt="It All Starts With A Conversation" fill sizes="100vw" className="object-cover" />
             <div className="absolute inset-x-0 bottom-0 border-t border-black/20 bg-black/20 p-3 backdrop-blur-md">
-              <p className="text-[10px] font-bold text-white">It All Starts With A Conversation</p>
+              <p className="inline-block rounded-lg border border-white px-2.5 py-1 text-[10px] font-bold text-white">
+                It All Starts With A Conversation
+              </p>
             </div>
           </div>
 
@@ -91,7 +93,9 @@ export default function WhatHappensNext() {
               </div>
             </div>
             <div className="p-5">
-              <h3 className="text-lg font-bold text-white">It All Starts With A Conversation</h3>
+              <h3 className="inline-block rounded-lg border border-white px-4 py-1.5 text-lg font-bold text-white">
+                It All Starts With A Conversation
+              </h3>
               {/* <a
                 href="#schedule-a-meet"
                 className="font-opensans mt-4 inline-flex h-11 w-full items-center justify-center rounded-lg bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"

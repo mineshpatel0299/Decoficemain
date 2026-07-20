@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Navbar from "./Navbar";
+import ContactModal from "./ContactModal";
 
 export default function Hero() {
+  const [isContactOpen, setIsContactOpen] = useState(false);
   const badgeRef = useRef<HTMLSpanElement>(null);
   const craftingRef = useRef<HTMLParagraphElement>(null);
   const rememberingRef = useRef<HTMLParagraphElement>(null);
@@ -128,12 +130,13 @@ export default function Hero() {
           ref={ctaRef}
           className="absolute inset-x-0 bottom-[16%] z-30 flex flex-wrap items-center justify-center gap-4 px-6 opacity-0"
         >
-          <a
-            href="#discuss-your-vision"
+          <button
+            type="button"
+            onClick={() => setIsContactOpen(true)}
             className="font-opensans inline-flex h-12 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg bg-emerald-600 px-7 py-3 text-base leading-6 font-semibold text-white transition-colors hover:bg-emerald-500"
           >
             Discuss Your Vision
-          </a>
+          </button>
 
         </div>
       </div>
@@ -201,12 +204,13 @@ export default function Hero() {
 
         {/* CTAs: kept above the resort cutout so they always stay legible and clickable */}
         <div ref={ctaMobileRef} className="absolute inset-x-0 bottom-[17%] z-30 flex flex-col items-center gap-4 px-6 opacity-0">
-          <a
-            href="#discuss-your-vision"
+          <button
+            type="button"
+            onClick={() => setIsContactOpen(true)}
             className="font-opensans flex h-9 w-37 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg bg-emerald-600 px-3 py-2 text-xs leading-4 font-semibold text-white transition-colors hover:bg-emerald-500"
           >
             Discuss Your Vision
-          </a>
+          </button>
           <a
             href="#enter-the-experience"
             className="font-opensans flex h-9 w-37 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border border-white/70 px-3 py-2 text-xs leading-4 font-semibold text-white transition-colors hover:bg-white/10"
@@ -215,6 +219,8 @@ export default function Hero() {
           </a>
         </div>
       </div>
+
+      <ContactModal open={isContactOpen} onClose={() => setIsContactOpen(false)} />
     </section>
   );
 }

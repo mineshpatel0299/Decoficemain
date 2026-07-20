@@ -53,7 +53,7 @@ export default function Navbar() {
         </nav>
 
         <a
-          href="/contact-us"
+          href="https://www.decofice.com/contact"
           className="hidden shrink-0 items-center justify-center gap-[10px] rounded-full bg-white px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal text-black transition-colors hover:bg-white/90 lg:inline-flex"
         >
           Contact Us
@@ -103,7 +103,7 @@ export default function Navbar() {
             </a>
           ))}
           <a
-            href="/contact-us"
+            href="https://www.decofice.com/contact"
             onClick={() => setMenuOpen(false)}
             className="mt-2 flex w-full max-w-60 items-center justify-center gap-[10px] rounded-full bg-white px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal text-black transition-colors hover:bg-white/90"
           >
