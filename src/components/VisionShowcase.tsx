@@ -173,14 +173,14 @@ export default function VisionShowcase() {
   // runway, so the actual scroll position stays in sync with activeStage —
   // otherwise the next scroll tick would just recompute activeStage from the
   // real (unchanged) scroll position and undo the jump.
-  const scrollToStage = (index: number) => {
+  const scrollToStage = (index: number, instant = false) => {
     const st = scrollTriggerRef.current;
     if (!st) return false;
 
     const progress = (index + 0.5) / stages.length;
     gsap.to(window, {
       scrollTo: st.start + (st.end - st.start) * progress,
-      duration: 1,
+      duration: instant ? 0 : 1,
       ease: "power2.inOut",
     });
     return true;
@@ -209,7 +209,10 @@ export default function VisionShowcase() {
       video.load();
     }
 
-    if (!scrollToStage(0)) setActiveStage(0);
+    // Jump straight to the "Vision" stage instead of animating the scroll —
+    // an eased scroll here would scrub the new video through its frames,
+    // reading as the old clip playing in reverse instead of a clean cut.
+    if (!scrollToStage(0, true)) setActiveStage(0);
   };
 
   return (
