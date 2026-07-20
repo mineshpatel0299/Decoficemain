@@ -227,7 +227,7 @@ export default function ExperienceScroll() {
                       </span>
                     ))}
                   </h2>
-                  
+
 
                   <p className="font-opensans mt-4 max-w-xl text-base leading-6 font-normal text-white/80 sm:text-lg sm:leading-7 lg:text-[20px] lg:leading-7.5">
                     {slide.paragraph}
@@ -250,6 +250,7 @@ export default function ExperienceScroll() {
             <div ref={markerRef} className="absolute top-1/2 h-0.5 -translate-y-1/2 bg-white" style={{ width: `${100 / slides.length}%` }} />
           </div>
         </div>
+
       </div>
     </section>
   );

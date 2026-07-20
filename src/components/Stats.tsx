@@ -46,14 +46,14 @@ export default function Stats() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative h-[1150px] max-h-screen min-h-[860px] w-full overflow-hidden bg-black">
+    <section ref={sectionRef} className="relative h-[900px] max-h-screen min-h-[700px] w-full overflow-hidden bg-black">
       <Image
         src="/stats/aurora.png"
         alt="Aurora over the mountains"
         fill
         priority
         sizes="100vw"
-        className="object-cover brightness-125"
+        className="object-cover"
       />
 
       <div ref={contentRef} className="absolute inset-0 z-10">
@@ -88,14 +88,17 @@ export default function Stats() {
         </div>
       </div>
 
-      <Image
-        src="/stats/hills.png"
-        alt=""
-        aria-hidden="true"
-        fill
-        sizes="100vw"
-        className="pointer-events-none absolute inset-0 z-20 translate-y-[8%] object-cover"
-      />
+      {/* Hills overlay — anchored to the bottom so it aligns with the hill silhouette in the aurora bg */}
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 h-[45%]">
+        <Image
+          src="/stats/hills.png"
+          alt=""
+          aria-hidden="true"
+          fill
+          sizes="100vw"
+          className="object-cover object-top"
+        />
+      </div>
     </section>
   );
 }

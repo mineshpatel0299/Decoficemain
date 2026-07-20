@@ -27,6 +27,7 @@ export default function DestinationsInMaking() {
           The strongest proof isn&apos;t always found in what&apos;s been completed- it&apos;s found in what&apos;s
           actively taking shape.
         </p>
+        
 
         <div className="mt-14 grid grid-cols-1 justify-items-center gap-6 text-left sm:grid-cols-2 lg:grid-cols-3">
           {projects.map((project, i) => (
