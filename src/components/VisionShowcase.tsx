@@ -194,25 +194,21 @@ export default function VisionShowcase() {
   const switchView = (index: number) => {
     if (index === activeView) return;
     setActiveView(index);
-    setActiveStage(0);
 
     const video = videoRef.current;
     if (video) {
-      // Swap the video file (Daylight vs Nightfall) and reset to the start,
-      // matching the "Vision" stage the rail is about to jump back to.
+      // Swap the video file (Daylight vs Nightfall) and resume at the same
+      // scroll progress the previous clip was showing, instead of resetting
+      // to the start — scroll position and stage stay put, so the cut reads
+      // as the same moment continuing under a different lighting pass.
       const onLoaded = () => {
-        video.currentTime = 0;
+        video.currentTime = progressRef.current * video.duration;
         video.pause();
       };
       video.addEventListener("loadedmetadata", onLoaded, { once: true });
       video.src = experienceViews[index].src;
       video.load();
     }
-
-    // Jump straight to the "Vision" stage instead of animating the scroll —
-    // an eased scroll here would scrub the new video through its frames,
-    // reading as the old clip playing in reverse instead of a clean cut.
-    if (!scrollToStage(0, true)) setActiveStage(0);
   };
 
   return (
