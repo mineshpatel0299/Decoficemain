@@ -63,7 +63,7 @@ export default function Hero() {
       </div>
 
       {/* Accessible heading: visually hidden, mirrors the two styled lines in both compositions below for assistive tech and SEO */}
-      <h1 className="sr-only">Crafting Places Worth Remembering</h1>
+      <h1 className="sr-only">Crafting The Future Of Hospitality</h1>
 
       {/* Desktop composition (>= lg): wide-format artwork, occlusion math tuned for landscape aspect ratios */}
       <div className="relative isolate hidden h-250 max-h-screen min-h-180 w-full lg:block">
@@ -92,7 +92,7 @@ export default function Hero() {
             aria-hidden="true"
             className="mt-10 font-opensans text-[4.375vw] font-extrabold leading-[1.111] tracking-normal text-white opacity-0"
           >
-            Crafting Places Worth
+            Crafting The Future Of
           </p>
         </div>
 
@@ -112,7 +112,7 @@ export default function Hero() {
           aria-hidden="true"
           className="absolute inset-x-0 top-[calc(-14.25vw+50vh+4.86vw+78px)] z-15 mx-auto max-w-5xl px-6 text-center font-serif text-[6.667vw] font-bold italic leading-[0.729] tracking-normal text-emerald-600 opacity-0"
         >
-          Remembering
+          Hospitality
         </p>
 
         {/* Resort cutout, pinned to its exact position in the base scene, in front of the copy */}
@@ -169,7 +169,7 @@ export default function Hero() {
             aria-hidden="true"
             className="mt-6 font-opensans text-[6.5vw] font-extrabold whitespace-nowrap leading-[1.2] tracking-normal text-white opacity-0"
           >
-            Crafting Places Worth
+            Crafting The Future Of
           </p>
         </div>
 
@@ -189,7 +189,7 @@ export default function Hero() {
           aria-hidden="true"
           className="absolute inset-x-0 top-[41%] z-15 mx-auto px-6 text-center font-serif text-[9.5vw] font-bold italic leading-[1.05] tracking-normal text-emerald-600 opacity-0"
         >
-          Remembering
+          Hospitality
         </p>
 
         {/* Resort cutout, pinned to its exact position in the base scene, in front of the copy */}
