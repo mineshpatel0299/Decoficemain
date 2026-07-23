@@ -9,7 +9,7 @@ const navLinks = [
   { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
   { label: "About Us", href: "https://www.decofice.com/about" },
   { label: "Start Your Project", href: "https://www.decofice.com/project-booking" },
-  { label: "Blogs", href: "https://www.decofice.com/blog" },
+  { label: "Resorts", href: "https://resort.decofice.com" },
 ];
 
 export default function Navbar() {

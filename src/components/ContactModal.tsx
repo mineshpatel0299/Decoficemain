@@ -46,7 +46,7 @@ export default function ContactModal({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="relative mt-6 w-full max-w-[1050px] sm:mt-0">
+      <div className="relative mt-6 w-full max-w-295 sm:mt-0">
         <button
           type="button"
           onClick={onClose}

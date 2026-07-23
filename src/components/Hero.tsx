@@ -135,7 +135,7 @@ export default function Hero() {
             onClick={() => setIsContactOpen(true)}
             className="font-opensans inline-flex h-12 items-center justify-center gap-2.5 whitespace-nowrap rounded-lg bg-emerald-600 px-7 py-3 text-base leading-6 font-semibold text-white transition-colors hover:bg-emerald-500"
           >
-            Discuss Your Vision
+            Book A Discovery Call
           </button>
 
         </div>
