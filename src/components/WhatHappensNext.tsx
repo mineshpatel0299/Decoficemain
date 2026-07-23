@@ -4,8 +4,8 @@ import Image from "next/image";
 // it's dropped into /public.
 const steps = [
   { title: "Walking The Land With New Perspective", image: "/whathappennext/5.png" },
-  { title: "Discovering The Potential Beneath The Surface", image: "/whathappennext/4.png" },
-  { title: "The First Glimpse Of What's Possible", image: "/whathappennext/3.png" },
+  { title: "Uncovering Insights That Shape Smarter Decisions", image: "/whathappennext/4.png" },
+  { title: "Giving Shape To Ideas Worth Building", image: "/whathappennext/3.png" },
 ];
 
 const GlowingDot = () => (
@@ -33,8 +33,8 @@ export default function WhatHappensNext() {
             Here&apos;s What Happens <span className="font-serif font-bold text-emerald-600 italic">Next</span>
           </h2>
           <p className="mx-auto mt-4 max-w-2xl text-[14px] leading-relaxed text-white/70 lg:mt-5 lg:text-base">
-            From site visits and planning to concepts and execution, here&apos;s what your journey with Decofice
-            could look like.
+            Every remarkable destination begins with a vision. From discovering the perfect site to bringing every
+            detail to life, here&apos;s how we transform ideas into extraordinary experiences.
           </p>
         </div>
 
@@ -44,7 +44,7 @@ export default function WhatHappensNext() {
           <div className="relative mx-auto h-[188px] w-full max-w-[338px] overflow-hidden rounded-[8px] border border-black/20">
             <Image src="/whathappennext/1.png" alt="It All Starts With A Conversation" fill sizes="100vw" className="object-cover" />
             <div className="absolute inset-x-0 bottom-0 border-t border-black/20 bg-black/20 p-3 backdrop-blur-md">
-              <p className="inline-block rounded-lg border border-white px-2.5 py-1 text-[10px] font-bold text-white">
+              <p className="inline-block rounded-lg border border-emerald-600 px-2.5 py-1 text-[10px] font-bold text-white">
                 It All Starts With A Conversation
               </p>
             </div>
@@ -64,9 +64,9 @@ export default function WhatHappensNext() {
 
           {/* Card 3 */}
           <div className="relative mx-auto h-[188px] w-full max-w-[338px] overflow-hidden rounded-[8px] border border-black/20">
-            <Image src="/whathappennext/2.png" alt="Turning vision into something real" fill sizes="100vw" className="object-cover" />
+            <Image src="/whathappennext/2.png" alt="Creating memorable destinations from once-distant visions" fill sizes="100vw" className="object-cover" />
             <div className="absolute inset-x-0 bottom-0 border-t border-black/20 bg-black/20 p-3 backdrop-blur-md">
-              <p className="text-[10px] font-bold text-white">Turning Vision Into Something Real</p>
+              <p className="text-[10px] font-bold text-white">Creating Memorable Destinations From Once-Distant Visions</p>
             </div>
           </div>
 
@@ -93,7 +93,7 @@ export default function WhatHappensNext() {
               </div>
             </div>
             <div className="p-5">
-              <h3 className="inline-block rounded-lg border border-white px-4 py-1.5 text-lg font-bold text-white">
+              <h3 className="inline-block rounded-lg border border-emerald-600 px-4 py-1.5 text-lg font-bold text-white">
                 It All Starts With A Conversation
               </h3>
               {/* <a
@@ -124,10 +124,10 @@ export default function WhatHappensNext() {
             <div className="relative col-span-full h-[281px] w-full overflow-hidden rounded-lg border border-white/20">
               {/* Dark left accent border */}
               <div className="absolute left-0 top-0 bottom-0 w-[3px] z-10" style={{ background: '#00000033' }} />
-              <Image src="/whathappennext/2.png" alt="Turning vision into something real" fill sizes="100vw" className="object-cover object-[center_90%]" />
+              <Image src="/whathappennext/2.png" alt="Creating memorable destinations from once-distant visions" fill sizes="100vw" className="object-cover object-[center_90%]" />
               <div className="absolute inset-x-0 bottom-0 flex items-center gap-5 border-t border-black/20 bg-black/20 p-5 backdrop-blur-md">
                 <GlowingDot />
-                <p className="text-base font-bold text-white">Turning Vision Into Something Real</p>
+                <p className="text-base font-bold text-white">Creating Memorable Destinations From Once-Distant Visions</p>
               </div>
             </div>
           </div>

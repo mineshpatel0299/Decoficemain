@@ -7,8 +7,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const stats = [
   { label: "YEARS OF EXPERIENCE", value: "10+" },
-  { label: "HAPPY CLIENTS", value: "50+" },
-  { label: "ACTIVE LOCATIONS", value: "15+" },
+  { label: "HAPPY CLIENTS", value: "8+" },
+  { label: "ACTIVE LOCATIONS", value: "5+" },
   { label: "CERTIFIED ARCHITECTS", value: "25+" },
 ];
 

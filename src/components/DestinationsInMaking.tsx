@@ -3,9 +3,30 @@ import Image from "next/image";
 // Placeholder photos — swap each `image` for the real construction-stage
 // photo once it's dropped into /public.
 const projects = [
-  { typeBadge: "Boho Villa", stageBadge: "Designing Stage", image: "/dim/1.png" },
-  { typeBadge: "Modern Resort", stageBadge: "Interior Stage", image: "/dim/2.png" },
-  { typeBadge: "Boutique Resort", stageBadge: "Under Construction", image: "/dim/3.png" },
+  {
+    typeBadge: "Nature Retreat",
+    stageBadge: "Final Handover",
+    name: "Alpine Meadow",
+    location: "Goa",
+    tagline: "Architecture . Interiors",
+    image: "/dim/1.png",
+  },
+  {
+    typeBadge: "Luxury Sanctuary",
+    stageBadge: "Interior Execution",
+    name: "Aurelia Grove Resort",
+    location: "Punjab",
+    tagline: "Architecture . Interiors",
+    image: "/dim/2.png",
+  },
+  {
+    typeBadge: "Signature Retreat",
+    stageBadge: "Under Development",
+    name: "Celestia Valley",
+    location: "Nainital, Uttarakhand",
+    tagline: "Architecture . Interiors",
+    image: "/dim/3.png",
+  },
 ];
 
 function Badge({ children }: { children: React.ReactNode }) {
@@ -56,13 +77,13 @@ export default function DestinationsInMaking() {
 
               {/* Resort name & location */}
               <div className="absolute bottom-14 left-4">
-                <h3 className="font-opensans text-xl font-bold text-white">Riverstone Resort</h3>
-                <p className="text-sm text-white/70">Rishikesh, Uttarakhand</p>
+                <h3 className="font-opensans text-xl font-bold text-white">{project.name}</h3>
+                <p className="text-sm text-white/70">{project.location}</p>
               </div>
 
-              {/* Master Planning strip — over the image at the very bottom */}
+              {/* Tagline strip — over the image at the very bottom */}
               <div className="absolute inset-x-0 bottom-0 px-4 py-4">
-                <p className="font-opensans text-lg font-semibold text-white">Master Planning • Architecture</p>
+                <p className="font-opensans text-lg font-semibold text-white">{project.tagline}</p>
               </div>
             </div>
           ))}
