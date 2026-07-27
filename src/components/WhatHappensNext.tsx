@@ -97,7 +97,7 @@ export default function WhatHappensNext() {
             {steps.map((step) => (
               <div
                 key={step.title}
-                className="relative h-[253px] w-full overflow-hidden rounded-lg border border-white/20"
+                className="relative h-69.5 w-full overflow-hidden rounded-lg border border-white/20"
               >
                 {/* Dark left accent border */}
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] z-10" style={{ background: '#00000033' }} />
@@ -109,7 +109,7 @@ export default function WhatHappensNext() {
               </div>
             ))}
 
-            <div className="relative col-span-full h-[281px] w-full overflow-hidden rounded-lg border border-white/20">
+            <div className="relative col-span-full h-77 w-full overflow-hidden rounded-lg border border-white/20">
               {/* Dark left accent border */}
               <div className="absolute left-0 top-0 bottom-0 w-[3px] z-10" style={{ background: '#00000033' }} />
               <Image src="/whathappennext/2.png" alt="Creating memorable destinations from once-distant visions" fill sizes="100vw" className="object-cover object-[center_90%]" />

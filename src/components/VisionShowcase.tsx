@@ -86,15 +86,6 @@ export default function VisionShowcase() {
 
     video.pause();
 
-    // Create the pin immediately on mount rather than waiting on the video's
-    // "loadedmetadata" event. Pinning reserves scroll space for every section
-    // below this one (DifferenceMarquee, Stats, ...), and GSAP schedules a
-    // full ScrollTrigger refresh whenever a new pin is created. In production
-    // the video can take a while to fetch over the network, so creating the
-    // pin late — after the user has already scrolled past it — used to shift
-    // those later sections mid-scroll, showing up as a glitch/jump in them.
-    // The scrub itself only needs video.duration, not the pin creation, so we
-    // guard just the currentTime seeks until the video is actually ready.
     const mm = gsap.matchMedia();
 
     const updateProgress = (self: ScrollTrigger) => {
@@ -114,7 +105,7 @@ export default function VisionShowcase() {
     mm.add("(min-width: 1024px)", () => {
       const st = ScrollTrigger.create({
         trigger: grid,
-        start: "top 0px",
+        start: "top 64px",
         end: () => "+=" + window.innerHeight * 1.6,
         pin: true,
         pinSpacing: true,
@@ -132,7 +123,7 @@ export default function VisionShowcase() {
     mm.add("(max-width: 1023.98px)", () => {
       const st = ScrollTrigger.create({
         trigger: grid,
-        start: "top 0px",
+        start: "top 64px",
         end: () => "+=" + window.innerHeight * 1.6,
         pin: true,
         pinSpacing: true,
@@ -147,12 +138,6 @@ export default function VisionShowcase() {
       };
     }, section);
 
-    // On a slow connection the video can still be loading when the user
-    // scrolls through the pinned range — every currentTime seek above gets
-    // skipped since video.duration isn't known yet, so the frame stays
-    // stuck. Once metadata does arrive, snap straight to wherever the
-    // scroll position already is instead of waiting for the next scroll
-    // event to reconcile it.
     const syncToScrollProgress = () => {
       if (!video.duration) return;
       video.currentTime = (scrollTriggerRef.current?.progress ?? 0) * video.duration;
@@ -169,10 +154,6 @@ export default function VisionShowcase() {
     };
   }, []);
 
-  // Smooth-scrolls to wherever stage `index` lives in the pinned scroll
-  // runway, so the actual scroll position stays in sync with activeStage —
-  // otherwise the next scroll tick would just recompute activeStage from the
-  // real (unchanged) scroll position and undo the jump.
   const scrollToStage = (index: number, instant = false) => {
     const st = scrollTriggerRef.current;
     if (!st) return false;
@@ -197,10 +178,6 @@ export default function VisionShowcase() {
 
     const video = videoRef.current;
     if (video) {
-      // Swap the video file (Daylight vs Nightfall) and resume at the same
-      // scroll progress the previous clip was showing, instead of resetting
-      // to the start — scroll position and stage stay put, so the cut reads
-      // as the same moment continuing under a different lighting pass.
       const onLoaded = () => {
         video.currentTime = progressRef.current * video.duration;
         video.pause();
@@ -215,36 +192,36 @@ export default function VisionShowcase() {
     <section ref={sectionRef} className="relative bg-[#0F0F0F] py-24 lg:py-32">
       <div
         ref={gridRef}
-        className="mx-auto flex h-177 max-w-7xl flex-col px-6 lg:px-12"
+        className="mx-auto flex h-177 max-w-7xl 2xl:max-w-[1440px] 2xl:h-[800px] flex-col px-6 lg:px-12"
       >
-        <div className="max-w-2xl shrink-0">
-          <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-heading">
+        <div className="max-w-2xl 2xl:max-w-3xl shrink-0">
+          <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-heading 2xl:text-[68px]">
             Watch Your <span className="font-serif font-bold italic text-emerald-600">Dream</span>
             <br />
             Taking Shape
           </h2>
-          <p className="mt-6 text-lg text-white/70">Distinctive hospitality destinations that combine</p>
+          <p className="mt-6 text-lg 2xl:text-xl text-white/70">Distinctive hospitality destinations that combine</p>
         </div>
 
-        <div className="mt-10 flex min-h-0 flex-1 flex-col gap-10 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-stretch">
+        <div className="mt-10 flex min-h-0 flex-1 flex-col gap-10 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-stretch 2xl:gap-12">
           <div className="flex shrink-0 flex-col items-center lg:block lg:self-start">
-            <div className="flex h-[227px] w-full max-w-[338px] flex-col gap-[6px] rounded-2xl border-[0.2px] border-white/10 bg-white/3 px-[14px] py-[10px] backdrop-blur-md lg:h-76.5 lg:w-60 lg:gap-3 lg:px-3.5 lg:py-2.5">
+            <div className="flex h-[227px] w-full max-w-[338px] flex-col gap-[6px] rounded-2xl border-[0.2px] border-white/10 bg-white/3 px-[14px] py-[10px] backdrop-blur-md lg:h-76.5 lg:w-60 lg:gap-3 lg:px-3.5 lg:py-2.5 2xl:h-[370px] 2xl:w-[290px] 2xl:px-5 2xl:py-4">
               <div className="flex items-center justify-center gap-3 pb-1 lg:pb-0 lg:justify-start">
                 <div>
-                  <div className="text-[14px] font-semibold text-white lg:text-base">Process Stages</div>
-                  <div className="text-[10px] text-white/50 lg:text-sm">Follow the Journey</div>
+                  <div className="text-[14px] font-semibold text-white lg:text-base 2xl:text-lg">Process Stages</div>
+                  <div className="text-[10px] text-white/50 lg:text-sm 2xl:text-base">Follow the Journey</div>
                 </div>
               </div>
 
-              <div className="flex flex-1 flex-col gap-2 overflow-y-auto lg:gap-3">
+              <div className="flex flex-1 flex-col gap-2 overflow-y-auto lg:gap-3 2xl:gap-3.5">
                 {resortTypes.map((label, i) => {
                   const active = i === activeStage;
                   return (
                     <button
                       key={label}
                       onClick={() => goTo(i)}
-                      className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 ${active
-                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600"
+                      className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 2xl:px-4 2xl:py-3 2xl:text-base ${active
+                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 font-medium"
                           : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
                         }`}
                     >
@@ -261,9 +238,6 @@ export default function VisionShowcase() {
             <div className="relative min-h-0 w-full flex-1 overflow-hidden rounded-3xl bg-[#0F0F0F]">
               <video
                 ref={videoRef}
-                // Only the initial src — Daylight/Nightfall switches after
-                // this happen imperatively in switchView(), not via React
-                // state, so a src swap doesn't fight with a re-render.
                 src={experienceViews[0].src}
                 className="absolute inset-0 h-full w-full object-cover"
                 muted
@@ -274,14 +248,14 @@ export default function VisionShowcase() {
             </div>
 
             <div className="mt-6 flex shrink-0 justify-center">
-              <div className="flex w-full max-w-[337px] items-center justify-center gap-1.5 rounded-lg border-[0.2px] border-white/10 bg-white/5 p-1.5 backdrop-blur-md">
+              <div className="flex w-full max-w-[337px] 2xl:max-w-[400px] items-center justify-center gap-1.5 rounded-lg border-[0.2px] border-white/10 bg-white/5 p-1.5 backdrop-blur-md">
                 {experienceViews.map((view, i) => {
                   const active = i === activeView;
                   return (
                     <button
                       key={view.label}
                       onClick={() => switchView(i)}
-                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-medium whitespace-nowrap transition-colors ${active
+                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs 2xl:text-sm font-medium whitespace-nowrap transition-colors ${active
                           ? "border-white/15 bg-white/15 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]"
                           : "border-transparent text-white/60 hover:bg-white/5 hover:text-white/90"
                         }`}
@@ -295,8 +269,7 @@ export default function VisionShowcase() {
             </div>
           </div>
 
-          {/* Progress rail — stretches to match the row height set by the
-              cards/video, instead of a hand-tuned pixel offset. */}
+          {/* Progress rail */}
           <div className="hidden lg:flex lg:h-full lg:flex-col lg:items-center lg:self-stretch">
             <div className="relative h-full w-[3px] bg-white/15">
               <div
