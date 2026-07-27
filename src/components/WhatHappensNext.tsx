@@ -82,26 +82,14 @@ export default function WhatHappensNext() {
         </div>
 
         {/* DESKTOP LAYOUT (hidden on mobile) */}
-        <div className="mt-14 hidden grid-cols-[294px_1fr] gap-6 lg:grid">
-          <div className="relative flex h-[558px] w-full max-w-[294px] flex-col overflow-hidden rounded-lg border border-white/20 bg-black/20 backdrop-blur-md">
+        <div className="mt-14 hidden grid-cols-[325px_1fr] gap-6 lg:grid">
+          <div className="relative h-[610px] w-full max-w-[325px] overflow-hidden rounded-lg border border-white/20">
             {/* Dark left accent border */}
             <div className="absolute left-0 top-0 bottom-0 w-[3px] z-10" style={{ background: '#00000033' }} />
-            <div className="relative flex-1">
-              {/* Inner constrained image: 273px wide (10px padding each side) */}
-              <div className="absolute inset-x-[10px] top-[12px] bottom-0 rounded-sm overflow-hidden border border-white/40">
-                <Image src="/whathappennext/1.png" alt="" fill sizes="273px" className="object-cover" />
-              </div>
-            </div>
-            <div className="p-5">
-              <h3 className="inline-block rounded-lg border border-emerald-600 px-4 py-1.5 text-lg font-bold text-white">
-                It All Starts With A Conversation
-              </h3>
-              {/* <a
-                href="#schedule-a-meet"
-                className="font-opensans mt-4 inline-flex h-11 w-full items-center justify-center rounded-lg bg-emerald-600 px-6 text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
-              >
-                Schedule A Meet
-              </a> */}
+            <Image src="/whathappennext/1.png" alt="It All Starts With A Conversation" fill sizes="325px" className="object-cover" />
+            <div className="absolute inset-x-0 bottom-0 flex items-center gap-4 border-t border-black/20 bg-black/20 p-5 backdrop-blur-md">
+              <GlowingDot />
+              <h3 className="text-lg font-bold text-white">It All Starts With A Conversation</h3>
             </div>
           </div>
 
