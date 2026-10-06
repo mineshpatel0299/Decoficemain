@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Open_Sans, Playfair_Display } from "next/font/google";
+import { Archivo, Geist, Geist_Mono, IBM_Plex_Mono, Manrope, Open_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import Preloader from "@/components/Preloader";
 
@@ -26,6 +26,24 @@ const openSans = Open_Sans({
   weight: ["400", "600", "700", "800"],
 });
 
+const manrope = Manrope({
+  variable: "--font-manrope-face",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const archivo = Archivo({
+  variable: "--font-archivo-face",
+  subsets: ["latin"],
+  weight: ["400", "600", "800"],
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: "--font-ibm-plex-mono",
+  subsets: ["latin"],
+  weight: ["500"],
+});
+
 export const metadata: Metadata = {
   title: "Decofice",
   description: "Architecture, Interior Design, Construction & Project Management under one roof.",
@@ -39,7 +57,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} ${openSans.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} ${openSans.variable} ${manrope.variable} ${archivo.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <Preloader />

@@ -12,6 +12,9 @@
   --font-mono: var(--font-geist-mono);
   --font-serif: var(--font-playfair);
   --font-opensans: var(--font-open-sans);
+  --font-manrope: var(--font-manrope-face);
+  --font-archivo: var(--font-archivo-face);
+  --font-plexmono: var(--font-ibm-plex-mono);
 
   /* Shared section heading size (desktop) — keep every section's lg: heading in sync */
   --text-heading: 64px;
@@ -34,4 +37,44 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@keyframes commercial-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Frosted-glass card from the "Why" section: soft fill, dark inner edge, 1px white gradient rim */
+.glass-card {
+  position: relative;
+  background-color: rgba(217, 217, 217, 0.04);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    10px 8px 16.5px rgba(0, 0, 0, 0.25),
+    inset 14px 10px 36px -10px rgba(0, 0, 0, 0.45),
+    inset -10px -8px 30px -12px rgba(255, 255, 255, 0.1);
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.18) 40%,
+    rgba(255, 255, 255, 0.12) 60%,
+    rgba(255, 255, 255, 0.34) 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
 }

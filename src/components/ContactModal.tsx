@@ -7,9 +7,13 @@ import ContactSection from "./ContactSection";
 export default function ContactModal({
   open,
   onClose,
+  label = "Discuss your vision",
+  children,
 }: {
   open: boolean;
   onClose: () => void;
+  label?: string;
+  children?: React.ReactNode;
 }) {
   const [mounted, setMounted] = useState(false);
 
@@ -40,7 +44,7 @@ export default function ContactModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label="Discuss your vision"
+      aria-label={label}
       className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/70 px-3 py-5 backdrop-blur-sm sm:items-center sm:px-4 sm:py-8"
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
@@ -57,7 +61,7 @@ export default function ContactModal({
             <path d="M6 6l12 12M18 6L6 18" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         </button>
-        <ContactSection />
+        {children ?? <ContactSection />}
       </div>
     </div>,
     document.body

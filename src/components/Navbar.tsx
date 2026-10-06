@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Logo from "./Logo";
 
-const navLinks = [
+export const defaultNavLinks = [
   { label: "Projects", href: "https://www.decofice.com/project" },
   { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
   { label: "About Us", href: "https://www.decofice.com/about" },
@@ -12,7 +12,15 @@ const navLinks = [
   { label: "Resorts", href: "https://resort.decofice.com" },
 ];
 
-export default function Navbar() {
+export default function Navbar({
+  links: navLinks = defaultNavLinks,
+  className = "px-8 pt-8 sm:px-12",
+  contactClassName = "bg-white text-black hover:bg-white/90",
+}: {
+  links?: { label: string; href: string }[];
+  className?: string;
+  contactClassName?: string;
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
 
@@ -33,7 +41,7 @@ export default function Navbar() {
   return (
     <header
       ref={headerRef}
-      className="relative z-30 mx-auto max-w-[1800px] px-8 pt-8 opacity-0 sm:px-12"
+      className={`relative z-30 mx-auto max-w-[1800px] opacity-0 ${className}`}
     >
       <div className="flex items-center justify-between">
         <a href="/" className="shrink-0 text-white">
@@ -54,7 +62,7 @@ export default function Navbar() {
 
         <a
           href="https://www.decofice.com/contact"
-          className="hidden shrink-0 items-center justify-center gap-[10px] rounded-full bg-white px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal text-black transition-colors hover:bg-white/90 lg:inline-flex"
+          className={`hidden shrink-0 items-center justify-center gap-[10px] rounded-full px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal transition-colors lg:inline-flex ${contactClassName}`}
         >
           Contact Us
         </a>

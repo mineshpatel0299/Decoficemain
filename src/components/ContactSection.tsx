@@ -242,7 +242,7 @@ export default function ContactSection() {
   };
 
   return (
-    <section className="bg-black py-4">
+    <section className="py-4">
       <div className="mx-auto max-w-295 px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-white/10 bg-[#0B0B0B] shadow-[0_24px_80px_rgba(0,0,0,0.45)] lg:grid-cols-[518px_1fr] lg:gap-8.25 lg:p-4">
           {/* Left: image panel */}
