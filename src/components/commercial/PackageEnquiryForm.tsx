@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { BUDGET_OPTIONS, isBudgetEligible, MINIMUM_BUDGET_LABEL } from "@/lib/package-enquiry";
 
 type FormState = {
   fullName: string;
@@ -29,7 +30,6 @@ export const PACKAGE_OPTIONS = [
 const SCOPE_OPTIONS = ["Interiors only", "Construction + interiors"];
 const START_OPTIONS = ["Immediately", "Within 1 month", "1–3 months", "3+ months"];
 const PROPERTY_OPTIONS = ["Leased / rented", "Owned"];
-const BUDGET_OPTIONS = ["Under ₹30L", "₹30–50L", "₹50L–1Cr", "₹1–3Cr", "₹3–5Cr", "₹5Cr+"];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -129,6 +129,7 @@ export default function PackageEnquiryForm({
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isDeclined, setIsDeclined] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -161,6 +162,12 @@ export default function PackageEnquiryForm({
     e.preventDefault();
     if (!validate()) return;
 
+    // Below the minimum budget: decline right away, nothing is sent
+    if (!isBudgetEligible(form.budget)) {
+      setIsDeclined(true);
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError(null);
     try {
@@ -171,6 +178,10 @@ export default function PackageEnquiryForm({
       });
       if (!res.ok) {
         const data = await res.json().catch(() => null);
+        if (data?.code === "budget_below_minimum") {
+          setIsDeclined(true);
+          return;
+        }
         throw new Error(data?.error || "Something went wrong. Please try again.");
       }
       setIsSubmitted(true);
@@ -217,7 +228,29 @@ export default function PackageEnquiryForm({
 
           {/* Right: form panel */}
           <div className="flex flex-col p-6 sm:p-9 lg:p-0">
-            {isSubmitted ? (
+            {isDeclined ? (
+              <div className="flex h-full min-h-72 flex-col items-center justify-center text-center">
+                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/10 text-amber-300">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-7 w-7">
+                    <path d="M12 8v5m0 3.5v.01" strokeLinecap="round" strokeLinejoin="round" />
+                    <circle cx="12" cy="12" r="9" />
+                  </svg>
+                </div>
+                <h3 className="mb-2 text-2xl font-semibold text-white">We can&apos;t take this one forward</h3>
+                <p className="max-w-sm text-white/60">
+                  Thank you, {form.fullName.trim() || "there"}. Our commercial fit-outs start at a project budget of{" "}
+                  {MINIMUM_BUDGET_LABEL}, so we aren&apos;t able to take this enquiry forward right now. If your
+                  budget changes, we&apos;d be glad to hear from you again.
+                </p>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="mt-8 rounded-full bg-white px-8 py-3 font-semibold text-black transition-colors hover:bg-white/90"
+                >
+                  Close
+                </button>
+              </div>
+            ) : isSubmitted ? (
               <div className="flex h-full min-h-72 flex-col items-center justify-center text-center">
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-emerald-600/30 bg-emerald-600/15 text-emerald-600">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-7 w-7">
@@ -353,11 +386,16 @@ export default function PackageEnquiryForm({
 
                   <ChipGroup
                     label="Project Budget*"
-                    options={BUDGET_OPTIONS}
+                    options={[...BUDGET_OPTIONS]}
                     value={form.budget}
                     error={errors.budget}
                     onChange={(v) => update("budget", v)}
                   />
+                  {form.budget && !isBudgetEligible(form.budget) && (
+                    <p role="status" className="-mt-1 text-xs text-amber-300">
+                      We currently take projects with a budget of {MINIMUM_BUDGET_LABEL} and above.
+                    </p>
+                  )}
 
                   <button
                     type="submit"
