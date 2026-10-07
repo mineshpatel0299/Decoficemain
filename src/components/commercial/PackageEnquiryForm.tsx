@@ -34,7 +34,7 @@ const PROPERTY_OPTIONS = ["Leased / rented", "Owned"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const inputClass =
-  "h-12 w-full rounded-full border bg-white/[0.02] px-4 text-base text-white placeholder:text-white/35 transition-colors focus:outline-none sm:h-11 sm:pl-3 sm:pr-5 sm:text-sm";
+  "h-12 w-full rounded-xl border bg-white/[0.02] px-4 text-base text-white placeholder:text-white/35 transition-colors focus:bg-white/[0.04] focus:outline-none sm:h-11 sm:rounded-full sm:bg-white/[0.02] sm:pl-3 sm:pr-5 sm:text-sm";
 
 const fieldBorder = (error?: string) =>
   error ? "border-rose-400/60 focus:border-rose-400" : "border-white/15 focus:border-emerald-600/60";
@@ -56,7 +56,7 @@ function ChevronIcon() {
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-1.5 block text-sm text-white/90 sm:mb-1">{label}</label>
+      <label className="mb-1.5 block text-[13px] font-medium text-white/80 sm:mb-1 sm:text-sm">{label}</label>
       {children}
       {error && <p className="mt-1.5 text-sm text-rose-400">{error}</p>}
     </div>
@@ -188,8 +188,8 @@ export default function PackageEnquiryForm({
   };
 
   return (
-    <section className="py-4">
-      <div className="mx-auto max-w-295 px-4 sm:px-6 lg:px-8">
+    <section className="py-2 sm:py-4">
+      <div className="mx-auto max-w-295 px-3 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 overflow-hidden rounded-2xl border border-white/10 bg-[#0B0B0B] shadow-[0_24px_80px_rgba(0,0,0,0.45)] lg:grid-cols-[518px_1fr] lg:gap-8.25 lg:p-4">
           {/* Left: image panel */}
           <div className="relative isolate hidden overflow-hidden lg:block lg:h-full lg:rounded-2xl">
@@ -210,19 +210,20 @@ export default function PackageEnquiryForm({
           </div>
 
           {/* Mobile banner */}
-          <div className="relative isolate block h-36 overflow-hidden lg:hidden">
+          <div className="relative isolate block h-32 overflow-hidden sm:h-36 lg:hidden">
             <Image src="/client/Elemental 9.jpg" alt="" fill sizes="100vw" className="object-cover object-[center_30%]" />
             <div className="absolute inset-0 bg-black/45" />
             <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-black/20" />
-            <div className="relative z-10 flex h-full flex-col justify-center p-6">
-              <h2 className="font-opensans text-2xl leading-tight font-bold text-white">
+            <div className="relative z-10 flex h-full flex-col justify-center p-5 sm:p-6">
+              <p className="mb-2 font-mono text-[10px] tracking-[0.2em] text-emerald-400 uppercase sm:hidden">Enquiry form</p>
+              <h2 className="max-w-[280px] font-opensans text-[23px] leading-[1.15] font-bold text-white sm:max-w-none sm:text-2xl sm:leading-tight">
                 Get a <span className="font-serif font-bold text-white italic">detailed</span> quotation
               </h2>
             </div>
           </div>
 
           {/* Right: form panel */}
-          <div className="flex flex-col p-6 sm:p-9 lg:p-0">
+          <div className="flex flex-col p-5 sm:p-9 lg:p-0">
             {isDeclined ? (
               <div className="flex h-full min-h-72 flex-col items-center justify-center text-center">
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/10 text-amber-300">
@@ -268,12 +269,12 @@ export default function PackageEnquiryForm({
               </div>
             ) : (
               <>
-                <div className="mb-3 border-b border-white/10 pb-3 text-center">
-                  <h2 className="font-opensans text-[20px] font-bold text-white sm:text-2xl">Enter Your Details Here</h2>
+                <div className="mb-4 border-b border-white/10 pb-4 text-left sm:mb-3 sm:pb-3 sm:text-center">
+                  <h2 className="font-opensans text-xl font-bold text-white sm:text-2xl">Enter Your Details Here</h2>
                 </div>
 
-                <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-3.5 sm:gap-2.5">
-                  <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-2.5">
+                <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-3 sm:gap-2.5">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-2.5">
                     <Field label="Your Name*" error={errors.fullName}>
                       <input
                         ref={nameRef}
@@ -309,7 +310,7 @@ export default function PackageEnquiryForm({
                     />
                   </Field>
 
-                  <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-2.5">
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-2.5">
                     <Field label="Estimated Built-up Area*" error={errors.builtUpArea}>
                       <div className="relative">
                         <input
@@ -400,7 +401,7 @@ export default function PackageEnquiryForm({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="mt-2 flex h-12 w-full items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 py-3 font-opensans text-base font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="mt-2 flex h-12 w-full items-center justify-center gap-2.5 rounded-xl bg-emerald-600 px-7 py-3 font-opensans text-base font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60 sm:rounded-lg"
                   >
                     {isSubmitting ? (
                       "Sending..."
