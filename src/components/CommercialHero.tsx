@@ -8,7 +8,7 @@ const commercialNavLinks = [
   { label: "Projects", href: "https://www.decofice.com/project" },
   { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
   { label: "About Us", href: "https://www.decofice.com/about" },
-  { label: "Start Your Project", href: "https://www.decofice.com/project-booking" },
+  { label: "Resort", href: "https://resort.decofice.com" },
   { label: "Blog", href: "https://www.decofice.com/blog" },
 ];
 
