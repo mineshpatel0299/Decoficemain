@@ -20,11 +20,9 @@ export default function Hero() {
 
   useEffect(() => {
     // Text and CTAs rise up from behind the mountain/resort cutouts, which already
-    // sit in front of these elements in the z-order. Starts once the preloader
-    // (1s delay + 1.4s logo zoom + 0.4s fade, overlapping) has fully cleared at
-    // ~2.5s, so this lands right after the homepage reveal. Mobile and desktop
-    // nodes both exist in the DOM (only one set is visible per breakpoint), so
-    // they're animated together and the hidden set is just a no-op visually.
+    // sit in front of these elements in the z-order. Mobile and desktop nodes
+    // both exist in the DOM (only one set is visible per breakpoint), so they're
+    // animated together and the hidden set is just a no-op visually.
     const desktopTargets = [
       badgeRef.current,
       craftingRef.current,
@@ -39,15 +37,11 @@ export default function Hero() {
       ctaMobileRef.current,
     ];
     
-    const hasSeen = sessionStorage.getItem("hasSeenPreloader");
-    const delay = hasSeen ? 0 : 2.6;
-
     const animTo = {
       y: 0,
       opacity: 1,
       duration: 1.4,
       ease: "power3.out",
-      delay,
       stagger: 0.15,
     };
 

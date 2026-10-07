@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Geist, Geist_Mono, IBM_Plex_Mono, Manrope, Open_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
-import Preloader from "@/components/Preloader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -60,7 +59,6 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} ${openSans.variable} ${manrope.variable} ${archivo.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
-        <Preloader />
         {children}
       </body>
     </html>

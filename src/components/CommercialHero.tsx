@@ -24,15 +24,13 @@ export default function CommercialHero({ onEnquire }: { onEnquire: () => void })
   const contentRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const hasSeen = sessionStorage.getItem("hasSeenPreloader");
-    const delay = hasSeen ? 0 : 2.6;
     const targets = contentRef.current?.children;
     if (!targets) return;
 
     gsap.fromTo(
       targets,
       { y: 40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1.1, ease: "power3.out", delay, stagger: 0.12 }
+      { y: 0, opacity: 1, duration: 1.1, ease: "power3.out", stagger: 0.12 }
     );
   }, []);
 

@@ -118,7 +118,7 @@ export default function WorkplacesDelivered() {
             <div className="absolute inset-x-0 bottom-0 -z-10 h-[176px] backdrop-blur-[6px] [mask-image:linear-gradient(to_top,black_15%,transparent)]" />
             <div className="flex items-center gap-2.5">
               <span className={tagClass}>OFFICE INTERIORS</span>
-              <span className={tagClass}>2000 SQ.FT.</span>
+              <span className={tagClass}>2600 SQ.FT.</span>
             </div>
             <div className="font-opensans leading-[normal] text-[#eaeaea]">
               <h3 className="text-2xl font-semibold leading-[normal]">{p.name}</h3>

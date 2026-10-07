@@ -18,7 +18,7 @@ const faqs = [
   },
   {
     q: "How soon will I receive a proposal?",
-    a: "Send us a plan and a budget band, and you will have a costed proposal to decide on in two to three weeks.",
+    a: "Send us a plan and a budget band, and you will have a costed proposal to decide on in two to three days.",
   },
   {
     q: "How much does a fit-out cost?",

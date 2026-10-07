@@ -23,9 +23,9 @@ export default function Stats() {
       const tl = gsap.timeline();
       tl.fromTo(
         contentRef.current,
-        { y: "65vh" },
-        { y: "0vh", ease: "none", duration: 1 }
-      );
+        { y: "45vh" },
+        { y: "22vh", ease: "none", duration: 0.9 }
+      ).to(contentRef.current, { y: "22vh", ease: "none", duration: 0.1 });
 
       ScrollTrigger.create({
         trigger: sectionRef.current,

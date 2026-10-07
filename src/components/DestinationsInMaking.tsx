@@ -39,7 +39,7 @@ function Badge({ children }: { children: React.ReactNode }) {
 
 export default function DestinationsInMaking() {
   return (
-    <section className="relative bg-[#0F0F0F] py-24 lg:py-32">
+    <section className="relative bg-[#0F0F0F] pt-20 pb-12 lg:pt-24 lg:pb-16">
       <div className="mx-auto max-w-7xl px-6 text-center lg:px-12">
         <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[44px] lg:text-heading">
           Destinations In The <span className="font-serif font-bold text-emerald-600 italic">Making</span>

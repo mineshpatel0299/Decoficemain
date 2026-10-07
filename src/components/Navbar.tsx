@@ -25,15 +25,10 @@ export default function Navbar({
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    // Slides down once the preloader (1s delay + 1.4s logo zoom + 0.4s fade,
-    // overlapping) has fully cleared at ~2.5s — same cue Hero's copy uses.
-    const hasSeen = sessionStorage.getItem("hasSeenPreloader");
-    const delay = hasSeen ? 0 : 2.5;
-
     gsap.fromTo(
       headerRef.current,
       { y: -40, opacity: 0 },
-      { y: 0, opacity: 1, duration: 1, ease: "power3.out", delay }
+      { y: 0, opacity: 1, duration: 1, ease: "power3.out" }
     );
   }, []);
 

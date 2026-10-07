@@ -221,7 +221,7 @@ export default function ScheduleVisit() {
     currentStep === 1 ? "Next up: Choose a slot" : currentStep === 2 ? "Next up: Share contact details" : "One final step before submit.";
 
   return (
-    <section className="relative bg-[#0F0F0F] py-24 lg:py-32">
+    <section className="relative bg-[#0F0F0F] pt-12 pb-12 lg:pt-16 lg:pb-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           <div className="text-center lg:text-left">

@@ -189,7 +189,7 @@ export default function VisionShowcase() {
   };
 
   return (
-    <section ref={sectionRef} className="relative bg-[#0F0F0F] py-24 lg:py-32">
+    <section ref={sectionRef} className="relative bg-[#0F0F0F] pt-24 pb-12 lg:pt-32 lg:pb-16">
       <div
         ref={gridRef}
         className="mx-auto flex h-177 max-w-7xl 2xl:max-w-[1440px] 2xl:h-[800px] flex-col px-6 lg:px-12"

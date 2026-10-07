@@ -26,7 +26,7 @@ const GlowingDot = () => (
 
 export default function WhatHappensNext() {
   return (
-    <section className="relative bg-[#0F0F0F] py-16 lg:py-32">
+    <section className="relative bg-[#0F0F0F] pt-8 pb-16 lg:pt-16 lg:pb-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-12">
         <div className="text-center">
           <h2 className="font-opensans text-[28px] leading-tight font-bold text-white sm:text-[44px] lg:text-heading">
