@@ -55,7 +55,7 @@ export default function OneTeam() {
         </div>
       </div>
 
-      <div className="mx-auto mt-[33px] hidden max-w-[1248px] items-start gap-6 sm:grid lg:gap-12 lg:max-[1439px]:grid-cols-2 lg:max-[1439px]:gap-x-12 min-[1440px]:grid-cols-[494px_1fr] min-[1440px]:gap-x-[140px]">
+      <div className="mx-auto mt-[33px] hidden max-w-[1248px] items-start gap-6 sm:grid lg:gap-12 lg:max-[1439px]:grid-cols-2 lg:max-[1439px]:gap-x-20 min-[1440px]:grid-cols-[494px_1fr] min-[1440px]:gap-x-[140px]">
         <div className="relative order-2 aspect-[4/3] w-full max-w-[494px] overflow-hidden rounded-2xl lg:order-1 lg:aspect-square">
           <Image
             src="/commercial/one-team.png"
@@ -66,7 +66,7 @@ export default function OneTeam() {
             className="absolute inset-0 h-full w-full object-cover object-[center_35%] min-[1440px]:inset-auto min-[1440px]:-left-[9px] min-[1440px]:-top-[60px] min-[1440px]:h-[642px] min-[1440px]:w-[514px] min-[1440px]:max-w-none"
           />
         </div>
-        <ul className="order-1 grid gap-x-6 gap-y-6 sm:max-[1439px]:grid-cols-2 lg:order-2 lg:gap-x-12 lg:gap-y-12 min-[1440px]:grid-cols-[221px_221px] min-[1440px]:gap-x-[101px] min-[1440px]:gap-y-[75px] min-[1440px]:pt-[47px]">
+        <ul className="order-1 grid gap-x-6 gap-y-6 sm:max-[1439px]:grid-cols-2 lg:order-2 lg:translate-x-8 lg:gap-x-12 lg:gap-y-12 min-[1440px]:grid-cols-[221px_221px] min-[1440px]:gap-x-[101px] min-[1440px]:gap-y-[75px] min-[1440px]:pt-[47px]">
           {services.map((s) => (
             <li key={s.n} className="flex max-w-[221px] flex-col gap-3 font-opensans leading-[normal] text-[#eaeaea]">
               <span className="flex size-11 items-center justify-center rounded-full bg-[#1f1f1f] font-manrope text-2xl font-bold leading-[30px] text-emerald-600">

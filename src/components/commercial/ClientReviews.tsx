@@ -17,9 +17,36 @@ const tiles = [
 ];
 
 const reviews = [
-  { quote: "Pay in phases tied to project milestones, not large lump sums upfront.", name: "Raju S.", role: "Founder - Spyne" },
-  { quote: "Pay in phases tied to project milestones, not large lump sums upfront.", name: "Raju S.", role: "Founder - Spyne" },
-  { quote: "Pay in phases tied to project milestones, not large lump sums upfront.", name: "Raju S.", role: "Founder - Spyne" },
+  {
+    quote: "The team turned our brief into a refined office with thoughtful details, premium finishes, and a smooth handover.",
+    name: "Ananya M.",
+    role: "Operations Director · Dubai",
+    avatar: "https://images.unsplash.com/photo-1773254214740-9fbc8d92688a?auto=format&fit=crop&crop=faces&w=96&h=96&q=80",
+  },
+  {
+    quote: "From the reception to the meeting rooms, every space feels considered. The lighting and finish quality are excellent.",
+    name: "Rohan K.",
+    role: "Founder · Technology company",
+    avatar: "https://images.unsplash.com/photo-1649433658557-54cf58577c68?auto=format&fit=crop&crop=faces&w=96&h=96&q=80",
+  },
+  {
+    quote: "Design and execution felt seamless. Our new office looks elevated and works beautifully for the entire team.",
+    name: "Nisha K.",
+    role: "Managing Partner · Consulting",
+    avatar: "https://images.unsplash.com/photo-1768803968211-a7f04e1effd2?auto=format&fit=crop&crop=faces&w=96&h=96&q=80",
+  },
+  {
+    quote: "We had clear updates throughout, and the final workspace reflects our brand with a genuinely premium finish.",
+    name: "Arjun R.",
+    role: "Regional Director · Finance",
+    avatar: "https://images.unsplash.com/photo-1590473159791-1d514fd3656e?auto=format&fit=crop&crop=faces&w=96&h=96&q=80",
+  },
+  {
+    quote: "Our office feels brighter, calmer, and more functional. The team paid attention to the details we use every day.",
+    name: "Kavita S.",
+    role: "People Lead · Enterprise",
+    avatar: "https://images.unsplash.com/photo-1603370928866-e15805756740?auto=format&fit=crop&crop=faces&w=96&h=96&q=80",
+  },
 ];
 
 function Chevron({ dir }: { dir: "left" | "right" }) {
@@ -60,38 +87,41 @@ export default function ClientReviews() {
         <h2 className="mt-5 max-w-[612px] font-opensans text-[30px] font-bold leading-[1.125] text-[#eaeaea] sm:mt-8 sm:text-5xl lg:text-(length:--text-heading) lg:leading-[72px]">
           What Our Office Clients Say
         </h2>
+        <p className="mt-3 text-xs text-white/45">Sample reviews · Portraits are illustrative</p>
       </div>
 
       <div className="relative mx-auto mt-8 max-w-[1248px] px-5 sm:mt-12 sm:px-6 min-[1280px]:mt-[83px] min-[1280px]:px-0">
         <button type="button" onClick={() => scroll(-1)} aria-label="Previous reviews" className={`${arrow} absolute left-0 top-[37px] hidden min-[1280px]:flex`}>
           <Chevron dir="left" />
         </button>
-        <ul
-          ref={trackRef}
-          className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] min-[1280px]:justify-start min-[1280px]:gap-[100px] min-[1280px]:overflow-visible min-[1280px]:pl-[117px] [&::-webkit-scrollbar]:hidden"
-        >
-          {reviews.map((r, i) => (
-            <li key={i} className="flex w-[min(84vw,360px)] shrink-0 snap-start flex-col gap-4 rounded-2xl border border-white/10 bg-[#181818] p-5 font-opensans leading-[normal] text-[#eaeaea] min-[1280px]:w-[271px] min-[1280px]:rounded-none min-[1280px]:border-0 min-[1280px]:bg-transparent min-[1280px]:p-0">
-              <div className="relative h-[15.692px] w-[73px] shrink-0 overflow-hidden">
-                <Image
-                  src="/commercial/reviews/stars.png"
-                  alt="5 out of 5 stars"
-                  width={73}
-                  height={23}
-                  className="absolute left-0 top-[-31.15%] h-[149.26%] w-full max-w-none"
-                />
-              </div>
-              <p className="text-sm leading-[normal]">{r.quote}</p>
-              <div className="flex items-end gap-3">
-                <Image src="/commercial/reviews/avatar.svg" alt="" width={40} height={40} className="shrink-0" />
-                <div className="flex flex-col gap-1">
-                  <p className="text-sm font-bold leading-[normal]">{r.name}</p>
-                  <p className="text-xs leading-[normal]">{r.role}</p>
+        <div className="min-[1280px]:mx-[68px]">
+          <ul
+            ref={trackRef}
+            className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] min-[1280px]:justify-start min-[1280px]:gap-[100px] [&::-webkit-scrollbar]:hidden"
+          >
+            {reviews.map((r) => (
+              <li key={r.name} className="flex w-[min(84vw,360px)] shrink-0 snap-start flex-col gap-4 rounded-2xl border border-white/10 bg-[#181818] p-5 font-opensans leading-[normal] text-[#eaeaea] min-[1280px]:w-[271px] min-[1280px]:rounded-none min-[1280px]:border-0 min-[1280px]:bg-transparent min-[1280px]:p-0">
+                <div className="relative h-[15.692px] w-[73px] shrink-0 overflow-hidden">
+                  <Image
+                    src="/commercial/reviews/stars.png"
+                    alt="5 out of 5 stars"
+                    width={73}
+                    height={23}
+                    className="absolute left-0 top-[-31.15%] h-[149.26%] w-full max-w-none"
+                  />
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+                <p className="text-sm leading-[normal]">{r.quote}</p>
+                <div className="flex items-end gap-3">
+                  <Image src={r.avatar} alt="" width={40} height={40} className="size-10 shrink-0 rounded-full object-cover ring-1 ring-white/15" />
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm font-bold leading-[normal]">{r.name}</p>
+                    <p className="text-xs leading-[normal]">{r.role}</p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
         <button type="button" onClick={() => scroll(1)} aria-label="Next reviews" className={`${arrow} absolute right-0 top-[37px] hidden min-[1280px]:flex`}>
           <Chevron dir="right" />
         </button>

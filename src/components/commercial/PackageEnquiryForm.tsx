@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { BUDGET_OPTIONS, isBudgetEligible, MINIMUM_BUDGET_LABEL, PACKAGE_PRICE_RANGES } from "@/lib/package-enquiry";
+import { BUDGET_OPTIONS, isBudgetEligible } from "@/lib/package-enquiry";
 
 type FormState = {
   fullName: string;
@@ -123,8 +123,6 @@ export default function PackageEnquiryForm({
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [isDeclined, setIsDeclined] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const nameRef = useRef<HTMLInputElement>(null);
 
@@ -159,7 +157,7 @@ export default function PackageEnquiryForm({
 
     // Below the minimum budget: decline right away, nothing is sent
     if (!isBudgetEligible(form.budget)) {
-      setIsDeclined(true);
+      window.location.assign("/enquiry-rejected");
       return;
     }
 
@@ -174,12 +172,12 @@ export default function PackageEnquiryForm({
       if (!res.ok) {
         const data = await res.json().catch(() => null);
         if (data?.code === "budget_below_minimum") {
-          setIsDeclined(true);
+          window.location.assign("/enquiry-rejected");
           return;
         }
         throw new Error(data?.error || "Something went wrong. Please try again.");
       }
-      setIsSubmitted(true);
+      window.location.assign("/enquiry-success");
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -224,52 +222,7 @@ export default function PackageEnquiryForm({
 
           {/* Right: form panel */}
           <div className="flex flex-col p-5 sm:p-9 lg:p-0">
-            {isDeclined ? (
-              <div className="flex h-full min-h-72 flex-col items-center justify-center text-center">
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-amber-300/30 bg-amber-300/10 text-amber-300">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" className="h-7 w-7">
-                    <path d="M12 8v5m0 3.5v.01" strokeLinecap="round" strokeLinejoin="round" />
-                    <circle cx="12" cy="12" r="9" />
-                  </svg>
-                </div>
-                <h3 className="mb-2 text-2xl font-semibold text-white">We can&apos;t take this one forward</h3>
-                <p className="max-w-sm text-white/60">
-                  Thank you, {form.fullName.trim() || "there"}. Our commercial fit-outs start at a project budget of{" "}
-                  {MINIMUM_BUDGET_LABEL}, so we aren&apos;t able to take this enquiry forward right now. If your
-                  budget changes, we&apos;d be glad to hear from you again.
-                </p>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="mt-8 rounded-full bg-white px-8 py-3 font-semibold text-black transition-colors hover:bg-white/90"
-                >
-                  Close
-                </button>
-              </div>
-            ) : isSubmitted ? (
-              <div className="flex h-full min-h-72 flex-col items-center justify-center text-center">
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-emerald-600/30 bg-emerald-600/15 text-emerald-600">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="h-7 w-7">
-                    <path d="M5 12.5l4.5 4.5L19 7" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </div>
-                <h3 className="mb-2 text-2xl font-semibold text-white">Enquiry received</h3>
-                <p className="max-w-sm text-white/60">
-                  Thank you, {form.fullName.trim() || "there"}. Our projects team will contact you with a detailed
-                  quotation for the {form.packageName} package (
-                  {PACKAGE_PRICE_RANGES[form.packageName as keyof typeof PACKAGE_PRICE_RANGES]}).
-                </p>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="mt-8 rounded-full bg-white px-8 py-3 font-semibold text-black transition-colors hover:bg-white/90"
-                >
-                  Close
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="mb-4 border-b border-white/10 pb-4 text-left sm:mb-3 sm:pb-3 sm:text-center">
+            <div className="mb-4 border-b border-white/10 pb-4 text-left sm:mb-3 sm:pb-3 sm:text-center">
                   <h2 className="font-opensans text-xl font-bold text-white sm:text-2xl">Enter Your Details Here</h2>
                 </div>
 
@@ -392,12 +345,6 @@ export default function PackageEnquiryForm({
                     onChange={(v) => update("budget", v)}
                     placeholder="Select a budget range"
                   />
-                  {form.budget && !isBudgetEligible(form.budget) && (
-                    <p role="status" className="-mt-1 text-sm text-amber-300">
-                      We currently take projects with a budget of {MINIMUM_BUDGET_LABEL} and above.
-                    </p>
-                  )}
-
                   <button
                     type="submit"
                     disabled={isSubmitting}
@@ -416,8 +363,6 @@ export default function PackageEnquiryForm({
                   </button>
                   {submitError && <p className="text-center text-sm text-rose-400">{submitError}</p>}
                 </form>
-              </>
-            )}
           </div>
         </div>
       </div>

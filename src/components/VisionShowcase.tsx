@@ -1,290 +1,272 @@
 "use client";
 
-import { useRef, useState, useLayoutEffect } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/ScrollToPlugin";
 
-const stages = ["Vision", "Craft", "Build", "Experience"];
+gsap.registerPlugin(ScrollTrigger);
 
-const resortTypes = ["Architectural Concept", "Design Development", "Construction & Interiors", "Luxury Destination"];
-
-const experienceViews: { label: string; icon: "daylight" | "nightfall"; src: string }[] = [
-  { label: "Daylight", icon: "daylight", src: "/day-scrub.mp4" },
-  { label: "Nightfall", icon: "nightfall", src: "/ggg-scrub.mp4" },
+const processStages = [
+  "Architectural Concept",
+  "Design Development",
+  "Construction & Interiors",
+  "Luxury Destination",
 ];
 
-function CheckIcon({ active }: { active: boolean }) {
+const experienceViews = {
+  daylight: "/day-scrub.mp4",
+  nightfall: "/ggg-scrub.mp4",
+};
+
+function SunIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 20 20" fill="none" className="shrink-0">
-      <circle cx="10" cy="10" r="9" className={active ? "fill-emerald-500" : "fill-white"} />
-      <path
-        d="M6 10.2l2.4 2.4L14 7"
-        stroke={active ? "#ffffff" : "#111827"}
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">
+      <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.7" />
+      <path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
     </svg>
   );
 }
 
-function ViewIcon({ type, active }: { type: "daylight" | "nightfall"; active: boolean }) {
-  const color = active ? "#34d399" : "#ffffff";
-  if (type === "daylight") {
-    return (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" className="shrink-0">
-        <circle cx="12" cy="12" r="4" />
-        <path
-          d="M12 2v2M12 20v2M4 12H2M22 12h-2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
-          strokeLinecap="round"
-        />
-      </svg>
-    );
-  }
+function MoonIcon() {
   return (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" className="shrink-0">
-      <path d="M20 14.5A8.5 8.5 0 019.5 4 8.5 8.5 0 1020 14.5z" strokeLinecap="round" strokeLinejoin="round" />
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">
+      <path d="M20.5 14.2A8.8 8.8 0 0 1 9.8 3.5a8.9 8.9 0 1 0 10.7 10.7Z" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
-
-const SmallGlowingDot = () => (
-  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
-    <g filter="url(#filter0_f_2305_90)">
-      <circle cx="5.5" cy="5.5" r="2.5" transform="rotate(-90 5.5 5.5)" stroke="#EAEAEA" />
-    </g>
-    <circle cx="5.5" cy="5.5" r="2" transform="rotate(-90 5.5 5.5)" fill="#EAEAEA" />
-    <defs>
-      <filter id="filter0_f_2305_90" x="0" y="0" width="11" height="11" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-        <feFlood floodOpacity="0" result="BackgroundImageFix" />
-        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-        <feGaussianBlur stdDeviation="1.25" result="effect1_foregroundBlur_2305_90" />
-      </filter>
-    </defs>
-  </svg>
-);
 
 export default function VisionShowcase() {
   const sectionRef = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const videoWrapRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const scrollTriggerRef = useRef<ScrollTrigger | null>(null);
+  const progressBarRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef(0);
   const [activeStage, setActiveStage] = useState(0);
-  const [activeView, setActiveView] = useState(0);
+  const [nightMode, setNightMode] = useState(false);
 
   useLayoutEffect(() => {
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
     const section = sectionRef.current;
-    const grid = gridRef.current;
-    const videoWrap = videoWrapRef.current;
     const video = videoRef.current;
-    if (!section || !grid || !videoWrap || !video) return;
+    if (!section || !video) return;
 
-    video.pause();
+    const syncProgress = (progress: number) => {
+      progressRef.current = progress;
+      if (progressBarRef.current) {
+        progressBarRef.current.style.width = `${progress * 100}%`;
+      }
 
-    const mm = gsap.matchMedia();
+      const nextStage = Math.min(processStages.length - 1, Math.floor(progress * processStages.length));
+      setActiveStage((current) => (current === nextStage ? current : nextStage));
 
-    const updateProgress = (self: ScrollTrigger) => {
-      progressRef.current = self.progress;
-      if (video.duration) video.currentTime = self.progress * video.duration;
-      const idx = Math.min(stages.length - 1, Math.floor(self.progress * stages.length));
-      setActiveStage((prev) => (prev === idx ? prev : idx));
+      if (Number.isFinite(video.duration) && video.duration > 0) {
+        const nextTime = progress * Math.max(0, video.duration - 0.05);
+        if (Math.abs(video.currentTime - nextTime) > 0.04) {
+          video.currentTime = nextTime;
+        }
+      }
     };
 
-    const snapBoundaries = {
-      onEnter: () => { if (video.duration) video.currentTime = 0; },
-      onLeave: () => { if (video.duration) video.currentTime = video.duration; },
-      onEnterBack: () => { if (video.duration) video.currentTime = video.duration; },
-      onLeaveBack: () => { if (video.duration) video.currentTime = 0; },
-    };
+    const onMetadataLoaded = () => syncProgress(progressRef.current);
+    video.addEventListener("loadedmetadata", onMetadataLoaded);
 
-    mm.add("(min-width: 1024px)", () => {
-      const st = ScrollTrigger.create({
-        trigger: grid,
-        start: "top 64px",
-        end: () => "+=" + window.innerHeight * 1.6,
-        pin: true,
-        pinSpacing: true,
-        anticipatePin: 1,
-        scrub: 0.5,
-        onUpdate: updateProgress,
-        ...snapBoundaries,
+    const context = gsap.context(() => {
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: "bottom bottom",
+        invalidateOnRefresh: true,
+        onUpdate: (self) => syncProgress(self.progress),
       });
-      scrollTriggerRef.current = st;
-      return () => {
-        if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
-      };
     }, section);
 
-    mm.add("(max-width: 1023.98px)", () => {
-      const st = ScrollTrigger.create({
-        trigger: grid,
-        start: "top 64px",
-        end: () => "+=" + window.innerHeight * 1.6,
-        pin: true,
-        pinSpacing: true,
-        anticipatePin: 1,
-        scrub: 0.5,
-        onUpdate: updateProgress,
-        ...snapBoundaries,
-      });
-      scrollTriggerRef.current = st;
-      return () => {
-        if (scrollTriggerRef.current === st) scrollTriggerRef.current = null;
-      };
-    }, section);
-
-    const syncToScrollProgress = () => {
-      if (!video.duration) return;
-      video.currentTime = (scrollTriggerRef.current?.progress ?? 0) * video.duration;
-    };
-    if (video.readyState >= 1) {
-      syncToScrollProgress();
-    } else {
-      video.addEventListener("loadedmetadata", syncToScrollProgress, { once: true });
+    if (video.readyState >= HTMLMediaElement.HAVE_METADATA) {
+      onMetadataLoaded();
     }
 
     return () => {
-      video.removeEventListener("loadedmetadata", syncToScrollProgress);
-      mm.revert();
+      video.removeEventListener("loadedmetadata", onMetadataLoaded);
+      context.revert();
     };
   }, []);
 
-  const scrollToStage = (index: number, instant = false) => {
-    const st = scrollTriggerRef.current;
-    if (!st) return false;
+  const goToStage = (index: number) => {
+    const section = sectionRef.current;
+    if (!section) return;
 
-    const progress = (index + 0.5) / stages.length;
-    gsap.to(window, {
-      scrollTo: st.start + (st.end - st.start) * progress,
-      duration: instant ? 0 : 1,
-      ease: "power2.inOut",
+    const scrollDistance = Math.max(0, section.offsetHeight - window.innerHeight);
+    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+    const progress = (index + 0.5) / processStages.length;
+    window.scrollTo({
+      top: sectionTop + scrollDistance * progress,
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
     });
-    return true;
   };
 
-  const goTo = (index: number) => {
-    if (index === activeStage) return;
-    if (!scrollToStage(index)) setActiveStage(index);
-  };
-
-  const switchView = (index: number) => {
-    if (index === activeView) return;
-    setActiveView(index);
+  const switchLighting = (showNight: boolean) => {
+    if (showNight === nightMode) return;
+    setNightMode(showNight);
 
     const video = videoRef.current;
-    if (video) {
-      const onLoaded = () => {
-        video.currentTime = progressRef.current * video.duration;
-        video.pause();
-      };
-      video.addEventListener("loadedmetadata", onLoaded, { once: true });
-      video.src = experienceViews[index].src;
-      video.load();
-    }
+    if (!video) return;
+
+    const onMetadataLoaded = () => {
+      if (video.duration) {
+        video.currentTime = progressRef.current * Math.max(0, video.duration - 0.05);
+      }
+      video.pause();
+    };
+
+    video.pause();
+    video.addEventListener("loadedmetadata", onMetadataLoaded, { once: true });
+    video.src = showNight ? experienceViews.nightfall : experienceViews.daylight;
+    video.load();
   };
 
   return (
-    <section ref={sectionRef} className="relative bg-[#0F0F0F] pt-24 pb-12 lg:pt-32 lg:pb-16">
-      <div
-        ref={gridRef}
-        className="mx-auto flex h-177 max-w-7xl 2xl:max-w-[1440px] 2xl:h-[800px] flex-col px-6 lg:px-12"
-      >
-        <div className="max-w-2xl 2xl:max-w-3xl shrink-0">
-          <h2 className="font-opensans text-[36px] leading-[1.1] font-bold text-white sm:text-[48px] lg:text-heading 2xl:text-[68px]">
-            Watch Your <span className="font-serif font-bold italic text-emerald-600">Dream</span>
-            <br />
-            Taking Shape
-          </h2>
-          <p className="mt-6 text-lg 2xl:text-xl text-white/70">Distinctive hospitality destinations that combine</p>
-        </div>
+    <section
+      ref={sectionRef}
+      className="relative -mt-32 h-[400vh] bg-black max-[900px]:-mt-20 max-[900px]:h-[320vh]"
+      aria-label="Our resort development process"
+    >
+      <div className="sticky top-0 flex h-screen min-h-[640px] w-full p-0 max-[900px]:min-h-[560px]">
+        <div className="relative isolate flex-1 overflow-hidden bg-black">
+          <video
+            ref={videoRef}
+            src={experienceViews.daylight}
+            poster="/grids.png"
+            muted
+            playsInline
+            preload="auto"
+            aria-hidden="true"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
 
-        <div className="mt-10 flex min-h-0 flex-1 flex-col gap-10 lg:grid lg:grid-cols-[auto_1fr_auto] lg:items-stretch 2xl:gap-12">
-          <div className="flex shrink-0 flex-col items-center lg:block lg:self-start">
-            <div className="flex h-[227px] w-full max-w-[338px] flex-col gap-[6px] rounded-2xl border-[0.2px] border-white/10 bg-white/3 px-[14px] py-[10px] backdrop-blur-md lg:h-76.5 lg:w-60 lg:gap-3 lg:px-3.5 lg:py-2.5 2xl:h-[370px] 2xl:w-[290px] 2xl:px-5 2xl:py-4">
-              <div className="flex items-center justify-center gap-3 pb-1 lg:pb-0 lg:justify-start">
-                <div>
-                  <div className="text-[14px] font-semibold text-white lg:text-base 2xl:text-lg">Process Stages</div>
-                  <div className="text-[10px] text-white/50 lg:text-sm 2xl:text-base">Follow the Journey</div>
-                </div>
-              </div>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[1]"
+            style={{
+              background:
+                "linear-gradient(180deg,rgba(0,0,0,.54) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 56%,rgba(0,0,0,.74) 80%,rgba(0,0,0,.92) 100%),radial-gradient(120% 80% at 50% 50%,transparent 55%,rgba(0,0,0,.5))",
+            }}
+          />
 
-              <div className="flex flex-1 flex-col gap-2 overflow-y-auto lg:gap-3 2xl:gap-3.5">
-                {resortTypes.map((label, i) => {
-                  const active = i === activeStage;
-                  return (
-                    <button
-                      key={label}
-                      onClick={() => goTo(i)}
-                      className={`flex h-[36px] w-full items-center gap-[10px] rounded-lg border px-[12px] py-[6px] text-left text-sm backdrop-blur-md transition-colors lg:h-auto lg:gap-3 lg:rounded-xl lg:px-3 lg:py-2.5 2xl:px-4 2xl:py-3 2xl:text-base ${active
-                          ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 font-medium"
-                          : "border-white/10 bg-white/5 text-white/80 hover:bg-white/10"
-                        }`}
-                    >
-                      <CheckIcon active={active} />
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 z-[1] opacity-[0.07] [mask-image:linear-gradient(to_bottom,black,transparent_40%)]"
+            style={{
+              backgroundImage:
+                "linear-gradient(rgba(255,255,255,.6) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.6) 1px,transparent 1px)",
+              backgroundSize: "64px 64px",
+            }}
+          />
+
+          <div className="absolute top-11 left-12 z-10 max-w-[600px] isolate max-[900px]:top-6 max-[900px]:left-5 max-[900px]:right-5">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-black/45 px-4 py-2 text-[11px] font-semibold tracking-[0.2em] text-white uppercase backdrop-blur-md max-[900px]:px-3 max-[900px]:py-1.5 max-[900px]:text-[10px]">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(37,151,91,.25)]" />
+              Process Stages
+            </span>
+            <h2 className="mt-5 font-opensans text-[clamp(2.15rem,4.4vw,4rem)] leading-[1.08] font-bold text-white [text-shadow:0_2px_18px_rgba(0,0,0,.55)] max-[900px]:mt-4 max-[900px]:max-w-[calc(100%-72px)] max-[900px]:text-[clamp(1.9rem,7vw,2.5rem)]">
+              Watch Your <span className="font-serif font-bold text-emerald-500 italic">Dream</span>
+              <br />
+              Taking Shape
+            </h2>
+            <p className="mt-3 max-w-[560px] text-[17px] leading-[1.6] text-white/90 [text-shadow:0_1px_10px_rgba(0,0,0,.7)] max-[900px]:hidden">
+              Distinctive hospitality destinations that combine personalized experiences with unique architectural character.
+            </p>
           </div>
 
-          <div ref={videoWrapRef} className="relative mt-8 flex min-h-0 flex-1 flex-col lg:mt-0 lg:h-full">
-            <div className="relative min-h-0 w-full flex-1 overflow-hidden rounded-3xl bg-[#0F0F0F]">
-              <video
-                ref={videoRef}
-                src={experienceViews[0].src}
-                className="absolute inset-0 h-full w-full object-cover"
-                muted
-                playsInline
-                preload="auto"
-                aria-hidden="true"
+          <div
+            className="absolute top-11 right-12 z-10 flex rounded-full border border-white/15 bg-black/45 p-[5px] backdrop-blur-md max-[900px]:top-6 max-[900px]:right-5"
+            role="group"
+            aria-label="Choose lighting"
+          >
+            <span
+              aria-hidden="true"
+              className={`absolute top-[5px] left-[5px] h-[calc(100%-10px)] w-[132px] rounded-full transition-[transform,background-color] duration-500 max-[900px]:w-11 ${
+                nightMode
+                  ? "translate-x-[132px] bg-[#dfe6ff] max-[900px]:translate-x-11"
+                  : "translate-x-0 bg-white"
+              }`}
+            />
+            <button
+              type="button"
+              aria-pressed={!nightMode}
+              onClick={() => switchLighting(false)}
+              className={`relative z-[1] flex w-[132px] items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-semibold transition-colors max-[900px]:h-11 max-[900px]:w-11 max-[900px]:p-0 ${
+                nightMode ? "text-white/90" : "text-black"
+              }`}
+            >
+              <SunIcon />
+              <span className="max-[900px]:sr-only">Daylight</span>
+            </button>
+            <button
+              type="button"
+              aria-pressed={nightMode}
+              onClick={() => switchLighting(true)}
+              className={`relative z-[1] flex w-[132px] items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-semibold transition-colors max-[900px]:h-11 max-[900px]:w-11 max-[900px]:p-0 ${
+                nightMode ? "text-black" : "text-white/90"
+              }`}
+            >
+              <MoonIcon />
+              <span className="max-[900px]:sr-only">Nightfall</span>
+            </button>
+          </div>
+
+          <div className="absolute bottom-[150px] left-12 z-10 max-[900px]:bottom-[170px] max-[900px]:left-5">
+            <span className="text-[13px] tracking-[0.2em] text-white/85 [text-shadow:0_1px_8px_rgba(0,0,0,.8)]">
+              <b className="text-emerald-400">{String(activeStage + 1).padStart(2, "0")}</b> / 04
+            </span>
+            <h3 className="mt-1.5 font-serif text-[clamp(1.9rem,3.6vw,3.25rem)] leading-tight font-bold text-white italic [text-shadow:0_2px_20px_rgba(0,0,0,.75)] max-[900px]:text-[clamp(1.75rem,6vw,2.5rem)]">
+              {processStages[activeStage]}
+            </h3>
+          </div>
+
+          <div className="absolute right-12 bottom-[150px] z-10 flex items-center gap-2.5 text-[11px] tracking-[0.14em] text-white/80 uppercase [text-shadow:0_1px_8px_rgba(0,0,0,.8)] max-[900px]:hidden">
+            Scroll to follow the journey
+            <span aria-hidden="true" className="h-7 w-px origin-top animate-pulse bg-gradient-to-b from-white/70 to-transparent" />
+          </div>
+
+          <div className="absolute right-12 bottom-10 left-12 z-10 max-[900px]:right-5 max-[900px]:bottom-6 max-[900px]:left-5">
+            <div className="h-0.5 overflow-hidden rounded-full bg-white/30">
+              <div
+                ref={progressBarRef}
+                className="h-full w-0 rounded-full bg-gradient-to-r from-emerald-500 to-emerald-300 shadow-[0_0_12px_rgba(37,151,91,.8)]"
               />
             </div>
+            <ol className="mt-[-7px] grid grid-cols-4">
+              {processStages.map((stage, index) => {
+                const isComplete = index < activeStage;
+                const isActive = index === activeStage;
 
-            <div className="mt-6 flex shrink-0 justify-center">
-              <div className="flex w-full max-w-[337px] 2xl:max-w-[400px] items-center justify-center gap-1.5 rounded-lg border-[0.2px] border-white/10 bg-white/5 p-1.5 backdrop-blur-md">
-                {experienceViews.map((view, i) => {
-                  const active = i === activeView;
-                  return (
+                return (
+                  <li key={stage}>
                     <button
-                      key={view.label}
-                      onClick={() => switchView(i)}
-                      className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-xs 2xl:text-sm font-medium whitespace-nowrap transition-colors ${active
-                          ? "border-white/15 bg-white/15 text-white shadow-[0_0_12px_rgba(255,255,255,0.08)]"
-                          : "border-transparent text-white/60 hover:bg-white/5 hover:text-white/90"
-                        }`}
+                      type="button"
+                      aria-current={isActive ? "step" : undefined}
+                      aria-label={`Go to stage ${String(index + 1).padStart(2, "0")}: ${stage}`}
+                      onClick={() => goToStage(index)}
+                      className={`relative flex w-full flex-col items-start gap-1.5 px-3 pt-[22px] pr-2 text-left text-[15px] leading-tight font-semibold transition-colors max-[900px]:px-1.5 max-[900px]:pt-5 max-[900px]:text-[11px] ${
+                        isActive ? "text-white" : "text-white/75 hover:text-white"
+                      }`}
                     >
-                      <ViewIcon type={view.icon} active={active} />
-                      {view.label}
+                      <span
+                        aria-hidden="true"
+                        className={`absolute top-0 left-0 h-3 w-3 rounded-full border-2 transition-colors ${
+                          isActive
+                            ? "border-white bg-emerald-500 shadow-[0_0_0_6px_rgba(37,151,91,.3)]"
+                            : isComplete
+                              ? "border-emerald-500 bg-emerald-500"
+                              : "border-white/45 bg-black"
+                        }`}
+                      />
+                      <span className={`text-[11px] tracking-[0.18em] max-[900px]:text-[9px] ${isActive ? "text-emerald-400" : "text-white/65"}`}>
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      {stage}
                     </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-
-          {/* Progress rail */}
-          <div className="hidden lg:flex lg:h-full lg:flex-col lg:items-center lg:self-stretch">
-            <div className="relative h-full w-[3px] bg-white/15">
-              <div
-                className="absolute top-0 left-0 w-full bg-emerald-500 transition-transform duration-500"
-                style={{
-                  height: `${100 / stages.length}%`,
-                  transform: `translateY(${activeStage * 100}%)`,
-                }}
-              >
-                <span className="absolute top-1/2 left-[-22px] flex h-[24px] min-w-[84px] -translate-x-1/2 -translate-y-1/2 -rotate-90 items-center justify-center gap-[10px] rounded-full border border-emerald-500/40 bg-[#0F0F0F] px-[14px] py-[6px] text-[11px] font-semibold tracking-widest whitespace-nowrap text-emerald-600 shadow-[0_0_15px_rgba(16,185,129,0.2)]">
-                  <SmallGlowingDot />
-                  {stages[activeStage]}
-                </span>
-              </div>
-            </div>
+                  </li>
+                );
+              })}
+            </ol>
           </div>
         </div>
       </div>
