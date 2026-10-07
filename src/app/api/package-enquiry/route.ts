@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { isBudgetEligible, MINIMUM_BUDGET_LABEL } from "@/lib/package-enquiry";
+import { isBudgetEligible, MINIMUM_BUDGET_LABEL, PACKAGE_PRICE_RANGES } from "@/lib/package-enquiry";
 
 type PackageEnquiryPayload = {
   fullName: string;
@@ -39,7 +39,11 @@ function isPayload(body: unknown): body is PackageEnquiryPayload {
     if (typeof b[field] !== "string" || (b[field] as string).trim().length === 0) return false;
   }
 
-  return EMAIL_RE.test((b.email as string).trim()) && MOBILE_RE.test((b.mobile as string).trim());
+  return (
+    EMAIL_RE.test((b.email as string).trim()) &&
+    MOBILE_RE.test((b.mobile as string).trim()) &&
+    Object.hasOwn(PACKAGE_PRICE_RANGES, b.packageName as string)
+  );
 }
 
 function escapeHtml(value: string) {
@@ -100,6 +104,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "The enquiry form is temporarily unavailable. Please try again later." }, { status: 500 });
   }
 
+  const packagePrice = PACKAGE_PRICE_RANGES[body.packageName as keyof typeof PACKAGE_PRICE_RANGES];
+  const packageLabel = `${body.packageName} — ${packagePrice}`;
+
   const rows: [string, string][] = [
     ["Name", body.fullName],
     ["Phone", body.mobile],
@@ -109,7 +116,7 @@ export async function POST(request: Request) {
     ["Scope of work", body.scope],
     ["Start", body.startTimeline],
     ["Property", body.property],
-    ["Package", body.packageName],
+    ["Package", packageLabel],
     ["Project budget", body.budget],
   ];
 
@@ -118,7 +125,7 @@ export async function POST(request: Request) {
       from: process.env.MAIL_FROM || process.env.SMTP_USER,
       to: mailTo,
       replyTo: body.email,
-      subject: `New fit-out enquiry (${body.packageName}) from ${body.fullName}`,
+      subject: `New fit-out enquiry (${packageLabel}) from ${body.fullName}`,
       text: rows.map(([label, value]) => `${label}: ${value.trim()}`).join("\n"),
       html: `<h2>New commercial fit-out enquiry</h2>${rows
         .map(([label, value]) => `<p><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value.trim())}</p>`)

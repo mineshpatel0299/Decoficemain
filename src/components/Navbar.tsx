@@ -16,10 +16,12 @@ export default function Navbar({
   links: navLinks = defaultNavLinks,
   className = "px-8 pt-8 sm:px-12",
   contactClassName = "bg-white text-black hover:bg-white/90",
+  showContactOnMobile = false,
 }: {
   links?: { label: string; href: string }[];
   className?: string;
   contactClassName?: string;
+  showContactOnMobile?: boolean;
 }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -57,7 +59,7 @@ export default function Navbar({
 
         <a
           href="https://www.decofice.com/contact"
-          className={`hidden shrink-0 items-center justify-center gap-[10px] rounded-full px-7 py-3 h-12 font-opensans text-[16px] font-normal leading-6 tracking-normal transition-colors lg:inline-flex ${contactClassName}`}
+          className={`${showContactOnMobile ? "inline-flex h-9 px-4 py-1.5 text-xs lg:h-12 lg:px-7 lg:py-3 lg:text-base" : "hidden h-12 px-7 py-3 text-base lg:inline-flex"} shrink-0 items-center justify-center gap-[10px] rounded-full font-opensans font-normal leading-6 tracking-normal transition-colors ${contactClassName}`}
         >
           Contact Us
         </a>

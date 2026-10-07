@@ -18,7 +18,7 @@ export default function BrandsMarquee() {
   );
 
   return (
-    <section className="bg-[#0f0f0f] pt-[90px]">
+    <section className="bg-[#0f0f0f] pt-12 lg:pt-[90px]">
       <div className="flex justify-center">
         <SectionBadge variant="compact">Brands we&apos;ve built for</SectionBadge>
       </div>

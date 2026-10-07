@@ -33,8 +33,10 @@ const columns: Card[][] = [
 ];
 
 export default function WhyDecofice() {
+  const mobileCards = columns.flat();
+
   return (
-    <section className="relative isolate overflow-hidden bg-[#0f0f0f] px-6 pb-[27px] pt-[111px] lg:px-24">
+    <section className="relative isolate overflow-hidden bg-[#0f0f0f] px-6 pb-6 pt-16 lg:px-24 lg:pb-[27px] lg:pt-[111px]">
       {/* Green glow: radial falloff centred below the section, sampled from the design */}
       <div
         aria-hidden="true"
@@ -55,14 +57,64 @@ export default function WhyDecofice() {
         }
       />
 
-      <div className="mx-auto mt-12 grid max-w-[1248px] gap-6 md:grid-cols-3 lg:mt-[76px] lg:-translate-x-px">
+      <div className="mx-auto mt-8 grid max-w-[1248px] grid-cols-2 gap-3 sm:hidden">
+        {mobileCards.map((card, index) => {
+          if (index === 0 && card.image) {
+            return (
+              <article key={card.title} className="glass-card col-span-2 flex min-h-[260px] flex-col overflow-hidden rounded-2xl">
+                <div className="relative h-[128px] w-full shrink-0 overflow-hidden">
+                  <Image
+                    src={`/commercial/why/${card.image.src}.png`}
+                    alt={card.image.alt}
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                  />
+                  <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#151715]/55 to-transparent" />
+                </div>
+                <div className="flex flex-1 flex-col justify-center p-4">
+                  <h3 className="font-opensans text-base font-bold leading-[19px] text-emerald-500">{card.title}</h3>
+                  <p className="mt-2 font-opensans text-[13px] leading-[18px] text-white/65">{card.body}</p>
+                </div>
+              </article>
+            );
+          }
+
+          const isWide = index === mobileCards.length - 1;
+          return (
+            <article
+              key={card.title}
+              className={`glass-card relative flex overflow-hidden rounded-2xl ${isWide ? "col-span-2 min-h-[112px] items-center p-4" : "min-h-[178px] flex-col"}`}
+            >
+              {card.image && (
+                <div className="relative h-[72px] w-full shrink-0 overflow-hidden">
+                  <Image
+                    src={`/commercial/why/${card.image.src}.png`}
+                    alt={card.image.alt}
+                    fill
+                    sizes="46vw"
+                    className="object-cover"
+                  />
+                  <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-[#151715]/70 to-transparent" />
+                </div>
+              )}
+              <div className={`${isWide ? "grid w-full grid-cols-2 items-center gap-4" : "flex flex-1 flex-col justify-center p-3.5"}`}>
+                <h3 className="font-opensans text-sm font-bold leading-[18px] text-emerald-500">{card.title}</h3>
+                <p className={`${isWide ? "mt-0" : "mt-2"} font-opensans text-[12px] leading-[17px] text-white/65`}>{card.body}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+      <div className="mx-auto mt-8 hidden max-w-[1248px] grid-cols-2 gap-3 sm:grid md:grid-cols-3 md:gap-6 lg:mt-[76px] lg:-translate-x-px">
         {columns.map((col, i) => (
-          <div key={i} className="flex flex-col gap-6">
+          <div key={i} className="contents md:flex md:flex-col md:gap-6">
             {col.map((card) => (
               <article
                 key={card.title}
-                className={`glass-card flex flex-col justify-end gap-4 rounded-3xl px-6 py-3.5 ${
-                  card.image ? "min-h-[424px] lg:h-[424px]" : "min-h-[284px] lg:h-[284px]"
+                className={`glass-card flex flex-col justify-end gap-3 rounded-2xl px-3 py-3 sm:gap-4 sm:rounded-3xl sm:px-6 sm:py-3.5 ${
+                  card.image ? "min-h-[255px] sm:min-h-[340px] lg:h-[424px]" : "min-h-[185px] sm:min-h-[240px] lg:h-[284px]"
                 }`}
               >
                 {card.image && (
@@ -83,10 +135,10 @@ export default function WhyDecofice() {
                     card.image ? "" : "lg:h-[116px]"
                   }`}
                 >
-                  <h3 className="text-2xl font-bold leading-[normal] text-emerald-600 lg:whitespace-nowrap">
+                  <h3 className="text-base font-bold leading-tight text-emerald-600 sm:text-2xl sm:leading-[normal] lg:whitespace-nowrap">
                     {card.title}
                   </h3>
-                  <p className={`text-base leading-[normal] text-[#eaeaea] ${card.image ? "lg:h-[67px]" : ""}`}>
+                  <p className={`text-sm leading-[normal] text-[#eaeaea] sm:text-base ${card.image ? "lg:h-[67px]" : ""}`}>
                     {card.body}
                   </p>
                 </div>

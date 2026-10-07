@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { BUDGET_OPTIONS, isBudgetEligible, MINIMUM_BUDGET_LABEL } from "@/lib/package-enquiry";
+import { BUDGET_OPTIONS, isBudgetEligible, MINIMUM_BUDGET_LABEL, PACKAGE_PRICE_RANGES } from "@/lib/package-enquiry";
 
 type FormState = {
   fullName: string;
@@ -34,7 +34,7 @@ const PROPERTY_OPTIONS = ["Leased / rented", "Owned"];
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const inputClass =
-  "h-11 w-full rounded-full border bg-white/[0.02] px-4 text-sm text-white placeholder:text-white/35 transition-colors focus:outline-none sm:h-6.5 sm:pl-3 sm:pr-5 sm:text-xs";
+  "h-12 w-full rounded-full border bg-white/[0.02] px-4 text-base text-white placeholder:text-white/35 transition-colors focus:outline-none sm:h-11 sm:pl-3 sm:pr-5 sm:text-sm";
 
 const fieldBorder = (error?: string) =>
   error ? "border-rose-400/60 focus:border-rose-400" : "border-white/15 focus:border-emerald-600/60";
@@ -56,54 +56,49 @@ function ChevronIcon() {
 function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs text-white/90 sm:mb-0.5">{label}</label>
+      <label className="mb-1.5 block text-sm text-white/90 sm:mb-1">{label}</label>
       {children}
-      {error && <p className="mt-1.5 text-xs text-rose-400">{error}</p>}
+      {error && <p className="mt-1.5 text-sm text-rose-400">{error}</p>}
     </div>
   );
 }
 
-function ChipGroup({
+function SelectGroup({
   label,
   options,
   value,
   error,
   onChange,
+  placeholder = "Select an option",
 }: {
   label: string;
   options: string[];
   value: string;
   error?: string;
   onChange: (value: string) => void;
+  placeholder?: string;
 }) {
   return (
-    <div>
-      <p className="mb-1.5 block text-xs text-white/90 sm:mb-0.5">{label}</p>
-      <div role="radiogroup" aria-label={label} className="flex flex-wrap gap-2 sm:gap-1.5">
-        {options.map((option) => {
-          const selected = value === option;
-          return (
-            <button
-              key={option}
-              type="button"
-              role="radio"
-              aria-checked={selected}
-              onClick={() => onChange(option)}
-              className={`h-11 rounded-full border px-4 text-sm transition-colors focus:outline-none focus-visible:border-emerald-600 sm:h-6.5 sm:px-3 sm:text-xs ${
-                selected
-                  ? "border-emerald-600 bg-emerald-600/20 text-white"
-                  : error
-                    ? "border-rose-400/60 bg-white/[0.02] text-white/80 hover:border-white/40"
-                    : "border-white/15 bg-white/[0.02] text-white/80 hover:border-white/40 hover:text-white"
-              }`}
-            >
+    <Field label={label} error={error}>
+      <div className="relative">
+        <select
+          aria-label={label}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={`${inputClass} ${fieldBorder(error)} appearance-none ${value ? "" : "text-white/35"}`}
+        >
+          <option value="" disabled>
+            {placeholder}
+          </option>
+          {options.map((option) => (
+            <option key={option} value={option} className="text-black">
               {option}
-            </button>
-          );
-        })}
+            </option>
+          ))}
+        </select>
+        <ChevronIcon />
       </div>
-      {error && <p className="mt-1.5 text-xs text-rose-400">{error}</p>}
-    </div>
+    </Field>
   );
 }
 
@@ -260,7 +255,8 @@ export default function PackageEnquiryForm({
                 <h3 className="mb-2 text-2xl font-semibold text-white">Enquiry received</h3>
                 <p className="max-w-sm text-white/60">
                   Thank you, {form.fullName.trim() || "there"}. Our projects team will contact you with a detailed
-                  quotation for the {form.packageName} package.
+                  quotation for the {form.packageName} package (
+                  {PACKAGE_PRICE_RANGES[form.packageName as keyof typeof PACKAGE_PRICE_RANGES]}).
                 </p>
                 <button
                   type="button"
@@ -324,7 +320,7 @@ export default function PackageEnquiryForm({
                           placeholder="e.g. 3000"
                           className={`${inputClass} pr-14! ${fieldBorder(errors.builtUpArea)}`}
                         />
-                        <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 font-mono text-xs text-white/50 sm:right-5 sm:text-[11px]">
+                        <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 font-mono text-sm text-white/50 sm:right-5">
                           sq ft
                         </span>
                       </div>
@@ -340,26 +336,29 @@ export default function PackageEnquiryForm({
                     </Field>
                   </div>
 
-                  <ChipGroup
+                  <SelectGroup
                     label="Scope of Work*"
                     options={SCOPE_OPTIONS}
                     value={form.scope}
                     error={errors.scope}
                     onChange={(v) => update("scope", v)}
+                    placeholder="Select scope of work"
                   />
-                  <ChipGroup
+                  <SelectGroup
                     label="When do you want to start?*"
                     options={START_OPTIONS}
                     value={form.startTimeline}
                     error={errors.startTimeline}
                     onChange={(v) => update("startTimeline", v)}
+                    placeholder="Select a timeline"
                   />
-                  <ChipGroup
+                  <SelectGroup
                     label="Is the property leased or owned?*"
                     options={PROPERTY_OPTIONS}
                     value={form.property}
                     error={errors.property}
                     onChange={(v) => update("property", v)}
+                    placeholder="Select property status"
                   />
 
                   <Field label="Which package are you interested in?*" error={errors.packageName}>
@@ -384,15 +383,16 @@ export default function PackageEnquiryForm({
                     </div>
                   </Field>
 
-                  <ChipGroup
+                  <SelectGroup
                     label="Project Budget*"
                     options={[...BUDGET_OPTIONS]}
                     value={form.budget}
                     error={errors.budget}
                     onChange={(v) => update("budget", v)}
+                    placeholder="Select a budget range"
                   />
                   {form.budget && !isBudgetEligible(form.budget) && (
-                    <p role="status" className="-mt-1 text-xs text-amber-300">
+                    <p role="status" className="-mt-1 text-sm text-amber-300">
                       We currently take projects with a budget of {MINIMUM_BUDGET_LABEL} and above.
                     </p>
                   )}
@@ -400,7 +400,7 @@ export default function PackageEnquiryForm({
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="mt-2 flex h-12 w-full items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 py-3 font-opensans font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="mt-2 flex h-12 w-full items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 py-3 font-opensans text-base font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSubmitting ? (
                       "Sending..."

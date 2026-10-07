@@ -46,10 +46,10 @@ export default function CommercialFaq() {
   const [open, setOpen] = useState<number | null>(0);
 
   return (
-    <section className="bg-[#0f0f0f] px-6 py-[90px] lg:px-[156px]">
+    <section className="bg-[#0f0f0f] px-5 py-12 sm:px-6 sm:py-[90px] lg:px-[156px]">
       <div className="flex flex-col items-center text-center">
         <SectionBadge>Questions before you sign</SectionBadge>
-        <h2 className="mt-8 font-opensans text-4xl font-bold leading-[1.125] text-[#eaeaea] sm:text-5xl lg:text-(length:--text-heading) lg:leading-[72px]">
+        <h2 className="mt-5 font-opensans text-[30px] font-bold leading-[1.125] text-[#eaeaea] sm:mt-8 sm:text-5xl lg:text-(length:--text-heading) lg:leading-[72px]">
           Frequently Asked Questions
         </h2>
       </div>

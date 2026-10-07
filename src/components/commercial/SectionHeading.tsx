@@ -17,12 +17,12 @@ export default function SectionHeading({
     <div className="flex flex-col items-center text-center">
       <SectionBadge>{badge}</SectionBadge>
       <h2
-        className={`mt-8 font-opensans text-4xl font-bold leading-[1.125] text-[#eaeaea] sm:text-5xl lg:text-(length:--text-heading) ${titleClassName}`}
+        className={`mt-6 font-opensans text-[30px] font-bold leading-[1.125] text-[#eaeaea] sm:mt-8 sm:text-5xl lg:text-(length:--text-heading) ${titleClassName}`}
       >
         {title}
       </h2>
       {subtitle && (
-        <p className={`mt-8 font-opensans text-base leading-7 text-[#eaeaea] sm:text-xl ${subtitleClassName}`}>
+        <p className={`mt-5 font-opensans text-sm leading-6 text-[#eaeaea] sm:mt-8 sm:text-xl sm:leading-7 ${subtitleClassName}`}>
           {subtitle}
         </p>
       )}

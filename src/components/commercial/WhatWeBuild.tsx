@@ -111,7 +111,7 @@ function SpaceCard({
       }
       onMouseLeave={clearHover}
       className={`relative isolate flex min-w-0 flex-col justify-end overflow-hidden rounded-2xl bg-[#181818] transition-[min-height] duration-700 ease-in-out motion-reduce:transition-none lg:h-[599px] ${
-        active ? "min-h-[599px]" : "min-h-[420px] cursor-pointer"
+        active ? "min-h-[480px]" : "min-h-[210px] cursor-pointer"
       }`}
     >
       <Image
@@ -199,7 +199,7 @@ export default function WhatWeBuild({ onEnquire }: { onEnquire: () => void }) {
   const [active, setActive] = useState<SpaceId>("office");
 
   return (
-    <section className="bg-[#0f0f0f] px-6 pt-[90px] lg:px-24">
+    <section className="bg-[#0f0f0f] px-6 pt-12 lg:px-24 lg:pt-[90px]">
       <SectionHeading
         badge="What we build"
         titleClassName="max-w-[632px]"
@@ -212,8 +212,78 @@ export default function WhatWeBuild({ onEnquire }: { onEnquire: () => void }) {
         subtitle="Every project tells a story- and every story begins with the people who create it together."
       />
 
+      <div className="mx-auto mt-8 max-w-[1248px] sm:hidden">
+        <div role="tablist" aria-label="Space type" className="mb-4 grid grid-cols-2 rounded-full border border-white/10 bg-[#151715] p-1">
+          {(Object.keys(spaces) as SpaceId[]).map((id) => {
+            const selected = active === id;
+            return (
+              <button
+                key={id}
+                id={`space-tab-${id}`}
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                aria-controls="mobile-space-panel"
+                onClick={() => setActive(id)}
+                className={`rounded-full px-3 py-3 text-sm font-semibold transition-colors ${
+                  selected ? "bg-emerald-600 text-white shadow-[0_4px_18px_rgba(37,151,91,0.25)]" : "text-white/55 hover:text-white"
+                }`}
+              >
+                {spaces[id].label}
+              </button>
+            );
+          })}
+        </div>
+
+        <article
+          id="mobile-space-panel"
+          role="tabpanel"
+          aria-labelledby={`space-tab-${active}`}
+          className="overflow-hidden rounded-[26px] border border-white/10 bg-[#151715] shadow-[0_20px_60px_rgba(0,0,0,0.3)]"
+        >
+          <div className="relative h-[220px] overflow-hidden">
+            <Image src={spaces[active].image} alt={spaces[active].alt} fill sizes="100vw" className="object-cover" />
+            <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-black/10" />
+            <span className="absolute bottom-4 left-4 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 font-opensans text-[11px] font-semibold uppercase tracking-[1.3px] text-white backdrop-blur-md">
+              {spaces[active].label}
+            </span>
+          </div>
+
+          <div className="p-5">
+            <h3 className="font-opensans text-[23px] font-bold leading-[1.15] tracking-[-0.3px] text-[#eaeaea]">
+              {spaces[active].title}
+            </h3>
+            <p className="mt-3 font-opensans text-sm leading-[21px] text-white/65">{spaces[active].body}</p>
+
+            <ul className="mt-5">
+              {spaces[active].points.map((point) => (
+                <li key={point} className="flex items-start gap-3 border-t border-white/10 py-3 font-opensans text-[13px] leading-[18px] text-[#eaeaea]">
+                  <span className="mt-0.5 flex size-[18px] shrink-0 items-center justify-center rounded-[4px] bg-emerald-600">
+                    <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                      <path d="m2.5 6.2 2.3 2.3 4.7-4.9" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                  {point}
+                </li>
+              ))}
+            </ul>
+
+            <button
+              type="button"
+              onClick={onEnquire}
+              className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2.5 rounded-full bg-emerald-600 px-5 font-opensans text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
+            >
+              {spaces[active].cta}
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 12h14m0 0-6-6m6 6-6 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </article>
+      </div>
+
       <div
-        className="mx-auto mt-8 grid max-w-[1248px] gap-6 transition-[grid-template-columns] duration-700 ease-in-out motion-reduce:transition-none lg:[grid-template-columns:var(--cols)]"
+        className="mx-auto mt-8 hidden max-w-[1248px] gap-6 transition-[grid-template-columns] duration-700 ease-in-out motion-reduce:transition-none sm:grid lg:[grid-template-columns:var(--cols)]"
         style={
           { "--cols": active === "office" ? "824fr 400fr" : "400fr 824fr" } as React.CSSProperties
         }

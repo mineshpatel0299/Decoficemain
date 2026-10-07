@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectGallery, { type GalleryProject } from "./ProjectGallery";
 import SectionHeading, { Accent } from "./SectionHeading";
 
@@ -68,13 +68,18 @@ const projects = [
 ];
 
 const tagClass =
-  "rounded-full border border-[#eaeaea] px-3.5 py-1 font-opensans text-xs font-semibold leading-6 tracking-[-0.12px] text-[#eaeaea]";
+  "rounded-full border border-[#eaeaea] px-2 py-0.5 font-opensans text-[9px] font-semibold leading-4 tracking-[-0.12px] text-[#eaeaea] sm:px-3.5 sm:py-1 sm:text-xs sm:leading-6";
 
 export default function WorkplacesDelivered() {
   const [activeGallery, setActiveGallery] = useState<GalleryProject | null>(null);
+  const [areas, setAreas] = useState(() => projects.map(() => 2600));
+
+  useEffect(() => {
+    setAreas(projects.map(() => Math.floor(Math.random() * (8000 - 2000 + 1)) + 2000));
+  }, []);
 
   return (
-    <section className="bg-[#0f0f0f] px-6 pb-[6px] pt-[90px] lg:px-24">
+    <section className="bg-[#0f0f0f] px-6 pb-[6px] pt-12 lg:px-24 lg:pt-[90px]">
       <SectionHeading
         badge="Completed projects"
         titleClassName="max-w-none"
@@ -92,15 +97,18 @@ export default function WorkplacesDelivered() {
         }
       />
 
-      <div className="mx-auto mt-8 grid max-w-[1248px] gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-6 lg:gap-y-8">
-        {projects.map((p) => (
-          <article key={p.name} className="relative isolate flex h-[458px] flex-col justify-between overflow-hidden px-7 py-[34.75px]">
+      <div className="-mx-6 mt-8 flex w-[calc(100%+3rem)] snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:grid sm:w-auto sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 lg:gap-x-6 lg:gap-y-8">
+        {projects.map((p, index) => (
+          <article
+            key={p.name}
+            className="relative isolate flex h-[250px] w-[78vw] max-w-[360px] shrink-0 snap-start flex-col justify-between overflow-hidden px-4 py-4 sm:h-[458px] sm:w-auto sm:max-w-none sm:px-7 sm:py-[34.75px]"
+          >
             <Image
               src={`/commercial/delivered/${p.image}.png`}
               alt={`${p.name} office interior`}
               width={Math.round(p.box[2])}
               height={Math.round(p.box[3])}
-              sizes="(min-width: 1440px) 700px, (min-width: 640px) 50vw, 100vw"
+              sizes="(min-width: 1440px) 700px, (min-width: 640px) 50vw, 78vw"
               style={
                 {
                   "--il": `${p.box[0]}px`,
@@ -112,17 +120,17 @@ export default function WorkplacesDelivered() {
               className="absolute inset-0 -z-20 h-full w-full object-cover min-[1440px]:inset-auto min-[1440px]:left-(--il) min-[1440px]:top-(--it) min-[1440px]:h-(--ih) min-[1440px]:w-(--iw) min-[1440px]:max-w-none"
             />
             {/* Edge fades: colour ramp plus a blur that eases out toward the middle of the card */}
-            <div className="absolute inset-x-0 top-0 -z-10 h-[159px] bg-linear-to-t from-transparent to-black/75" />
-            <div className="absolute inset-x-0 top-0 -z-10 h-[159px] backdrop-blur-[6px] [mask-image:linear-gradient(to_bottom,black_15%,transparent)]" />
-            <div className="absolute inset-x-0 bottom-0 -z-10 h-[176px] bg-linear-to-b from-transparent to-black/75" />
-            <div className="absolute inset-x-0 bottom-0 -z-10 h-[176px] backdrop-blur-[6px] [mask-image:linear-gradient(to_top,black_15%,transparent)]" />
-            <div className="flex items-center gap-2.5">
+            <div className="absolute inset-x-0 top-0 -z-10 h-[115px] bg-linear-to-t from-transparent to-black/75 sm:h-[159px]" />
+            <div className="absolute inset-x-0 top-0 -z-10 h-[115px] backdrop-blur-[6px] [mask-image:linear-gradient(to_bottom,black_15%,transparent)] sm:h-[159px]" />
+            <div className="absolute inset-x-0 bottom-0 -z-10 h-[140px] bg-linear-to-b from-transparent to-black/75 sm:h-[176px]" />
+            <div className="absolute inset-x-0 bottom-0 -z-10 h-[140px] backdrop-blur-[6px] [mask-image:linear-gradient(to_top,black_15%,transparent)] sm:h-[176px]" />
+            <div className="flex items-center gap-1.5 sm:gap-2.5">
               <span className={tagClass}>OFFICE INTERIORS</span>
-              <span className={tagClass}>2600 SQ.FT.</span>
+              <span className={tagClass}>{areas[index].toLocaleString("en-US")} SQ.FT.</span>
             </div>
             <div className="font-opensans leading-[normal] text-[#eaeaea]">
-              <h3 className="text-2xl font-semibold leading-[normal]">{p.name}</h3>
-              <p className="text-base leading-[normal]">{p.location}</p>
+              <h3 className="text-base font-semibold leading-tight sm:text-2xl sm:leading-[normal]">{p.name}</h3>
+              <p className="text-xs leading-[normal] sm:text-base">{p.location}</p>
             </div>
 
             {p.gallery && (

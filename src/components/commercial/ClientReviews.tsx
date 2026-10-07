@@ -41,7 +41,7 @@ export default function ClientReviews() {
     "flex size-[52px] shrink-0 items-center justify-center rounded-full border border-emerald-600 text-emerald-600 transition-colors hover:bg-emerald-600 hover:text-white";
 
   return (
-    <section className="bg-[#0f0f0f] pt-[90px]">
+    <section className="bg-[#0f0f0f] pt-12 lg:pt-[90px]">
       {/* Decorative tile collage (desktop) */}
       <div aria-hidden="true" className="relative mx-auto hidden h-[472px] max-w-[1248px] min-[1280px]:block">
         {tiles.map((t) => (
@@ -57,21 +57,21 @@ export default function ClientReviews() {
 
       <div className="flex flex-col items-center px-6 text-center min-[1280px]:-mt-[122px]">
         <SectionBadge>Client reviews</SectionBadge>
-        <h2 className="mt-8 max-w-[612px] font-opensans text-4xl font-bold leading-[1.125] text-[#eaeaea] sm:text-5xl lg:text-(length:--text-heading) lg:leading-[72px]">
+        <h2 className="mt-5 max-w-[612px] font-opensans text-[30px] font-bold leading-[1.125] text-[#eaeaea] sm:mt-8 sm:text-5xl lg:text-(length:--text-heading) lg:leading-[72px]">
           What Our Office Clients Say
         </h2>
       </div>
 
-      <div className="relative mx-auto mt-12 max-w-[1248px] px-6 min-[1280px]:mt-[83px] min-[1280px]:px-0">
+      <div className="relative mx-auto mt-8 max-w-[1248px] px-5 sm:mt-12 sm:px-6 min-[1280px]:mt-[83px] min-[1280px]:px-0">
         <button type="button" onClick={() => scroll(-1)} aria-label="Previous reviews" className={`${arrow} absolute left-0 top-[37px] hidden min-[1280px]:flex`}>
           <Chevron dir="left" />
         </button>
         <ul
           ref={trackRef}
-          className="flex snap-x snap-mandatory gap-8 overflow-x-auto scroll-smooth [scrollbar-width:none] min-[1280px]:justify-start min-[1280px]:gap-[100px] min-[1280px]:overflow-visible min-[1280px]:pl-[117px] [&::-webkit-scrollbar]:hidden"
+          className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth [scrollbar-width:none] min-[1280px]:justify-start min-[1280px]:gap-[100px] min-[1280px]:overflow-visible min-[1280px]:pl-[117px] [&::-webkit-scrollbar]:hidden"
         >
           {reviews.map((r, i) => (
-            <li key={i} className="flex w-[271px] shrink-0 snap-start flex-col gap-4 font-opensans leading-[normal] text-[#eaeaea]">
+            <li key={i} className="flex w-[min(84vw,360px)] shrink-0 snap-start flex-col gap-4 rounded-2xl border border-white/10 bg-[#181818] p-5 font-opensans leading-[normal] text-[#eaeaea] min-[1280px]:w-[271px] min-[1280px]:rounded-none min-[1280px]:border-0 min-[1280px]:bg-transparent min-[1280px]:p-0">
               <div className="relative h-[15.692px] w-[73px] shrink-0 overflow-hidden">
                 <Image
                   src="/commercial/reviews/stars.png"

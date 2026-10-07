@@ -16,7 +16,7 @@ const steps = [
 
 export default function FitOutPackages({ onEnquire }: { onEnquire: (packageName?: string) => void }) {
   return (
-    <section className="bg-[#0f0f0f] px-6 pt-[69px] lg:px-24">
+    <section className="bg-[#0f0f0f] px-6 pt-12 lg:px-24 lg:pt-[69px]">
       {/* Anchor target sits below the section padding so the heading lands near the top of the screen */}
       <div id="fit-out-packages" className="scroll-mt-12">
         <SectionHeading
@@ -31,10 +31,10 @@ export default function FitOutPackages({ onEnquire }: { onEnquire: (packageName?
           subtitle="Five fit-out packages, from cost-led workspaces to flagship offices and stores. Inclusions and your quotation are shared once our team understands your requirement."
         />
 
-        <div className="mx-auto mt-[47px] grid max-w-[1248px] gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mx-auto mt-[47px] flex max-w-[1248px] snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-5">
           {packages.map((p) => (
             // Wrapper holds the hover area and never moves, so the card lifting can't cause hover flicker
-            <div key={p.name} className="group relative hover:z-10">
+            <div key={p.name} className="group relative w-[82vw] max-w-[300px] shrink-0 snap-start hover:z-10 sm:w-auto sm:max-w-none">
               <button
                 type="button"
                 onClick={() => onEnquire(p.enquiry)}
@@ -77,7 +77,33 @@ export default function FitOutPackages({ onEnquire }: { onEnquire: (packageName?
           ))}
         </div>
 
-        <div className="mx-auto mt-[48px] flex max-w-[1248px] flex-col gap-[18px] rounded-lg border-[0.5px] border-emerald-600 bg-[#0b2c1b] p-[26px] lg:flex-row lg:items-center">
+        <div className="mx-auto mt-8 max-w-[1248px] rounded-[26px] border border-emerald-600/40 bg-[linear-gradient(145deg,rgba(11,44,27,0.9),rgba(12,18,15,0.98)_58%)] p-4 shadow-[0_18px_50px_rgba(0,0,0,0.25)] sm:hidden">
+          <h3 className="px-1 font-opensans text-lg font-bold leading-6 tracking-[-0.184px] text-[#eaeaea]">
+            How you get your quotation
+          </h3>
+          <ol className="mt-4 grid gap-2.5">
+            {steps.map((s) => (
+              <li key={s.n} className="flex items-start gap-3 rounded-2xl border border-white/[0.08] bg-black/20 p-3.5">
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-emerald-500/25 bg-emerald-500/10 font-manrope text-lg font-semibold text-emerald-500">
+                  {s.n}
+                </span>
+                <div className="flex min-w-0 flex-1 flex-col gap-1.5 font-opensans text-[#eaeaea]">
+                  <p className="text-sm font-semibold leading-5">{s.title}</p>
+                  <p className="text-[13px] leading-[19px] text-white/60">{s.body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+          <button
+            type="button"
+            onClick={() => onEnquire()}
+            className="mt-4 flex h-12 w-full items-center justify-center rounded-xl bg-emerald-600 px-5 font-archivo text-sm font-semibold text-white transition-colors hover:bg-emerald-500"
+          >
+            Submit your enquiry →
+          </button>
+        </div>
+
+        <div className="mx-auto mt-[48px] hidden max-w-[1248px] flex-col gap-[18px] rounded-lg border-[0.5px] border-emerald-600 bg-[#0b2c1b] p-[26px] sm:flex lg:flex-row lg:items-center">
           <div className="flex flex-1 flex-col gap-4">
             <h3 className="font-opensans text-xl font-bold leading-6 tracking-[-0.184px] text-[#eaeaea]">
               How you get your quotation
