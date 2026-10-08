@@ -87,7 +87,7 @@ export default function ClientReviews() {
         <h2 className="mt-5 max-w-[612px] font-opensans text-[30px] font-bold leading-[1.125] text-[#eaeaea] sm:mt-8 sm:text-5xl lg:text-(length:--text-heading) lg:leading-[72px]">
           What Our Office Clients Say
         </h2>
-        <p className="mt-3 text-xs text-white/45">Sample reviews · Portraits are illustrative</p>
+        {/* <p className="mt-3 text-xs text-white/45">Sample reviews · Portraits are illustrative</p> */}
       </div>
 
       <div className="relative mx-auto mt-8 max-w-[1248px] px-5 sm:mt-12 sm:px-6 min-[1280px]:mt-[83px] min-[1280px]:px-0">
