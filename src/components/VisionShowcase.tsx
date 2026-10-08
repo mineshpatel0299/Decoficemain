@@ -18,6 +18,11 @@ const experienceViews = {
   nightfall: "/ggg-scrub.mp4",
 };
 
+const experiencePosters = {
+  daylight: "/day-scrub-poster.jpg",
+  nightfall: "/night-scrub-poster.jpg",
+};
+
 function SunIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-4 w-4">
@@ -66,7 +71,12 @@ export default function VisionShowcase() {
     };
 
     const onMetadataLoaded = () => syncProgress(progressRef.current);
+    const onFirstFrameReady = () => {
+      video.pause();
+      syncProgress(progressRef.current);
+    };
     video.addEventListener("loadedmetadata", onMetadataLoaded);
+    video.addEventListener("loadeddata", onFirstFrameReady, { once: true });
 
     const context = gsap.context(() => {
       ScrollTrigger.create({
@@ -84,6 +94,7 @@ export default function VisionShowcase() {
 
     return () => {
       video.removeEventListener("loadedmetadata", onMetadataLoaded);
+      video.removeEventListener("loadeddata", onFirstFrameReady);
       context.revert();
     };
   }, []);
@@ -108,7 +119,7 @@ export default function VisionShowcase() {
     const video = videoRef.current;
     if (!video) return;
 
-    const onMetadataLoaded = () => {
+    const onFirstFrameReady = () => {
       if (video.duration) {
         video.currentTime = progressRef.current * Math.max(0, video.duration - 0.05);
       }
@@ -116,7 +127,7 @@ export default function VisionShowcase() {
     };
 
     video.pause();
-    video.addEventListener("loadedmetadata", onMetadataLoaded, { once: true });
+    video.addEventListener("loadeddata", onFirstFrameReady, { once: true });
     video.src = showNight ? experienceViews.nightfall : experienceViews.daylight;
     video.load();
   };
@@ -132,9 +143,10 @@ export default function VisionShowcase() {
           <video
             ref={videoRef}
             src={experienceViews.daylight}
-            poster="/grids.png"
+            poster={nightMode ? experiencePosters.nightfall : experiencePosters.daylight}
             muted
             playsInline
+            autoPlay
             preload="auto"
             aria-hidden="true"
             className="absolute inset-0 h-full w-full object-cover max-[900px]:object-contain"
