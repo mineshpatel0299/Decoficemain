@@ -4,6 +4,17 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        {
+          source: "/",
+          has: [{ type: "host", value: "commercial\\.decofice\\.com" }],
+          destination: "/commercial",
+        },
+      ],
+    };
+  },
   images: {
     remotePatterns: [
       {
