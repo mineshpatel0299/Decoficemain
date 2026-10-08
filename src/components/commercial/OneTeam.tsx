@@ -55,7 +55,39 @@ export default function OneTeam() {
         </div>
       </div>
 
-      <div className="mx-auto mt-[33px] hidden max-w-[1248px] items-start gap-6 sm:grid lg:gap-12 lg:max-[1439px]:grid-cols-2 lg:max-[1439px]:gap-x-20 min-[1440px]:grid-cols-[494px_1fr] min-[1440px]:gap-x-[140px]">
+      <div className="mx-auto mt-8 hidden max-w-[1248px] md:max-[1023px]:block">
+        <div className="relative aspect-[2.15/1] overflow-hidden rounded-3xl border border-white/10 bg-[#181818] shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+          <Image
+            src="/commercial/one-team.png"
+            alt="Designer and contractor reviewing plans together"
+            width={514}
+            height={642}
+            sizes="(max-width: 1023px) 100vw, 1px"
+            className="absolute inset-0 h-full w-full object-cover object-[center_40%]"
+          />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/5 to-transparent" />
+          <span className="absolute bottom-5 left-5 rounded-full border border-white/20 bg-black/35 px-4 py-2 font-mono text-[10px] tracking-[0.18em] text-white/85 uppercase backdrop-blur-md">
+            Design · Build · Deliver
+          </span>
+        </div>
+        <ul className="mt-5 grid grid-cols-2 gap-4">
+          {services.map((s) => (
+            <li key={s.n} className="min-h-[150px] rounded-2xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.015))] p-5 shadow-[0_16px_36px_rgba(0,0,0,0.16)]">
+              <div className="flex items-start gap-3.5">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/[0.08] font-manrope text-lg font-bold text-emerald-400">
+                {s.n}
+                </span>
+                <div>
+                  <h3 className="font-opensans text-lg font-semibold leading-snug text-[#eaeaea]">{s.title}</h3>
+                  <p className="mt-2 font-opensans text-sm leading-[1.55] text-white/60">{s.body}</p>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mx-auto mt-[33px] hidden max-w-[1248px] items-start gap-6 sm:grid md:max-[1023px]:hidden lg:gap-12 lg:max-[1439px]:grid-cols-2 lg:max-[1439px]:gap-x-20 min-[1440px]:grid-cols-[494px_1fr] min-[1440px]:gap-x-[140px]">
         <div className="relative order-2 aspect-[4/3] w-full max-w-[494px] overflow-hidden rounded-2xl lg:order-1 lg:aspect-square">
           <Image
             src="/commercial/one-team.png"

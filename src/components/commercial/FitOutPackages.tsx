@@ -31,7 +31,16 @@ export default function FitOutPackages({ onEnquire }: { onEnquire: (packageName?
           subtitle="Five fit-out packages, from cost-led workspaces to flagship offices and stores. Inclusions and your quotation are shared once our team understands your requirement."
         />
 
-        <div className="mx-auto mt-[47px] flex max-w-[1248px] snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-5">
+        <div className="mx-auto mt-3 flex h-7 max-w-[1248px] items-center justify-end sm:hidden">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.04] px-3 py-1.5 font-opensans text-[10px] font-medium tracking-[0.08em] text-white/65 uppercase">
+            Swipe to explore
+            <svg aria-hidden="true" viewBox="0 0 20 20" fill="none" className="h-3.5 w-3.5 animate-pulse text-emerald-400">
+              <path d="M3.5 10h12m0 0-4.5-4.5M15.5 10 11 14.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </span>
+        </div>
+
+        <div className="mx-auto mt-2 flex max-w-[1248px] snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-[47px] sm:grid sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0">
           {packages.map((p) => (
             // Wrapper holds the hover area and never moves, so the card lifting can't cause hover flicker
             <div key={p.name} className="group relative w-[82vw] max-w-[300px] shrink-0 snap-start hover:z-10 sm:w-auto sm:max-w-none">
