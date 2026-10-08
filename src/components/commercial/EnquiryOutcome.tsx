@@ -1,7 +1,18 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import { MINIMUM_BUDGET_LABEL } from "@/lib/package-enquiry";
 
 export default function EnquiryOutcome({ outcome }: { outcome: "success" | "rejected" }) {
   const isSuccess = outcome === "success";
+  const [returnHref, setReturnHref] = useState("/commercial");
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hostname.startsWith("commercial.")) {
+      setReturnHref("/");
+    }
+  }, []);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#fcfdfc] bg-[radial-gradient(#e8eee9_0.8px,transparent_0.8px)] [background-size:22px_22px] px-4 py-8 sm:px-8 sm:py-12">
@@ -63,15 +74,15 @@ export default function EnquiryOutcome({ outcome }: { outcome: "success" | "reje
             : "We focus on commercial projects above our minimum budget. We appreciate your interest and would be glad to reconnect if your project budget changes."}
         </p>
 
-        <a
-          href="/"
+        <Link
+          href={returnHref}
           className="mt-9 inline-flex min-h-14 items-center justify-center gap-3 rounded-full bg-[#155d43] px-8 py-4 font-opensans text-sm font-semibold text-white shadow-[0_10px_24px_rgba(21,93,67,0.2)] transition-colors hover:bg-[#104b36] sm:mt-11 sm:min-w-[272px] sm:text-base"
         >
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="size-5">
             <path d="M19 12H5m0 0 6 6m-6-6 6-6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          Return to Commercial Page
-        </a>
+          Go Back to Commercial Page
+        </Link>
       </section>
     </main>
   );
