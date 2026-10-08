@@ -55,8 +55,8 @@ export default function OneTeam() {
         </div>
       </div>
 
-      <div className="mx-auto mt-8 hidden max-w-[1248px] md:max-[1023px]:block">
-        <div className="relative aspect-[2.15/1] overflow-hidden rounded-3xl border border-white/10 bg-[#181818] shadow-[0_24px_60px_rgba(0,0,0,0.35)]">
+      <div className="mx-auto mt-8 hidden max-w-[1248px] sm:max-[1023px]:block">
+        <div className="relative aspect-[2.15/1] overflow-hidden rounded-3xl border border-white/10 bg-[#181818] shadow-[0_24px_60px_rgba(0,0,0,0.35)] sm:max-[767px]:aspect-[2.4/1]">
           <Image
             src="/commercial/one-team.png"
             alt="Designer and contractor reviewing plans together"
@@ -70,16 +70,16 @@ export default function OneTeam() {
             Design · Build · Deliver
           </span>
         </div>
-        <ul className="mt-5 grid grid-cols-2 gap-4">
+        <ul className="mt-5 grid grid-cols-2 gap-4 sm:max-[767px]:mt-4 sm:max-[767px]:gap-3">
           {services.map((s) => (
-            <li key={s.n} className="min-h-[150px] rounded-2xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.015))] p-5 shadow-[0_16px_36px_rgba(0,0,0,0.16)]">
-              <div className="flex items-start gap-3.5">
-                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/[0.08] font-manrope text-lg font-bold text-emerald-400">
+            <li key={s.n} className="min-h-[150px] rounded-2xl border border-white/10 bg-[linear-gradient(145deg,rgba(255,255,255,0.055),rgba(255,255,255,0.015))] p-5 shadow-[0_16px_36px_rgba(0,0,0,0.16)] sm:max-[767px]:min-h-[138px] sm:max-[767px]:rounded-xl sm:max-[767px]:p-4">
+              <div className="flex items-start gap-3.5 sm:max-[767px]:gap-3">
+                <span className="flex size-11 shrink-0 items-center justify-center rounded-xl border border-emerald-500/20 bg-emerald-500/[0.08] font-manrope text-lg font-bold text-emerald-400 sm:max-[767px]:size-9 sm:max-[767px]:rounded-lg sm:max-[767px]:text-base">
                 {s.n}
                 </span>
                 <div>
-                  <h3 className="font-opensans text-lg font-semibold leading-snug text-[#eaeaea]">{s.title}</h3>
-                  <p className="mt-2 font-opensans text-sm leading-[1.55] text-white/60">{s.body}</p>
+                  <h3 className="font-opensans text-lg font-semibold leading-snug text-[#eaeaea] sm:max-[767px]:text-base">{s.title}</h3>
+                  <p className="mt-2 font-opensans text-sm leading-[1.55] text-white/60 sm:max-[767px]:mt-1.5 sm:max-[767px]:text-[13px]">{s.body}</p>
                 </div>
               </div>
             </li>
@@ -87,7 +87,7 @@ export default function OneTeam() {
         </ul>
       </div>
 
-      <div className="mx-auto mt-[33px] hidden max-w-[1248px] items-start gap-6 sm:grid md:max-[1023px]:hidden lg:gap-12 lg:max-[1439px]:grid-cols-2 lg:max-[1439px]:gap-x-20 min-[1440px]:grid-cols-[494px_1fr] min-[1440px]:gap-x-[140px]">
+      <div className="mx-auto mt-[33px] hidden max-w-[1248px] items-start gap-6 sm:grid sm:max-[1023px]:hidden lg:gap-12 lg:max-[1439px]:grid-cols-2 lg:max-[1439px]:gap-x-20 min-[1440px]:grid-cols-[494px_1fr] min-[1440px]:gap-x-[140px]">
         <div className="relative order-2 aspect-[4/3] w-full max-w-[494px] overflow-hidden rounded-2xl lg:order-1 lg:aspect-square">
           <Image
             src="/commercial/one-team.png"
