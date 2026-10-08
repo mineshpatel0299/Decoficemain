@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { BUDGET_OPTIONS, isBudgetEligible } from "@/lib/package-enquiry";
 
 type FormState = {
@@ -70,6 +70,7 @@ function SelectGroup({
   error,
   onChange,
   placeholder = "Select an option",
+  openAbove = false,
 }: {
   label: string;
   options: string[];
@@ -77,6 +78,7 @@ function SelectGroup({
   error?: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  openAbove?: boolean;
 }) {
   return (
     <Field label={label} error={error}>
@@ -85,7 +87,7 @@ function SelectGroup({
           aria-label={label}
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          className={`${inputClass} ${fieldBorder(error)} appearance-none ${value ? "" : "text-white/35"}`}
+          className={`hidden ${inputClass} ${fieldBorder(error)} appearance-none sm:block ${value ? "" : "text-white/35"}`}
         >
           <option value="" disabled>
             {placeholder}
@@ -96,9 +98,139 @@ function SelectGroup({
             </option>
           ))}
         </select>
-        <ChevronIcon />
+        <span className="hidden sm:block">
+          <ChevronIcon />
+        </span>
+        <MobileSelect
+          label={label}
+          options={options.map((option) => ({ value: option, label: option }))}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          error={error}
+          openAbove={openAbove}
+        />
       </div>
     </Field>
+  );
+}
+
+function MobileSelect({
+  label,
+  options,
+  value,
+  onChange,
+  placeholder,
+  error,
+  openAbove = false,
+}: {
+  label: string;
+  options: { value: string; label: string }[];
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  error?: string;
+  openAbove?: boolean;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const rootRef = useRef<HTMLDivElement>(null);
+  const listboxId = useId();
+  const selectedIndex = options.findIndex((option) => option.value === value);
+  const selectedOption = options[selectedIndex];
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setIsOpen(false);
+    };
+
+    document.addEventListener("pointerdown", closeOnOutsideClick);
+    return () => document.removeEventListener("pointerdown", closeOnOutsideClick);
+  }, [isOpen]);
+
+  const open = () => {
+    setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
+    setIsOpen(true);
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (!isOpen && ["ArrowDown", "ArrowUp", "Enter", " "].includes(event.key)) {
+      event.preventDefault();
+      open();
+      return;
+    }
+
+    if (!isOpen) return;
+
+    if (event.key === "Escape" || event.key === "Tab") {
+      if (event.key === "Escape") event.stopPropagation();
+      setIsOpen(false);
+    } else if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const direction = event.key === "ArrowDown" ? 1 : -1;
+      setActiveIndex((current) => (current + direction + options.length) % options.length);
+    } else if (event.key === "Home" || event.key === "End") {
+      event.preventDefault();
+      setActiveIndex(event.key === "Home" ? 0 : options.length - 1);
+    } else if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      const option = options[activeIndex];
+      if (option) onChange(option.value);
+      setIsOpen(false);
+    }
+  };
+
+  return (
+    <div ref={rootRef} className="relative sm:hidden">
+      <button
+        type="button"
+        role="combobox"
+        aria-label={label}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-controls={listboxId}
+        aria-activedescendant={isOpen ? `${listboxId}-option-${activeIndex}` : undefined}
+        onClick={() => (isOpen ? setIsOpen(false) : open())}
+        onKeyDown={handleKeyDown}
+        className={`relative flex ${inputClass} ${fieldBorder(error)} items-center justify-between text-left ${
+          selectedOption ? "text-white" : "text-white/35"
+        }`}
+      >
+        <span className="truncate pr-6">{selectedOption?.label ?? placeholder}</span>
+        <ChevronIcon />
+      </button>
+      {isOpen && (
+        <div
+          id={listboxId}
+          role="listbox"
+          aria-label={label}
+          className={`absolute right-0 left-0 z-30 max-h-60 overflow-y-auto rounded-xl border border-white/15 bg-[#141414] py-1 shadow-[0_12px_32px_rgba(0,0,0,0.55)] ${
+            openAbove ? "bottom-full mb-2" : "top-full mt-2"
+          }`}
+        >
+          {options.map((option, index) => (
+            <div
+              key={option.value}
+              id={`${listboxId}-option-${index}`}
+              role="option"
+              aria-selected={option.value === value}
+              onMouseEnter={() => setActiveIndex(index)}
+              onClick={() => {
+                onChange(option.value);
+                setIsOpen(false);
+              }}
+              className={`cursor-pointer px-4 py-3 text-sm text-white ${
+                index === activeIndex ? "bg-white/10" : ""
+              } ${option.value === value ? "text-emerald-400" : ""}`}
+            >
+              {option.label}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -318,9 +450,10 @@ export default function PackageEnquiryForm({
                   <Field label="Which package are you interested in?*" error={errors.packageName}>
                     <div className="relative">
                       <select
+                        aria-label="Which package are you interested in?"
                         value={form.packageName}
                         onChange={(e) => update("packageName", e.target.value)}
-                        className={`${inputClass} ${fieldBorder(errors.packageName)} appearance-none ${
+                        className={`hidden ${inputClass} ${fieldBorder(errors.packageName)} appearance-none sm:block ${
                           form.packageName ? "" : "text-white/35"
                         }`}
                       >
@@ -333,7 +466,18 @@ export default function PackageEnquiryForm({
                           </option>
                         ))}
                       </select>
-                      <ChevronIcon />
+                      <span className="hidden sm:block">
+                        <ChevronIcon />
+                      </span>
+                      <MobileSelect
+                        label="Which package are you interested in?"
+                        options={PACKAGE_OPTIONS}
+                        value={form.packageName}
+                        onChange={(value) => update("packageName", value)}
+                        placeholder="Select a package"
+                        error={errors.packageName}
+                        openAbove
+                      />
                     </div>
                   </Field>
 
@@ -344,6 +488,7 @@ export default function PackageEnquiryForm({
                     error={errors.budget}
                     onChange={(v) => update("budget", v)}
                     placeholder="Select a budget range"
+                    openAbove
                   />
                   <button
                     type="submit"

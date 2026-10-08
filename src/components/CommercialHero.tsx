@@ -59,7 +59,7 @@ export default function CommercialHero({ onEnquire }: { onEnquire: () => void })
       <div className="flex flex-1 items-center justify-center px-6 pb-12 pt-8 sm:pb-16 sm:pt-0">
         <div
           ref={contentRef}
-          className="mx-auto flex w-full max-w-[988px] flex-col items-start gap-5 text-left sm:items-center sm:gap-8 sm:text-center"
+          className="mx-auto flex w-full max-w-[988px] flex-col items-center gap-5 text-center sm:gap-8"
         >
           <span className="inline-flex h-6 items-center justify-center gap-2.5 rounded-full bg-[#eaeaea]/20 px-3.5 font-opensans text-[10px] uppercase tracking-[0.16em] text-[#eaeaea] opacity-0 sm:text-xs sm:tracking-[0.12px]">
             <span className="h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_0_3px_rgba(255,255,255,0.3)]" />
@@ -76,7 +76,7 @@ export default function CommercialHero({ onEnquire }: { onEnquire: () => void })
             structural and vastu consultancy sit with one team, under one contract.
           </p>
 
-          <ul className="flex flex-wrap justify-start gap-2 opacity-0 sm:justify-center sm:gap-3">
+          <ul className="flex flex-wrap justify-center gap-2 opacity-0 sm:gap-3">
             {segments.map((segment) => (
               <li
                 key={segment}
@@ -87,7 +87,7 @@ export default function CommercialHero({ onEnquire }: { onEnquire: () => void })
             ))}
           </ul>
 
-          <div className="flex w-full max-w-[360px] flex-col items-start justify-center gap-3 opacity-0 sm:w-auto sm:max-w-none sm:flex-row sm:items-center sm:gap-8">
+          <div className="flex w-full max-w-[360px] flex-col items-center justify-center gap-3 opacity-0 sm:w-auto sm:max-w-none sm:flex-row sm:gap-8">
             <button
               type="button"
               onClick={onEnquire}
