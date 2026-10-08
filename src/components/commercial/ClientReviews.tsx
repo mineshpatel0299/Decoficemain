@@ -20,7 +20,7 @@ const reviews = [
   {
     quote: "The team turned our brief into a refined office with thoughtful details, premium finishes, and a smooth handover.",
     name: "Ananya M.",
-    role: "Operations Director · Dubai",
+    role: "Operations Director ",
     avatar: "https://images.unsplash.com/photo-1773254214740-9fbc8d92688a?auto=format&fit=crop&crop=faces&w=96&h=96&q=80",
   },
   {

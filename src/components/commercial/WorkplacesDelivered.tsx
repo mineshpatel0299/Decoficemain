@@ -97,7 +97,7 @@ export default function WorkplacesDelivered() {
         }
       />
 
-      <div className="-mx-6 mt-8 flex w-[calc(100%+3rem)] snap-x snap-mandatory gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:grid sm:w-auto sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 lg:gap-x-6 lg:gap-y-8">
+      <div className="-mx-6 mt-8 flex w-[calc(100%+3rem)] snap-x snap-mandatory scroll-pl-6 gap-3 overflow-x-auto px-6 pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mx-auto sm:grid sm:w-auto sm:grid-cols-2 sm:scroll-pl-0 sm:gap-6 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3 lg:gap-x-6 lg:gap-y-8">
         {projects.map((p, index) => (
           <article
             key={p.name}
