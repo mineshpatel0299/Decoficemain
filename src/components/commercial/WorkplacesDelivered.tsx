@@ -101,7 +101,7 @@ export default function WorkplacesDelivered() {
         {projects.map((p, index) => (
           <article
             key={p.name}
-            className="relative isolate flex h-[250px] w-[78vw] max-w-[360px] shrink-0 snap-start flex-col justify-between overflow-hidden px-4 py-4 sm:h-[458px] sm:w-auto sm:max-w-none sm:px-7 sm:py-[34.75px]"
+            className="relative isolate flex h-[250px] w-[78vw] max-w-[360px] shrink-0 snap-start flex-col justify-between overflow-hidden rounded-lg px-4 py-4 sm:h-[458px] sm:w-auto sm:max-w-none sm:px-7 sm:py-[34.75px]"
           >
             <Image
               src={`/commercial/delivered/${p.image}.png`}

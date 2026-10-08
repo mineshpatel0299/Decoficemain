@@ -40,7 +40,7 @@ export default function FitOutPackages({ onEnquire }: { onEnquire: (packageName?
           </span>
         </div>
 
-        <div className="mx-auto mt-2 flex max-w-[1248px] snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-[47px] sm:grid sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0">
+        <div className="mx-auto mt-2 flex max-w-[1248px] snap-x snap-mandatory gap-3 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:mt-[47px] sm:grid sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-5">
           {packages.map((p) => (
             // Wrapper holds the hover area and never moves, so the card lifting can't cause hover flicker
             <div key={p.name} className="group relative w-[82vw] max-w-[300px] shrink-0 snap-start hover:z-10 sm:w-auto sm:max-w-none">
