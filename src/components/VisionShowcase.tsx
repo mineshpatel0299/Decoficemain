@@ -124,7 +124,7 @@ export default function VisionShowcase() {
   return (
     <section
       ref={sectionRef}
-      className="relative -mt-32 h-[400vh] bg-black max-[900px]:-mt-20 max-[900px]:h-[320svh]"
+      className="relative -mt-32 h-[400vh] bg-black max-[900px]:mt-0 max-[900px]:h-[320svh]"
       aria-label="Our resort development process"
     >
       <div className="sticky top-0 flex h-screen min-h-[640px] w-full p-0 max-[900px]:h-[100svh] max-[900px]:min-h-0">

@@ -155,10 +155,9 @@ export default function ExperienceScroll() {
   return (
     <section
       ref={sectionRef}
-      className="relative"
-      style={{ height: `${slides.length * 100}vh` }}
+      className="relative h-[600vh] max-[900px]:h-[600svh]"
     >
-      <div ref={pinRef} className="relative h-screen w-full overflow-hidden bg-black">
+      <div ref={pinRef} className="relative h-screen w-full overflow-hidden bg-black max-[900px]:h-[100svh]">
         {slides.map((slide, i) => (
           <div
             key={slide.image + i}
