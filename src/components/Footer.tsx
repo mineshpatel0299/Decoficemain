@@ -3,7 +3,8 @@ import Logo from "./Logo";
 const companyLinks = [
   { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
   { label: "Projects", href: "https://www.decofice.com/project" },
-  { label: "Start Your Project", href: "https://www.decofice.com/project-booking" },
+  { label: "Commercial", href: "https://commercial.decofice.com" },
+  { label: "Resort", href: "https://resort.decofice.com" },
   { label: "About Us", href: "https://www.decofice.com/about" },
   { label: "Contact Us", href: "#" }
 ];
