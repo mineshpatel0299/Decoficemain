@@ -15,8 +15,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/commercial/og-image.jpg",
-        width: 1024,
-        height: 701,
+        width: 1200,
+        height: 644,
         alt: "Decofice Commercial Interiors & Fit-Outs",
       },
     ],
