@@ -4,6 +4,34 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
+  async redirects() {
+    return [
+      {
+        source: "/enquiry-success",
+        has: [{ type: "host", value: "www\\.decofice\\.com" }],
+        destination: "https://commercial.decofice.com/enquiry-success",
+        permanent: false,
+      },
+      {
+        source: "/enquiry-success",
+        has: [{ type: "host", value: "decofice\\.com" }],
+        destination: "https://commercial.decofice.com/enquiry-success",
+        permanent: false,
+      },
+      {
+        source: "/enquiry-rejected",
+        has: [{ type: "host", value: "www\\.decofice\\.com" }],
+        destination: "https://commercial.decofice.com/enquiry-rejected",
+        permanent: false,
+      },
+      {
+        source: "/enquiry-rejected",
+        has: [{ type: "host", value: "decofice\\.com" }],
+        destination: "https://commercial.decofice.com/enquiry-rejected",
+        permanent: false,
+      },
+    ];
+  },
   async rewrites() {
     return {
       beforeFiles: [

@@ -6,11 +6,15 @@ import { MINIMUM_BUDGET_LABEL } from "@/lib/package-enquiry";
 
 export default function EnquiryOutcome({ outcome }: { outcome: "success" | "rejected" }) {
   const isSuccess = outcome === "success";
-  const [returnHref, setReturnHref] = useState("/commercial");
+  const [returnHref, setReturnHref] = useState("https://commercial.decofice.com");
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.location.hostname.startsWith("commercial.")) {
-      setReturnHref("/");
+    if (typeof window !== "undefined") {
+      if (window.location.hostname.startsWith("commercial.")) {
+        setReturnHref("/");
+      } else if (!window.location.hostname.includes("decofice.com")) {
+        setReturnHref("/commercial");
+      }
     }
   }, []);
 

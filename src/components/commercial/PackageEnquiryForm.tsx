@@ -283,13 +283,20 @@ export default function PackageEnquiryForm({
     return Object.keys(next).length === 0;
   };
 
+  const getOutcomeUrl = (path: "/enquiry-success" | "/enquiry-rejected") => {
+    if (typeof window !== "undefined" && window.location.hostname.includes("decofice.com")) {
+      return `https://commercial.decofice.com${path}`;
+    }
+    return path;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!validate()) return;
 
     // Below the minimum budget: decline right away, nothing is sent
     if (!isBudgetEligible(form.budget)) {
-      window.location.assign("/enquiry-rejected");
+      window.location.assign(getOutcomeUrl("/enquiry-rejected"));
       return;
     }
 
@@ -304,12 +311,12 @@ export default function PackageEnquiryForm({
       if (!res.ok) {
         const data = await res.json().catch(() => null);
         if (data?.code === "budget_below_minimum") {
-          window.location.assign("/enquiry-rejected");
+          window.location.assign(getOutcomeUrl("/enquiry-rejected"));
           return;
         }
         throw new Error(data?.error || "Something went wrong. Please try again.");
       }
-      window.location.assign("/enquiry-success");
+      window.location.assign(getOutcomeUrl("/enquiry-success"));
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
