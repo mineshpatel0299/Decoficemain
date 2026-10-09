@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import EnquiryOutcome from "@/components/commercial/EnquiryOutcome";
+import ContactEnquiryOutcome from "@/components/ContactEnquiryOutcome";
 
 export const metadata: Metadata = {
-  title: "Enquiry Submitted | Decofice Commercial",
-  description: "Your commercial interiors enquiry has been submitted successfully.",
+  title: "Discovery Call Enquiry Submitted | Decofice",
+  description: "Your hospitality project enquiry has been submitted successfully.",
+  robots: { index: false, follow: false },
 };
 
-export default function EnquirySuccessPage() {
-  return <EnquiryOutcome outcome="success" />;
+export default function ContactSuccessPage() {
+  return <ContactEnquiryOutcome outcome="success" />;
 }

@@ -287,7 +287,7 @@ export default function PackageEnquiryForm({
     if (typeof window !== "undefined" && window.location.hostname.includes("decofice.com")) {
       return `https://commercial.decofice.com${path}`;
     }
-    return path;
+    return `/commercial${path}`;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

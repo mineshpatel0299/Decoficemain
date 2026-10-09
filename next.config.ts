@@ -40,6 +40,17 @@ const nextConfig: NextConfig = {
           has: [{ type: "host", value: "commercial\\.decofice\\.com" }],
           destination: "/commercial",
         },
+        // The two domains share clean URLs, but serve separate outcome pages.
+        {
+          source: "/enquiry-success",
+          has: [{ type: "host", value: "commercial\\.decofice\\.com" }],
+          destination: "/commercial/enquiry-success",
+        },
+        {
+          source: "/enquiry-rejected",
+          has: [{ type: "host", value: "commercial\\.decofice\\.com" }],
+          destination: "/commercial/enquiry-rejected",
+        },
       ],
     };
   },

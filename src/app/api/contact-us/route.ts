@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { BUDGET_OPTIONS, isBudgetEligible, MINIMUM_BUDGET_LABEL } from "@/lib/contact-enquiry";
 
 type ContactPayload = {
   fullName: string;
@@ -91,6 +92,20 @@ export async function POST(request: Request) {
 
   if (!isContactPayload(body)) {
     return NextResponse.json({ error: "Missing or invalid required fields." }, { status: 400 });
+  }
+
+  if (!BUDGET_OPTIONS.some((option) => option === body.budget.trim())) {
+    return NextResponse.json({ error: "Select a valid project budget." }, { status: 400 });
+  }
+
+  if (!isBudgetEligible(body.budget)) {
+    return NextResponse.json(
+      {
+        error: `We currently take hospitality projects with a budget of ${MINIMUM_BUDGET_LABEL} and above.`,
+        code: "budget_below_minimum",
+      },
+      { status: 422 }
+    );
   }
 
   const mailTo = process.env.MAIL_TO;

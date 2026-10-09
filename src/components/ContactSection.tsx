@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { useState } from "react";
+import { BUDGET_OPTIONS, isBudgetEligible } from "@/lib/contact-enquiry";
 
 type FormState = {
   fullName: string;
@@ -106,27 +106,9 @@ const HEAR_ABOUT_US_OPTIONS = [
   "Others",
 ];
 
-const BUDGET_OPTIONS = [
-  "Under ₹1.5 Cr",
-  "₹1.5 to ₹3 Cr",
-  "₹3 - ₹5 Cr",
-  "₹5 - ₹10 Cr",
-  "₹10 - ₹20 Cr",
-  "₹20 - ₹50 Cr",
-  "Above 50 Cr.",
-];
-
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
-
-function CheckIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className={className}>
-      <path d="M5 12.5l4.5 4.5L19 7" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 function ChevronIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
@@ -164,7 +146,6 @@ function fieldBorder(hasError?: string) {
 export default function ContactSection() {
   const [form, setForm] = useState<FormState>(INITIAL_FORM);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [step, setStep] = useState(0);
@@ -201,23 +182,22 @@ export default function ContactSection() {
 
   const validate = () => validateFields(REQUIRED_FIELDS);
 
-  const goNext = () => {
+  const goNext = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Advancing to the last step changes this button to a submit button.
+    event.preventDefault();
     if (validateFields(STEPS[step].fields)) setStep((s) => Math.min(s + 1, STEPS.length - 1));
   };
 
   const goBack = () => setStep((s) => Math.max(s - 1, 0));
 
-  const resetForm = () => {
-    setForm(INITIAL_FORM);
-    setErrors({});
-    setIsSubmitted(false);
-    setSubmitError(null);
-    setStep(0);
-  };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (isSubmitting || !validate()) return;
+
+    if (!isBudgetEligible(form.budget)) {
+      window.location.assign("/enquiry-rejected");
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitError(null);
@@ -230,10 +210,14 @@ export default function ContactSection() {
 
       if (!res.ok) {
         const data = await res.json().catch(() => null);
+        if (data?.code === "budget_below_minimum") {
+          window.location.assign("/enquiry-rejected");
+          return;
+        }
         throw new Error(data?.error || "Something went wrong. Please try again.");
       }
 
-      setIsSubmitted(true);
+      window.location.assign("/enquiry-success");
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     } finally {
@@ -272,314 +256,285 @@ export default function ContactSection() {
 
           {/* Right: form panel */}
           <div className="flex flex-col p-6 sm:p-9 lg:p-0">
-            {isSubmitted ? (
-              <div className="flex h-full min-h-72 flex-col items-center justify-center text-center">
-                <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full border border-emerald-600/30 bg-emerald-600/15 text-emerald-600">
-                  <CheckIcon className="h-7 w-7" />
-                </div>
-                <h3 className="mb-2 text-2xl font-semibold text-white">Query received</h3>
-                <p className="max-w-sm text-white/60">
-                  Thank you, {form.fullName || "there"}. Our team will review your project details and reach out shortly.
-                </p>
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+            <div className="mb-3 border-b border-white/10 pb-3 text-center">
+              <h2 className="font-opensans text-[20px] font-bold text-white sm:text-2xl">Enter Your Details Here</h2>
+              <p className="mt-1 text-xs font-semibold tracking-wide text-emerald-600 sm:hidden">
+                Step {step + 1} of {STEPS.length} · {STEPS[step].title}
+              </p>
+              <div className="mt-2.5 flex items-center justify-center gap-1.5 sm:hidden">
+                {STEPS.map((s, i) => (
+                  <span
+                    key={s.title}
+                    className={`h-1 rounded-full transition-all duration-300 ${
+                      i === step ? "w-6 bg-emerald-600" : i < step ? "w-3 bg-emerald-600/50" : "w-3 bg-white/15"
+                    }`}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 sm:gap-2.5">
+              <div className={`${step === 0 ? "grid" : "hidden"} grid-cols-1 gap-3.5 sm:grid sm:grid-cols-2 sm:gap-2.5`}>
+                <Field label="Full Name*" error={errors.fullName}>
+                  <input
+                    type="text"
+                    value={form.fullName}
+                    onChange={(e) => updateField("fullName", e.target.value)}
+                    placeholder="Rohan Gupta"
+                    className={`${inputClass} ${fieldBorder(errors.fullName)}`}
+                  />
+                </Field>
+                <Field label="Mobile Number*" error={errors.mobile}>
+                  <input
+                    type="tel"
+                    value={form.mobile}
+                    onChange={(e) => updateField("mobile", e.target.value)}
+                    placeholder="+91 123 4567 890"
+                    className={`${inputClass} ${fieldBorder(errors.mobile)}`}
+                  />
+                </Field>
+              </div>
+
+              <div className={`${step === 0 ? "grid" : "hidden"} grid-cols-1 gap-3.5 sm:grid sm:grid-cols-2 sm:gap-2.5`}>
+                <Field label="Email Address*" error={errors.email}>
+                  <input
+                    type="email"
+                    value={form.email}
+                    onChange={(e) => updateField("email", e.target.value)}
+                    placeholder="mail@gmail.com"
+                    className={`${inputClass} ${fieldBorder(errors.email)}`}
+                  />
+                </Field>
+                <Field label="Who best describes you?">
+                  <div className="relative">
+                    <select
+                      value={form.company}
+                      onChange={(e) => updateField("company", e.target.value)}
+                      className={`${inputClass} ${fieldBorder()} appearance-none ${form.company ? "" : "text-white/35"}`}
+                    >
+                      <option value="" disabled>
+                        Select the option that best describes you
+                      </option>
+                      {DESCRIBES_YOU_OPTIONS.map((option) => (
+                        <option key={option} value={option} className="text-black">
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
+                  </div>
+                </Field>
+              </div>
+
+              <div className={`${step === 1 ? "flex" : "hidden"} flex-col gap-3.5 sm:flex sm:gap-2.5`}>
+                <Field label="Project Location*" error={errors.location}>
+                  <input
+                    type="text"
+                    value={form.location}
+                    onChange={(e) => updateField("location", e.target.value)}
+                    placeholder="Dehradun, Uttrakhand"
+                    className={`${inputClass} ${fieldBorder(errors.location)}`}
+                  />
+                </Field>
+
+                <Field label="Project Type*" error={errors.projectType}>
+                  <div className="relative">
+                    <select
+                      value={form.projectType}
+                      onChange={(e) => updateField("projectType", e.target.value)}
+                      className={`${inputClass} ${fieldBorder(errors.projectType)} appearance-none ${form.projectType ? "" : "text-white/35"}`}
+                    >
+                      <option value="" disabled>
+                        Mention your Project Type
+                      </option>
+                      {PROJECT_TYPES.map((type) => (
+                        <option key={type} value={type} className="text-black">
+                          {type}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
+                  </div>
+                </Field>
+
+                <Field label="What specific service do you need from decofice?*" error={errors.serviceNeeded}>
+                  <div className="relative">
+                    <select
+                      value={form.serviceNeeded}
+                      onChange={(e) => updateField("serviceNeeded", e.target.value)}
+                      className={`${inputClass} ${fieldBorder(errors.serviceNeeded)} appearance-none ${form.serviceNeeded ? "" : "text-white/35"}`}
+                    >
+                      <option value="" disabled>
+                        Select the service needed
+                      </option>
+                      {SERVICE_OPTIONS.map((service) => (
+                        <option key={service} value={service} className="text-black">
+                          {service}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
+                  </div>
+                </Field>
+
+                <Field label="Have you already acquired the Land?">
+                  <div className="relative">
+                    <select
+                      value={form.landAcquired}
+                      onChange={(e) => updateField("landAcquired", e.target.value)}
+                      className={`${inputClass} ${fieldBorder()} appearance-none ${form.landAcquired ? "" : "text-white/35"}`}
+                    >
+                      <option value="" disabled>
+                        Select an option
+                      </option>
+                      {LAND_ACQUIRED_OPTIONS.map((option) => (
+                        <option key={option} value={option} className="text-black">
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
+                  </div>
+                </Field>
+              </div>
+
+              <div className={`${step === 2 ? "grid" : "hidden"} grid-cols-1 gap-3.5 sm:grid sm:grid-cols-2 sm:gap-2.5`}>
+                <Field label="Plot Area*" error={errors.plotArea}>
+                  <input
+                    type="text"
+                    value={form.plotArea}
+                    onChange={(e) => updateField("plotArea", e.target.value)}
+                    placeholder="4 Acres"
+                    className={`${inputClass} ${fieldBorder(errors.plotArea)}`}
+                  />
+                </Field>
+                <Field label="Estimated Built-up area*" error={errors.builtUpArea}>
+                  <input
+                    type="text"
+                    value={form.builtUpArea}
+                    onChange={(e) => updateField("builtUpArea", e.target.value)}
+                    placeholder="50000 sqft"
+                    className={`${inputClass} ${fieldBorder(errors.builtUpArea)}`}
+                  />
+                </Field>
+              </div>
+
+              <div className={`${step === 2 ? "grid" : "hidden"} grid-cols-1 gap-3.5 sm:grid sm:grid-cols-2 sm:gap-2.5`}>
+                <Field label="Estimated Budget*" error={errors.budget}>
+                  <div className="relative">
+                    <select
+                      value={form.budget}
+                      onChange={(e) => updateField("budget", e.target.value)}
+                      className={`${inputClass} ${fieldBorder(errors.budget)} appearance-none ${form.budget ? "" : "text-white/35"}`}
+                    >
+                      <option value="" disabled>
+                        ₹5 Cr
+                      </option>
+                      {BUDGET_OPTIONS.map((option) => (
+                        <option key={option} value={option} className="text-black">
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
+                  </div>
+                </Field>
+                <Field label="How soon you want to start the project*" error={errors.startTimeline}>
+                  <div className="relative">
+                    <select
+                      value={form.startTimeline}
+                      onChange={(e) => updateField("startTimeline", e.target.value)}
+                      className={`${inputClass} ${fieldBorder(errors.startTimeline)} appearance-none ${form.startTimeline ? "" : "text-white/35"}`}
+                    >
+                      <option value="" disabled>
+                        Select an option
+                      </option>
+                      {START_TIMELINE_OPTIONS.map((option) => (
+                        <option key={option} value={option} className="text-black">
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
+                  </div>
+                </Field>
+              </div>
+
+              <div className={`${step === 3 ? "block" : "hidden"} sm:block`}>
+                <Field label="How did you know about us?">
+                  <div className="relative">
+                    <select
+                      value={form.hearAboutUs}
+                      onChange={(e) => updateField("hearAboutUs", e.target.value)}
+                      className={`${inputClass} ${fieldBorder()} appearance-none ${form.hearAboutUs ? "" : "text-white/35"}`}
+                    >
+                      <option value="" disabled>
+                        Select How you heard about us?
+                      </option>
+                      {HEAR_ABOUT_US_OPTIONS.map((option) => (
+                        <option key={option} value={option} className="text-black">
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
+                  </div>
+                </Field>
+              </div>
+
+              <div className={`${step === 3 ? "block" : "hidden"} sm:block`}>
+                <Field label="What do you want us to know about your project?">
+                  <div className="flex h-11 items-center rounded-3xl border border-white/15 bg-white/2 px-4 transition-colors focus-within:border-emerald-600/60 sm:h-6.5 sm:pl-3 sm:pr-5">
+                    <textarea
+                      rows={1}
+                      value={form.requirements}
+                      onChange={(e) => updateField("requirements", e.target.value)}
+                      placeholder="Tell us more about your dream project!"
+                      className="w-full resize-none bg-transparent text-sm text-white placeholder:text-white/35 focus:outline-none sm:text-xs"
+                    />
+                  </div>
+                </Field>
+              </div>
+
+              {/* Mobile wizard nav: Back/Next walk through steps without the whole form ever needing to scroll */}
+              <div className="mt-2 flex items-center gap-3 sm:hidden">
+                {step > 0 && (
                   <button
                     type="button"
-                    onClick={resetForm}
-                    className="rounded-full bg-white px-8 py-3 font-semibold text-black transition-colors hover:bg-white/90"
+                    onClick={goBack}
+                    className="flex h-12 flex-1 items-center justify-center rounded-lg border border-white/20 font-opensans font-semibold text-white transition-colors hover:bg-white/10"
                   >
-                    Submit Another Query
+                    Back
                   </button>
-                  <Link
-                    href="/"
-                    className="rounded-full border border-white/20 px-8 py-3 font-semibold text-white transition-colors hover:bg-white/10"
-                  >
-                    Back to Home
-                  </Link>
-                </div>
-              </div>
-            ) : (
-              <>
-                <div className="mb-3 border-b border-white/10 pb-3 text-center">
-                  <h2 className="font-opensans text-[20px] font-bold text-white sm:text-2xl">Enter Your Details Here</h2>
-                  <p className="mt-1 text-xs font-semibold tracking-wide text-emerald-600 sm:hidden">
-                    Step {step + 1} of {STEPS.length} · {STEPS[step].title}
-                  </p>
-                  <div className="mt-2.5 flex items-center justify-center gap-1.5 sm:hidden">
-                    {STEPS.map((s, i) => (
-                      <span
-                        key={s.title}
-                        className={`h-1 rounded-full transition-all duration-300 ${
-                          i === step ? "w-6 bg-emerald-600" : i < step ? "w-3 bg-emerald-600/50" : "w-3 bg-white/15"
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <form onSubmit={handleSubmit} className="flex flex-col gap-3.5 sm:gap-2.5">
-                  <div className={`${step === 0 ? "grid" : "hidden"} grid-cols-1 gap-3.5 sm:grid sm:grid-cols-2 sm:gap-2.5`}>
-                    <Field label="Full Name*" error={errors.fullName}>
-                      <input
-                        type="text"
-                        value={form.fullName}
-                        onChange={(e) => updateField("fullName", e.target.value)}
-                        placeholder="Rohan Gupta"
-                        className={`${inputClass} ${fieldBorder(errors.fullName)}`}
-                      />
-                    </Field>
-                    <Field label="Mobile Number*" error={errors.mobile}>
-                      <input
-                        type="tel"
-                        value={form.mobile}
-                        onChange={(e) => updateField("mobile", e.target.value)}
-                        placeholder="+91 123 4567 890"
-                        className={`${inputClass} ${fieldBorder(errors.mobile)}`}
-                      />
-                    </Field>
-                  </div>
-
-                  <div className={`${step === 0 ? "grid" : "hidden"} grid-cols-1 gap-3.5 sm:grid sm:grid-cols-2 sm:gap-2.5`}>
-                    <Field label="Email Address*" error={errors.email}>
-                      <input
-                        type="email"
-                        value={form.email}
-                        onChange={(e) => updateField("email", e.target.value)}
-                        placeholder="mail@gmail.com"
-                        className={`${inputClass} ${fieldBorder(errors.email)}`}
-                      />
-                    </Field>
-                    <Field label="Who best describes you?">
-                      <div className="relative">
-                        <select
-                          value={form.company}
-                          onChange={(e) => updateField("company", e.target.value)}
-                          className={`${inputClass} ${fieldBorder()} appearance-none ${form.company ? "" : "text-white/35"}`}
-                        >
-                          <option value="" disabled>
-                            Select the option that best describes you
-                          </option>
-                          {DESCRIBES_YOU_OPTIONS.map((option) => (
-                            <option key={option} value={option} className="text-black">
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
-                      </div>
-                    </Field>
-                  </div>
-
-                  <div className={`${step === 1 ? "flex" : "hidden"} flex-col gap-3.5 sm:flex sm:gap-2.5`}>
-                    <Field label="Project Location*" error={errors.location}>
-                      <input
-                        type="text"
-                        value={form.location}
-                        onChange={(e) => updateField("location", e.target.value)}
-                        placeholder="Dehradun, Uttrakhand"
-                        className={`${inputClass} ${fieldBorder(errors.location)}`}
-                      />
-                    </Field>
-
-                    <Field label="Project Type*" error={errors.projectType}>
-                      <div className="relative">
-                        <select
-                          value={form.projectType}
-                          onChange={(e) => updateField("projectType", e.target.value)}
-                          className={`${inputClass} ${fieldBorder(errors.projectType)} appearance-none ${form.projectType ? "" : "text-white/35"}`}
-                        >
-                          <option value="" disabled>
-                            Mention your Project Type
-                          </option>
-                          {PROJECT_TYPES.map((type) => (
-                            <option key={type} value={type} className="text-black">
-                              {type}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
-                      </div>
-                    </Field>
-
-                    <Field label="What specific service do you need from decofice?*" error={errors.serviceNeeded}>
-                      <div className="relative">
-                        <select
-                          value={form.serviceNeeded}
-                          onChange={(e) => updateField("serviceNeeded", e.target.value)}
-                          className={`${inputClass} ${fieldBorder(errors.serviceNeeded)} appearance-none ${form.serviceNeeded ? "" : "text-white/35"}`}
-                        >
-                          <option value="" disabled>
-                            Select the service needed
-                          </option>
-                          {SERVICE_OPTIONS.map((service) => (
-                            <option key={service} value={service} className="text-black">
-                              {service}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
-                      </div>
-                    </Field>
-
-                    <Field label="Have you already acquired the Land?">
-                      <div className="relative">
-                        <select
-                          value={form.landAcquired}
-                          onChange={(e) => updateField("landAcquired", e.target.value)}
-                          className={`${inputClass} ${fieldBorder()} appearance-none ${form.landAcquired ? "" : "text-white/35"}`}
-                        >
-                          <option value="" disabled>
-                            Select an option
-                          </option>
-                          {LAND_ACQUIRED_OPTIONS.map((option) => (
-                            <option key={option} value={option} className="text-black">
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
-                      </div>
-                    </Field>
-                  </div>
-
-                  <div className={`${step === 2 ? "grid" : "hidden"} grid-cols-1 gap-3.5 sm:grid sm:grid-cols-2 sm:gap-2.5`}>
-                    <Field label="Plot Area*" error={errors.plotArea}>
-                      <input
-                        type="text"
-                        value={form.plotArea}
-                        onChange={(e) => updateField("plotArea", e.target.value)}
-                        placeholder="4 Acres"
-                        className={`${inputClass} ${fieldBorder(errors.plotArea)}`}
-                      />
-                    </Field>
-                    <Field label="Estimated Built-up area*" error={errors.builtUpArea}>
-                      <input
-                        type="text"
-                        value={form.builtUpArea}
-                        onChange={(e) => updateField("builtUpArea", e.target.value)}
-                        placeholder="50000 sqft"
-                        className={`${inputClass} ${fieldBorder(errors.builtUpArea)}`}
-                      />
-                    </Field>
-                  </div>
-
-                  <div className={`${step === 2 ? "grid" : "hidden"} grid-cols-1 gap-3.5 sm:grid sm:grid-cols-2 sm:gap-2.5`}>
-                    <Field label="Estimated Budget*" error={errors.budget}>
-                      <div className="relative">
-                        <select
-                          value={form.budget}
-                          onChange={(e) => updateField("budget", e.target.value)}
-                          className={`${inputClass} ${fieldBorder(errors.budget)} appearance-none ${form.budget ? "" : "text-white/35"}`}
-                        >
-                          <option value="" disabled>
-                            ₹5 Cr
-                          </option>
-                          {BUDGET_OPTIONS.map((option) => (
-                            <option key={option} value={option} className="text-black">
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
-                      </div>
-                    </Field>
-                    <Field label="How soon you want to start the project*" error={errors.startTimeline}>
-                      <div className="relative">
-                        <select
-                          value={form.startTimeline}
-                          onChange={(e) => updateField("startTimeline", e.target.value)}
-                          className={`${inputClass} ${fieldBorder(errors.startTimeline)} appearance-none ${form.startTimeline ? "" : "text-white/35"}`}
-                        >
-                          <option value="" disabled>
-                            Select an option
-                          </option>
-                          {START_TIMELINE_OPTIONS.map((option) => (
-                            <option key={option} value={option} className="text-black">
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
-                      </div>
-                    </Field>
-                  </div>
-
-                  <div className={`${step === 3 ? "block" : "hidden"} sm:block`}>
-                    <Field label="How did you know about us?">
-                      <div className="relative">
-                        <select
-                          value={form.hearAboutUs}
-                          onChange={(e) => updateField("hearAboutUs", e.target.value)}
-                          className={`${inputClass} ${fieldBorder()} appearance-none ${form.hearAboutUs ? "" : "text-white/35"}`}
-                        >
-                          <option value="" disabled>
-                            Select How you heard about us?
-                          </option>
-                          {HEAR_ABOUT_US_OPTIONS.map((option) => (
-                            <option key={option} value={option} className="text-black">
-                              {option}
-                            </option>
-                          ))}
-                        </select>
-                        <ChevronIcon className="pointer-events-none absolute top-1/2 right-4 h-4 w-4 -translate-y-1/2 text-white/50 sm:right-5" />
-                      </div>
-                    </Field>
-                  </div>
-
-                  <div className={`${step === 3 ? "block" : "hidden"} sm:block`}>
-                    <Field label="What do you want us to know about your project?">
-                      <div className="flex h-11 items-center rounded-3xl border border-white/15 bg-white/2 px-4 transition-colors focus-within:border-emerald-600/60 sm:h-6.5 sm:pl-3 sm:pr-5">
-                        <textarea
-                          rows={1}
-                          value={form.requirements}
-                          onChange={(e) => updateField("requirements", e.target.value)}
-                          placeholder="Tell us more about your dream project!"
-                          className="w-full resize-none bg-transparent text-sm text-white placeholder:text-white/35 focus:outline-none sm:text-xs"
-                        />
-                      </div>
-                    </Field>
-                  </div>
-
-                  {/* Mobile wizard nav: Back/Next walk through steps without the whole form ever needing to scroll */}
-                  <div className="mt-2 flex items-center gap-3 sm:hidden">
-                    {step > 0 && (
-                      <button
-                        type="button"
-                        onClick={goBack}
-                        className="flex h-12 flex-1 items-center justify-center rounded-lg border border-white/20 font-opensans font-semibold text-white transition-colors hover:bg-white/10"
-                      >
-                        Back
-                      </button>
-                    )}
-                    {isLastStep ? (
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="flex h-12 flex-1 items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 font-opensans font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
-                      >
-                        {isSubmitting ? "Sending..." : "Submit Your Query"}
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={goNext}
-                        className="flex h-12 flex-1 items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 font-opensans font-semibold text-white transition-colors hover:bg-emerald-500"
-                      >
-                        Next
-                      </button>
-                    )}
-                  </div>
-
+                )}
+                {isLastStep ? (
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="mt-2 hidden h-12 w-full items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 py-3 font-opensans font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60 sm:flex"
+                    className="flex h-12 flex-1 items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 font-opensans font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isSubmitting ? "Sending..." : "Submit Your Query"}
                   </button>
-                  {submitError && <p className="text-center text-sm text-rose-400">{submitError}</p>}
-                </form>
-              </>
-            )}
+                ) : (
+                  <button
+                    type="button"
+                    onClick={goNext}
+                    className="flex h-12 flex-1 items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 font-opensans font-semibold text-white transition-colors hover:bg-emerald-500"
+                  >
+                    Next
+                  </button>
+                )}
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="mt-2 hidden h-12 w-full items-center justify-center gap-2.5 rounded-lg bg-emerald-600 px-7 py-3 font-opensans font-semibold text-white transition-colors hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-60 sm:flex"
+              >
+                {isSubmitting ? "Sending..." : "Submit Your Query"}
+              </button>
+              {submitError && <p className="text-center text-sm text-rose-400">{submitError}</p>}
+            </form>
           </div>
         </div>
       </div>
