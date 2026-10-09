@@ -8,8 +8,10 @@ export const defaultNavLinks = [
   { label: "Projects", href: "https://www.decofice.com/project" },
   { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
   { label: "About Us", href: "https://www.decofice.com/about" },
-  { label: "Start Your Project", href: "https://www.decofice.com/project-booking" },
-  { label: "Resorts", href: "https://resort.decofice.com" },
+  { label: "Commercial", href: "https://commercial.decofice.com" },
+  // { label: "Start Your Project", href: "https://www.decofice.com/project-booking" },
+
+  { label: "Resort", href: "https://resort.decofice.com" },
 ];
 
 export default function Navbar({
