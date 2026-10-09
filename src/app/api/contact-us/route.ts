@@ -8,11 +8,15 @@ type ContactPayload = {
   company?: string;
   location: string;
   projectType: string;
-  projectStage: string;
+  serviceNeeded?: string;
+  projectStage?: string;
+  landAcquired?: string;
   plotArea: string;
   builtUpArea: string;
   budget: string;
-  startDate: string;
+  startTimeline?: string;
+  startDate?: string;
+  hearAboutUs?: string;
   requirements?: string;
 };
 
@@ -22,28 +26,30 @@ function isContactPayload(body: unknown): body is ContactPayload {
   if (!body || typeof body !== "object") return false;
   const b = body as Record<string, unknown>;
 
-  const requiredStrings: (keyof ContactPayload)[] = [
+  const requiredFields = [
     "fullName",
     "mobile",
     "email",
     "location",
     "projectType",
-    "projectStage",
     "plotArea",
     "builtUpArea",
     "budget",
-    "startDate",
   ];
 
-  for (const field of requiredStrings) {
+  for (const field of requiredFields) {
     if (typeof b[field] !== "string" || (b[field] as string).trim().length === 0) return false;
   }
 
-  return (
-    EMAIL_RE.test((b.email as string).trim()) &&
-    (b.company === undefined || typeof b.company === "string") &&
-    (b.requirements === undefined || typeof b.requirements === "string")
-  );
+  // Support both serviceNeeded (sent by form) and projectStage
+  const service = typeof b.serviceNeeded === "string" ? b.serviceNeeded : typeof b.projectStage === "string" ? b.projectStage : "";
+  if (!service.trim()) return false;
+
+  // Support both startTimeline (sent by form) and startDate
+  const start = typeof b.startTimeline === "string" ? b.startTimeline : typeof b.startDate === "string" ? b.startDate : "";
+  if (!start.trim()) return false;
+
+  return EMAIL_RE.test((b.email as string).trim());
 }
 
 function escapeHtml(value: string) {
@@ -93,6 +99,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Contact form is temporarily unavailable. Please try again later." }, { status: 500 });
   }
 
+  const service = body.serviceNeeded?.trim() || body.projectStage?.trim() || "-";
+  const start = body.startTimeline?.trim() || body.startDate?.trim() || "-";
+  const land = body.landAcquired?.trim() || "-";
+  const hear = body.hearAboutUs?.trim() || "-";
+
   try {
     const transporter = getTransporter();
 
@@ -108,11 +119,13 @@ export async function POST(request: Request) {
         `Company: ${body.company?.trim() || "-"}`,
         `Project location: ${body.location}`,
         `Project type: ${body.projectType}`,
-        `Project stage: ${body.projectStage}`,
+        `Service needed / Stage: ${service}`,
+        `Land acquired: ${land}`,
         `Plot area: ${body.plotArea}`,
         `Built-up area: ${body.builtUpArea}`,
         `Estimated budget: ${body.budget}`,
-        `Estimated start date: ${body.startDate}`,
+        `Estimated start date / timeline: ${start}`,
+        `How did you hear about us: ${hear}`,
         `Additional requirements: ${body.requirements?.trim() || "-"}`,
       ].join("\n"),
       html: `
@@ -123,11 +136,13 @@ export async function POST(request: Request) {
         <p><strong>Company:</strong> ${escapeHtml(body.company?.trim() || "-")}</p>
         <p><strong>Project location:</strong> ${escapeHtml(body.location)}</p>
         <p><strong>Project type:</strong> ${escapeHtml(body.projectType)}</p>
-        <p><strong>Project stage:</strong> ${escapeHtml(body.projectStage)}</p>
+        <p><strong>Service needed / Stage:</strong> ${escapeHtml(service)}</p>
+        <p><strong>Land acquired:</strong> ${escapeHtml(land)}</p>
         <p><strong>Plot area:</strong> ${escapeHtml(body.plotArea)}</p>
         <p><strong>Built-up area:</strong> ${escapeHtml(body.builtUpArea)}</p>
         <p><strong>Estimated budget:</strong> ${escapeHtml(body.budget)}</p>
-        <p><strong>Estimated start date:</strong> ${escapeHtml(body.startDate)}</p>
+        <p><strong>Estimated start date / timeline:</strong> ${escapeHtml(start)}</p>
+        <p><strong>How did you hear about us:</strong> ${escapeHtml(hear)}</p>
         <p><strong>Additional requirements:</strong> ${escapeHtml(body.requirements?.trim() || "-")}</p>
       `,
     });
