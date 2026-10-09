@@ -4,14 +4,6 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import Navbar from "./Navbar";
 
-const commercialNavLinks = [
-  { label: "Projects", href: "https://www.decofice.com/project" },
-  { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
-  { label: "About Us", href: "https://www.decofice.com/about" },
-  { label: "Resort", href: "https://resort.decofice.com" },
-  { label: "Blog", href: "https://www.decofice.com/blog" },
-];
-
 const segments = [
   "Corporate offices",
   "SME & branch offices",
@@ -50,7 +42,6 @@ export default function CommercialHero({ onEnquire }: { onEnquire: () => void })
 
       <div className="relative z-30">
         <Navbar
-          links={commercialNavLinks}
           className="px-6 pt-4 lg:px-24"
           contactClassName="bg-[#eaeaea] text-[#0f0f0f] hover:bg-[#eaeaea]/90"
         />

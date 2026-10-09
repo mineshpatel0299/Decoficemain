@@ -99,7 +99,9 @@ export default function Footer() {
 
           {/* Logo & Company Info */}
           <div className="col-span-2 mb-2 lg:col-span-1 lg:mb-0 lg:min-w-[240px]">
-            <Logo className="h-7 lg:h-9 w-auto text-white" />
+            <a href="https://www.decofice.com/" className="inline-block">
+              <Logo className="h-7 lg:h-9 w-auto text-white" />
+            </a>
             <p className="mt-4 text-sm lg:text-lg font-semibold text-white">Experience the dream</p>
             <p className="mt-1.5 text-xs lg:text-sm text-white/50">CIN: U72900KL2021PTC069994</p>
             <div className="mt-5 flex items-center gap-3 lg:mt-5">
