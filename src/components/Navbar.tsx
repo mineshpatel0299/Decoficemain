@@ -6,12 +6,12 @@ import Logo from "./Logo";
 
 export const defaultNavLinks = [
   { label: "Projects", href: "https://www.decofice.com/project" },
-  { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
-  { label: "About Us", href: "https://www.decofice.com/about" },
   { label: "Commercial", href: "https://commercial.decofice.com" },
+  { label: "Resort", href: "https://resort.decofice.com" },
+  { label: "About Us", href: "https://www.decofice.com/about" },
+  { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
   // { label: "Start Your Project", href: "https://www.decofice.com/project-booking" },
 
-  { label: "Resort", href: "https://resort.decofice.com" },
 ];
 
 export default function Navbar({
@@ -43,7 +43,7 @@ export default function Navbar({
       className={`relative z-30 mx-auto max-w-[1800px] opacity-0 ${className}`}
     >
       <div className="flex items-center justify-between">
-        <a href="/" className="shrink-0 text-white">
+        <a href="https://www.decofice.com/" className="shrink-0 text-white">
           <Logo className="w-[39px] h-[38px]" />
         </a>
 

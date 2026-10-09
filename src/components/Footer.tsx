@@ -2,9 +2,9 @@ import Logo from "./Logo";
 
 const companyLinks = [
   { label: "Real Estate Solution", href: "https://www.decofice.com/realestate-solution" },
-  { label: "Projects", href: "https://www.decofice.com/project" },
-  { label: "Commercial", href: "https://commercial.decofice.com" },
   { label: "Resort", href: "https://resort.decofice.com" },
+  { label: "Commercial", href: "https://commercial.decofice.com" },
+  { label: "Projects", href: "https://www.decofice.com/project" },
   { label: "About Us", href: "https://www.decofice.com/about" },
   { label: "Contact Us", href: "#" }
 ];
@@ -96,7 +96,7 @@ export default function Footer() {
       <div className="relative mx-auto max-w-7xl px-6 pt-12 pb-8 lg:px-12 lg:pt-16 lg:pb-8">
         {/* Main Footer Links - Grid on Mobile, Flex on Desktop */}
         <div className="grid grid-cols-2 gap-y-10 gap-x-4 lg:flex lg:flex-row lg:justify-between lg:gap-12">
-          
+
           {/* Logo & Company Info */}
           <div className="col-span-2 mb-2 lg:col-span-1 lg:mb-0 lg:min-w-[240px]">
             <Logo className="h-7 lg:h-9 w-auto text-white" />
@@ -125,7 +125,7 @@ export default function Footer() {
         {/* Bottom Section - Stacked on Mobile, Row on Desktop */}
         <div className="mt-12 border-t border-emerald-600/40 pt-6 lg:mt-14 lg:pt-6">
           <div className="flex flex-col-reverse items-center justify-between gap-6 lg:flex-row lg:gap-4">
-            
+
             <p className="text-xs lg:text-sm text-white/50 text-center lg:text-left">
               Copyright © {new Date().getFullYear()} Decofice Technologies Private Limited | All rights reserved
             </p>
@@ -142,7 +142,7 @@ export default function Footer() {
               <span className="text-xs lg:text-sm font-bold text-white/80 italic">RuPay</span>
               <span className="rounded bg-blue-600 px-1.5 py-0.5 text-[10px] lg:px-2 lg:py-1 font-bold text-white">AMEX</span>
             </div>
-            
+
           </div>
         </div>
       </div>
