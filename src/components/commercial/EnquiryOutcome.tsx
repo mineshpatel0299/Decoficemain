@@ -10,10 +10,10 @@ export default function EnquiryOutcome({ outcome }: { outcome: "success" | "reje
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      if (window.location.hostname.startsWith("commercial.")) {
+      if (window.location.hostname.startsWith("commercial.") || window.location.hostname.startsWith("resort.")) {
         setReturnHref("/");
       } else if (!window.location.hostname.includes("decofice.com")) {
-        setReturnHref("/commercial");
+        setReturnHref("/");
       }
     }
   }, []);
