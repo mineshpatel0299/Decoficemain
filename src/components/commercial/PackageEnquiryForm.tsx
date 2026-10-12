@@ -24,7 +24,7 @@ export const PACKAGE_OPTIONS = [
   { value: "Enhanced", label: "Enhanced · ₹1,900 – ₹2,200 per sq ft" },
   { value: "Professional", label: "Professional · ₹2,500+ per sq ft" },
   { value: "Premium", label: "Premium · ₹3,000+ per sq ft" },
-  { value: "Extra Premium", label: "Extra Premium · ₹4,000+ per sq ft" },
+  { value: "Bespoke", label: "Bespoke · ₹4,000+ per sq ft" },
 ];
 
 const SCOPE_OPTIONS = ["Interiors only", "Construction + interiors"];

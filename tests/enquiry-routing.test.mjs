@@ -25,7 +25,7 @@ function getPage(path, host) {
 
 for (const site of [
   { host: "resort.decofice.com", type: "hospitality", budget: "₹1.5 Cr", back: "Back to Home" },
-  { host: "commercial.decofice.com", type: "commercial", budget: "₹30L", back: "Go Back to Commercial Page" },
+  { host: "commercial.decofice.com", type: "commercial", budget: "₹25L", back: "Go Back to Commercial Page" },
 ]) {
   for (const outcome of ["success", "rejected"]) {
     test(`${site.host}/enquiry-${outcome} serves the ${site.type} outcome`, async () => {
@@ -41,9 +41,10 @@ for (const site of [
       assert.ok(text.includes(site.back), "Expected the correct return button");
       assert.ok(!text.includes(site.type === "commercial" ? "hospitality" : "commercial"));
       if (outcome === "rejected") {
-        assert.ok(text.includes("Rejected"));
+        assert.ok(text.includes("Unfortunately, your enquiry cannot be accepted at this time."));
+        assert.ok(!text.includes("Rejected"));
         assert.ok(text.includes(site.budget), "Expected the correct budget minimum");
-        assert.ok(!text.includes(site.type === "commercial" ? "₹1.5 Cr" : "₹30L"));
+        assert.ok(!text.includes(site.type === "commercial" ? "₹1.5 Cr" : "₹25L"));
       } else {
         assert.ok(text.includes("Submission successful"));
         assert.ok(!text.includes("Rejected"));

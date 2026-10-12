@@ -5,7 +5,7 @@ const packages = [
   { name: "Enhanced", enquiry: "Enhanced", tagline: "Standard corporate", price: "₹1,900–₹2,200", color: "#e0662c", tint: "#d9bfad" },
   { name: "Professional", enquiry: "Professional", tagline: "Brand-visible office", price: "₹2,500+", color: "#6a3fc4", tint: "#bcb6d3" },
   { name: "Premium", enquiry: "Premium", tagline: "Turnkey, low-friction", price: "₹3,000+", color: "#c39410", tint: "#d2cba6" },
-  { name: "Bespoke", enquiry: "Extra Premium", tagline: "Flagship", price: "₹4,000+", color: "#b3264e", tint: "#ceafb6" },
+  { name: "Bespoke", enquiry: "Bespoke", tagline: "Flagship", price: "₹4,000+", color: "#b3264e", tint: "#ceafb6" },
 ];
 
 const steps = [

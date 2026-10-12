@@ -53,8 +53,9 @@ export default function EnquiryOutcome({
             </>
           ) : (
             <>
-              Your Enquiry Has Been
-              <span className="mt-1 block font-serif font-normal text-[#e34338] italic">Rejected</span>
+              Unfortunately, your enquiry{" "}
+              <span className="mt-1 block font-serif font-normal text-[#e34338] italic">cannot be accepted</span>
+              {" "}at this time.
             </>
           )}
         </h1>
