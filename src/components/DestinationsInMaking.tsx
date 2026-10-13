@@ -1,25 +1,54 @@
-import Image from "next/image";
+"use client";
 
-// Placeholder photos — swap each `image` for the real construction-stage
-// photo once it's dropped into /public.
+import Image from "next/image";
+import { useState } from "react";
+import ProjectGallery, { type GalleryProject } from "./commercial/ProjectGallery";
+
+const eutierraPhotos = [
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791876815/Eutierria_14_xv3edt.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791876815/Eutierria_11_ycobeb.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791876815/Eutierria_13_bt8rkt.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791876815/Eutierria_10_qmmdpp.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791876814/Eutierria_12_yjaujj.jpg",
+];
+
+const villaMandarinaPhotos = [
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877670/Villa_Mandarina_17.png_z7hagv.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877669/Villa_Mandarina_12.jpg_txvfmy.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877669/Villa_Mandarina_11.jpg_qail3m.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877667/Villa_Mandarina_10.jpg_pfs3nc.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877859/Villa_Mandarina_9.jpg_cstku9.jpg",
+];
+
+const woodenVillaPhotos = [
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877334/Wooden_Villa_5_ltt7jj.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877333/Wooden_Villa_2_yhytut.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877333/Wooden_Villa_16_md9t1a.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877310/Wooden_Villa_14_trfe9v.jpg",
+  "https://res.cloudinary.com/de4pazo51/image/upload/v1791877310/Wooden_Villa_1_k9r8du.jpg",
+];
+
 const projects = [
   {
     typeBadge: "Nature Retreat",
-    name: "Alpine Meadow",
+    name: "Eutierra Wellness Centre",
     tagline: "Architecture . Interiors",
-    image: "/dim/1.png",
+    image: eutierraPhotos[3],
+    gallery: eutierraPhotos,
   },
   {
     typeBadge: "Luxury Sanctuary",
-    name: "Aurelia Grove Resort",
+    name: "Villa Mandarina",
     tagline: "Architecture . Interiors",
-    image: "/dim/2.png",
+    image: villaMandarinaPhotos[0],
+    gallery: villaMandarinaPhotos,
   },
   {
     typeBadge: "Signature Retreat",
-    name: "Celestia Valley",
+    name: "Wooden Villa",
     tagline: "Architecture . Interiors",
-    image: "/dim/3.png",
+    image: woodenVillaPhotos[0],
+    gallery: woodenVillaPhotos,
   },
 ];
 
@@ -32,6 +61,8 @@ function Badge({ children }: { children: React.ReactNode }) {
 }
 
 export default function DestinationsInMaking() {
+  const [activeGallery, setActiveGallery] = useState<GalleryProject | null>(null);
+
   return (
     <section className="relative bg-[#0F0F0F] pt-20 pb-0 lg:pt-24">
       <div className="mx-auto max-w-7xl px-6 text-center lg:px-12">
@@ -55,7 +86,7 @@ export default function DestinationsInMaking() {
               {/* Image fills the full card */}
               <Image
                 src={project.image}
-                alt={project.typeBadge}
+                alt={project.name}
                 fill
                 sizes="(min-width: 1024px) 33vw, 100vw"
                 className="object-cover"
@@ -78,6 +109,15 @@ export default function DestinationsInMaking() {
               <div className="absolute inset-x-0 bottom-0 px-4 py-4">
                 <p className="font-opensans text-lg font-semibold text-white">{project.tagline}</p>
               </div>
+
+              {project.gallery && (
+                <button
+                  type="button"
+                  onClick={() => setActiveGallery({ title: project.name, location: "", images: project.gallery })}
+                  aria-label={`View ${project.gallery.length} photos of ${project.name}`}
+                  className="absolute inset-0 z-10 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-emerald-600"
+                />
+              )}
             </div>
           ))}
         </div>
@@ -89,6 +129,7 @@ export default function DestinationsInMaking() {
         
         </div>
       </div>
+      {activeGallery && <ProjectGallery project={activeGallery} onClose={() => setActiveGallery(null)} />}
     </section>
   );
 }
