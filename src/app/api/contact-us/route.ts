@@ -1,6 +1,9 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { BUDGET_OPTIONS, isBudgetEligible, MINIMUM_BUDGET_LABEL } from "@/lib/contact-enquiry";
+import { sendLeadToIntegrations } from "@/lib/lead-webhooks";
+
+export const maxDuration = 60;
 
 type ContactPayload = {
   fullName: string;
@@ -42,6 +45,9 @@ function isContactPayload(body: unknown): body is ContactPayload {
   for (const field of requiredFields) {
     if (typeof b[field] !== "string" || (b[field] as string).trim().length === 0) return false;
   }
+
+  const optionalFields = ["company", "serviceNeeded", "projectStage", "landAcquired", "startTimeline", "startDate", "hearAboutUs", "requirements"];
+  if (optionalFields.some((field) => b[field] !== undefined && typeof b[field] !== "string")) return false;
 
   // Support both serviceNeeded (sent by form) and projectStage
   const service = typeof b.serviceNeeded === "string" ? b.serviceNeeded : typeof b.projectStage === "string" ? b.projectStage : "";
@@ -99,7 +105,30 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Select a valid project budget." }, { status: 400 });
   }
 
-  if (!isBudgetEligible(body.budget)) {
+  const eligible = isBudgetEligible(body.budget);
+  after(() => sendLeadToIntegrations({
+    site: "resort",
+    form: "contact-us",
+    status: eligible ? "eligible" : "below_minimum",
+    name: body.fullName,
+    phone: body.mobile,
+    email: body.email,
+    fields: {
+      company: body.company || "",
+      location: body.location,
+      projectType: body.projectType,
+      serviceNeeded: body.serviceNeeded || body.projectStage || "",
+      landAcquired: body.landAcquired || "",
+      plotArea: body.plotArea,
+      builtUpArea: body.builtUpArea,
+      budget: body.budget,
+      startTimeline: body.startTimeline || body.startDate || "",
+      hearAboutUs: body.hearAboutUs || "",
+      requirements: body.requirements || "",
+    },
+  }));
+
+  if (!eligible) {
     return NextResponse.json(
       {
         error: `We currently take hospitality projects with a budget of ${MINIMUM_BUDGET_LABEL} and above.`,

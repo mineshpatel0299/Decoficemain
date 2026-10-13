@@ -174,7 +174,7 @@ export default function ScheduleVisit() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validateStep(3)) return;
+    if (isSubmitting || !validateStep(3)) return;
 
     setIsSubmitting(true);
     setSubmitError(null);

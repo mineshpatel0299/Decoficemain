@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useId, useRef, useState } from "react";
-import { BUDGET_OPTIONS, isBudgetEligible } from "@/lib/package-enquiry";
+import { BUDGET_OPTIONS } from "@/lib/package-enquiry";
 
 type FormState = {
   fullName: string;
@@ -292,13 +292,7 @@ export default function PackageEnquiryForm({
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validate()) return;
-
-    // Below the minimum budget: decline right away, nothing is sent
-    if (!isBudgetEligible(form.budget)) {
-      window.location.assign(getOutcomeUrl("/enquiry-rejected"));
-      return;
-    }
+    if (isSubmitting || !validate()) return;
 
     setIsSubmitting(true);
     setSubmitError(null);

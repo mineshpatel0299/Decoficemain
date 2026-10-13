@@ -1,5 +1,8 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
+import { sendLeadToIntegrations } from "@/lib/lead-webhooks";
+
+export const maxDuration = 60;
 
 type VisitType = "In-person" | "Virtual Call";
 
@@ -75,6 +78,21 @@ export async function POST(request: Request) {
   if (!isSchedulePayload(body)) {
     return NextResponse.json({ error: "Missing or invalid required fields." }, { status: 400 });
   }
+
+  after(() => sendLeadToIntegrations({
+    site: "resort",
+    form: "schedule-visit",
+    status: "meeting_requested",
+    name: body.fullName,
+    phone: body.phone,
+    email: body.email,
+    fields: {
+      visitType: body.visitType,
+      date: body.date,
+      time: body.time,
+      message: body.message || "",
+    },
+  }));
 
   const mailTo = process.env.MAIL_TO;
   if (!mailTo) {

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { BUDGET_OPTIONS, isBudgetEligible } from "@/lib/contact-enquiry";
+import { BUDGET_OPTIONS } from "@/lib/contact-enquiry";
 
 type FormState = {
   fullName: string;
@@ -198,11 +198,6 @@ export default function ContactSection() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isSubmitting || !validate()) return;
-
-    if (!isBudgetEligible(form.budget)) {
-      window.location.assign("/enquiry-rejected");
-      return;
-    }
 
     setIsSubmitting(true);
     setSubmitError(null);

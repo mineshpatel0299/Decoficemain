@@ -1,6 +1,9 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { isBudgetEligible, MINIMUM_BUDGET_LABEL, PACKAGE_PRICE_RANGES } from "@/lib/package-enquiry";
+import { BUDGET_OPTIONS, isBudgetEligible, MINIMUM_BUDGET_LABEL, PACKAGE_PRICE_RANGES } from "@/lib/package-enquiry";
+import { sendLeadToIntegrations } from "@/lib/lead-webhooks";
+
+export const maxDuration = 60;
 
 type PackageEnquiryPayload = {
   fullName: string;
@@ -87,8 +90,32 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing or invalid required fields." }, { status: 400 });
   }
 
-  // Below the minimum budget: decline without notifying the team
-  if (!isBudgetEligible(body.budget)) {
+  if (!BUDGET_OPTIONS.some((option) => option === body.budget.trim())) {
+    return NextResponse.json({ error: "Select a valid project budget." }, { status: 400 });
+  }
+
+  const eligible = isBudgetEligible(body.budget);
+  after(() => sendLeadToIntegrations({
+    site: "commercial",
+    form: "package-enquiry",
+    status: eligible ? "eligible" : "below_minimum",
+    name: body.fullName,
+    phone: body.mobile,
+    email: body.email,
+    fields: {
+      builtUpArea: body.builtUpArea,
+      location: body.location,
+      scope: body.scope,
+      startTimeline: body.startTimeline,
+      property: body.property,
+      packageName: body.packageName,
+      packagePrice: PACKAGE_PRICE_RANGES[body.packageName as keyof typeof PACKAGE_PRICE_RANGES],
+      budget: body.budget,
+    },
+  }));
+
+  // Below-budget leads reach the CRMs, but still receive the rejection outcome and no team email.
+  if (!eligible) {
     return NextResponse.json(
       {
         error: `We currently take projects with a budget of ${MINIMUM_BUDGET_LABEL} and above.`,
