@@ -1,5 +1,12 @@
 import Link from "next/link";
 
+export const ENQUIRY_REJECTION_CONTENT = {
+  heading: "Thank You for Your Enquiry",
+  pill: "Beyond Our Current Scope",
+  subtext: "We currently undertake only turnkey architecture and interior projects with a minimum execution value of ₹75 Lakhs. As your requirement falls outside our execution and feasibility criteria, we are unable to proceed with your enquiry.",
+  body: "We focus exclusively on large-scale turnkey architecture and luxury interior projects. We sincerely appreciate your interest and wish you the absolute best with your upcoming project!",
+};
+
 type EnquiryOutcomeProps = {
   outcome: "success" | "rejected";
   projectType: "commercial" | "hospitality";
@@ -7,6 +14,12 @@ type EnquiryOutcomeProps = {
   successFollowUp: string;
   returnHref: string;
   returnLabel: string;
+  rejectionContent?: {
+    heading: string;
+    pill: string;
+    subtext: string;
+    body: string;
+  };
 };
 
 export default function EnquiryOutcome({
@@ -16,6 +29,7 @@ export default function EnquiryOutcome({
   successFollowUp,
   returnHref,
   returnLabel,
+  rejectionContent,
 }: EnquiryOutcomeProps) {
   const isSuccess = outcome === "success";
 
@@ -42,8 +56,8 @@ export default function EnquiryOutcome({
           </div>
         </div>
 
-        <p className="font-manrope text-[11px] font-bold tracking-[0.3em] text-[#648775] uppercase sm:text-xs">
-          {isSuccess ? "Submission successful" : "Lead status"}
+        <p className={`font-manrope text-[11px] font-bold tracking-[0.3em] text-[#648775] uppercase sm:text-xs ${!isSuccess && rejectionContent ? "inline-flex rounded-full bg-[#f3f8f5] px-4 py-2" : ""}`}>
+          {isSuccess ? "Submission successful" : rejectionContent?.pill ?? "Lead status"}
         </p>
         <h1 className="mx-auto mt-5 max-w-[570px] font-opensans text-[34px] leading-[1.12] font-bold text-[#171717] sm:text-5xl">
           {isSuccess ? (
@@ -51,6 +65,8 @@ export default function EnquiryOutcome({
               Thank You For Your
               <span className="mt-1 block font-serif font-normal text-[#155d43] italic">Enquiry</span>
             </>
+          ) : rejectionContent ? (
+            rejectionContent.heading
           ) : (
             <>
               Unfortunately, your enquiry{" "}
@@ -64,6 +80,8 @@ export default function EnquiryOutcome({
           <p className="font-opensans text-base leading-7 text-[#333] sm:text-lg">
             {isSuccess ? (
               `Thank you for submitting your ${projectType} enquiry. Our team will get in touch with you shortly.`
+            ) : rejectionContent ? (
+              rejectionContent.subtext
             ) : (
               <>
                 We currently take {projectType} projects with a minimum budget of{" "}
@@ -77,7 +95,7 @@ export default function EnquiryOutcome({
         <p className="mx-auto mt-8 max-w-[500px] font-opensans text-sm leading-6 text-[#969696] sm:mt-10 sm:text-[15px] sm:leading-7">
           {isSuccess
             ? successFollowUp
-            : `We focus on ${projectType} projects above our minimum budget. We appreciate your interest and would be glad to reconnect if your project budget changes.`}
+            : rejectionContent?.body ?? `We focus on ${projectType} projects above our minimum budget. We appreciate your interest and would be glad to reconnect if your project budget changes.`}
         </p>
 
         <Link

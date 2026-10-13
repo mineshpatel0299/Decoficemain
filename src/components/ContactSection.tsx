@@ -107,6 +107,7 @@ const HEAR_ABOUT_US_OPTIONS = [
 ];
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MOBILE_RE = /^\d{10}$/;
 
 type FormErrors = Partial<Record<keyof FormState, string>>;
 
@@ -173,6 +174,10 @@ export default function ContactSection() {
       }
       if (field === "email" && form.email.trim() && !EMAIL_RE.test(form.email.trim())) {
         nextErrors.email = "Enter a valid email";
+        ok = false;
+      }
+      if (field === "mobile" && form.mobile.trim() && !MOBILE_RE.test(form.mobile)) {
+        nextErrors.mobile = "Enter a 10-digit mobile number";
         ok = false;
       }
     }
@@ -287,9 +292,14 @@ export default function ContactSection() {
                 <Field label="Mobile Number*" error={errors.mobile}>
                   <input
                     type="tel"
+                    inputMode="numeric"
+                    autoComplete="tel-national"
+                    minLength={10}
+                    maxLength={10}
+                    pattern="[0-9]{10}"
                     value={form.mobile}
-                    onChange={(e) => updateField("mobile", e.target.value)}
-                    placeholder="+91 123 4567 890"
+                    onChange={(e) => updateField("mobile", e.target.value.replace(/\D/g, "").slice(0, 10))}
+                    placeholder="10-digit mobile"
                     className={`${inputClass} ${fieldBorder(errors.mobile)}`}
                   />
                 </Field>

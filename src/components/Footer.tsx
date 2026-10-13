@@ -28,7 +28,7 @@ const resourceLinks = [
 const socials = [
   {
     label: "Instagram",
-    href: "#",
+    href: "https://www.instagram.com/decofice/",
     icon: (
       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="3" y="3" width="18" height="18" rx="5" />
@@ -39,7 +39,7 @@ const socials = [
   },
   {
     label: "Facebook",
-    href: "#",
+    href: "https://www.facebook.com/decofice/",
     icon: (
       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
         <path d="M13.5 21v-8h2.7l.4-3.1h-3.1V8c0-.9.25-1.5 1.55-1.5H17V3.6c-.28-.04-1.25-.12-2.38-.12-2.36 0-3.97 1.44-3.97 4.08V9.9H8v3.1h2.65V21h2.85z" />
@@ -48,7 +48,7 @@ const socials = [
   },
   {
     label: "X",
-    href: "#",
+    href: "https://x.com/decofice?lang=en",
     icon: (
       <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
         <path d="M18.9 3H21l-6.6 7.55L22 21h-6.4l-4.7-6.15L5.5 21H3.4l7.05-8.06L2 3h6.55l4.25 5.62L18.9 3zm-1.1 16h1.15L7.3 5H6.1l11.7 14z" />
@@ -57,7 +57,7 @@ const socials = [
   },
   {
     label: "LinkedIn",
-    href: "#",
+    href: "https://www.linkedin.com/company/decofice/",
     icon: (
       <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
         <path d="M6.94 5.5a2 2 0 11-4 0 2 2 0 014 0zM3.5 8.75h3.4V21h-3.4V8.75zM9.7 8.75h3.26v1.68h.05c.45-.85 1.56-1.75 3.2-1.75 3.42 0 4.05 2.25 4.05 5.18V21h-3.4v-5.6c0-1.34-.02-3.06-1.87-3.06-1.87 0-2.15 1.46-2.15 2.96V21H9.7V8.75z" />
@@ -129,7 +129,7 @@ export default function Footer() {
           <div className="flex flex-col-reverse items-center justify-between gap-6 lg:flex-row lg:gap-4">
 
             <p className="text-xs lg:text-sm text-white/50 text-center lg:text-left">
-              Copyright © {new Date().getFullYear()} Decofice Technologies Private Limited | All rights reserved
+              Copyright © 2027 Decofice Technologies Private Limited | All rights reserved
             </p>
 
             <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-4">

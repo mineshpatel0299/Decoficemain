@@ -462,9 +462,9 @@ export default function ScheduleVisit() {
 
               {!isSubmitted && (
                 <div className="mt-auto shrink-0 border-t border-white/10 pt-3 lg:mt-6 lg:pt-6">
-                <div className="flex flex-row items-center justify-between">
+                <div className="flex flex-row flex-wrap items-center justify-between gap-3 lg:flex-nowrap lg:gap-0">
                   <p className="text-[10px] text-white/50 lg:text-sm lg:text-white/45">{nextUpText}</p>
-                  <div className="flex gap-2 lg:gap-3">
+                  <div className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0 lg:gap-3">
                     {currentStep > 1 && (
                       <button
                         type="button"
@@ -479,7 +479,7 @@ export default function ScheduleVisit() {
                         key="continue"
                         type="button"
                         onClick={goNext}
-                        className="flex h-[24px] w-[64px] items-center justify-center rounded-lg bg-white px-[10px] py-[2px] text-[10px] font-semibold leading-none text-black transition-colors hover:bg-white/90 lg:h-auto lg:w-auto lg:rounded-full lg:px-8 lg:py-3 lg:text-base"
+                        className="flex h-12 w-28 items-center justify-center rounded-lg bg-white px-4 py-3 text-sm font-semibold leading-none text-black transition-colors hover:bg-white/90 lg:h-auto lg:w-auto lg:rounded-full lg:px-8 lg:py-3 lg:text-base"
                       >
                         Continue
                       </button>

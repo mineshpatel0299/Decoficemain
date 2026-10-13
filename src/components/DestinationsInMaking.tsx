@@ -5,25 +5,19 @@ import Image from "next/image";
 const projects = [
   {
     typeBadge: "Nature Retreat",
-    stageBadge: "Final Handover",
     name: "Alpine Meadow",
-    location: "Goa",
     tagline: "Architecture . Interiors",
     image: "/dim/1.png",
   },
   {
     typeBadge: "Luxury Sanctuary",
-    stageBadge: "Interior Execution",
     name: "Aurelia Grove Resort",
-    location: "Punjab",
     tagline: "Architecture . Interiors",
     image: "/dim/2.png",
   },
   {
     typeBadge: "Signature Retreat",
-    stageBadge: "Under Development",
     name: "Celestia Valley",
-    location: "Nainital, Uttarakhand",
     tagline: "Architecture . Interiors",
     image: "/dim/3.png",
   },
@@ -39,14 +33,15 @@ function Badge({ children }: { children: React.ReactNode }) {
 
 export default function DestinationsInMaking() {
   return (
-    <section className="relative bg-[#0F0F0F] pt-20 pb-12 lg:pt-24 lg:pb-16">
+    <section className="relative bg-[#0F0F0F] pt-20 pb-0 lg:pt-24">
       <div className="mx-auto max-w-7xl px-6 text-center lg:px-12">
         <h2 className="font-opensans text-[32px] leading-tight font-bold text-white sm:text-[44px] lg:text-heading">
-          Destinations In The <span className="font-serif font-bold text-emerald-600 italic">Making</span>
+          Destinations worth <span className="font-serif font-bold text-emerald-600 italic">Imagining</span>
         </h2>
         <p className="mx-auto mt-5 max-w-2xl text-white/70">
-          The strongest proof isn&apos;t always found in what&apos;s been completed- it&apos;s found in what&apos;s
-          actively taking shape.
+          A curated look at resort &amp; retreat styles, from hillside retreats to
+          beach villas, and the guest experiences that well-planned architecture and
+          interiors make possible.
         </p>
 
 
@@ -72,13 +67,11 @@ export default function DestinationsInMaking() {
               {/* Badges */}
               <div className="absolute top-4 left-4 flex flex-wrap gap-2">
                 <Badge>{project.typeBadge}</Badge>
-                <Badge>{project.stageBadge}</Badge>
               </div>
 
-              {/* Resort name & location */}
+              {/* Resort name */}
               <div className="absolute bottom-14 left-4">
                 <h3 className="font-opensans text-xl font-bold text-white">{project.name}</h3>
-                <p className="text-sm text-white/70">{project.location}</p>
               </div>
 
               {/* Tagline strip — over the image at the very bottom */}

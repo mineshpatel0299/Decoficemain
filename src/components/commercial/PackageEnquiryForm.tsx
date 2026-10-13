@@ -277,7 +277,7 @@ export default function PackageEnquiryForm({
     (Object.keys(form) as (keyof FormState)[]).forEach((field) => {
       if (!form[field].trim()) next[field] = "Required";
     });
-    if (!next.mobile && form.mobile.length !== 10) next.mobile = "Enter a 10-digit mobile number";
+    if (!next.mobile && !/^\d{10}$/.test(form.mobile)) next.mobile = "Enter a 10-digit mobile number";
     if (!next.email && !EMAIL_RE.test(form.email.trim())) next.email = "Enter a valid email";
     setErrors(next);
     return Object.keys(next).length === 0;
@@ -383,6 +383,9 @@ export default function PackageEnquiryForm({
                         type="tel"
                         inputMode="numeric"
                         autoComplete="tel-national"
+                        minLength={10}
+                        maxLength={10}
+                        pattern="[0-9]{10}"
                         value={form.mobile}
                         onChange={(e) => update("mobile", e.target.value.replace(/\D/g, "").slice(0, 10))}
                         placeholder="10-digit mobile"

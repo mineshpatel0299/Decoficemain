@@ -81,18 +81,18 @@ export default function WorkplacesDelivered() {
   return (
     <section className="bg-[#0f0f0f] px-6 pb-[6px] pt-12 lg:px-24 lg:pt-[90px]">
       <SectionHeading
-        badge="Completed projects"
+        badge="WHAT WE CAN BUILD"
         titleClassName="max-w-none"
         title={
           <>
             <Accent>Workplaces</Accent>{" "}
-            We&apos;ve Delivered
+            we can Create
           </>
         }
         subtitle={
           <span className="mx-auto block max-w-[626px] leading-[30px]">
-            Explore thoughtfully selected second-home opportunities across destinations, property types and
-            ownership models.
+            A look at the workplace styles we design and execute, from collaborative open offices to
+            boutique boardrooms, each one tailored to your team, brand and budget.
           </span>
         }
       />

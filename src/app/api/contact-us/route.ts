@@ -22,6 +22,7 @@ type ContactPayload = {
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MOBILE_RE = /^\d{10}$/;
 
 function isContactPayload(body: unknown): body is ContactPayload {
   if (!body || typeof body !== "object") return false;
@@ -50,7 +51,7 @@ function isContactPayload(body: unknown): body is ContactPayload {
   const start = typeof b.startTimeline === "string" ? b.startTimeline : typeof b.startDate === "string" ? b.startDate : "";
   if (!start.trim()) return false;
 
-  return EMAIL_RE.test((b.email as string).trim());
+  return EMAIL_RE.test((b.email as string).trim()) && MOBILE_RE.test((b.mobile as string).trim());
 }
 
 function escapeHtml(value: string) {
